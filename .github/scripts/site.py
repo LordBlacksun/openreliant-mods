@@ -376,13 +376,14 @@ def latest_openreliant() -> dict | None:
 
 
 def mod_releases() -> list[dict]:
-    """The mods' releases, newest first, each with its tag, its date and its notes: from GitHub, or
-    from the git tags, without notes, where GitHub can't be read."""
+    """The mods' releases, newest first, each with its tag, its date, its notes and its assets, each
+    with its name, size and sha256 digest: from GitHub, or from the git tags, without notes or
+    assets, where GitHub can't be read."""
     try:
         found = subprocess.run(
             ["gh", "api", f"repos/{REPOSITORY}/releases", "--paginate",
              "--jq", ".[] | select(.draft | not) | {tag: .tag_name, date: .published_at, notes: .body, "
-                     "assets: [.assets[] | {name, size}]}"],
+                     "assets: [.assets[] | {name, size, digest}]}"],
             check=True, capture_output=True, text=True,
         ).stdout
         releases = [json.loads(line) for line in found.splitlines() if line.strip()]
@@ -658,19 +659,30 @@ def updates_page(root: Category, releases: list[dict], updated: str) -> str:
 
 
 def index_json(mods: list[Mod], releases: list[dict], updated_at: dict[str, str], updated: str) -> str:
-    """mods.json: every mod that has a release, in its latest version, with what its card shows and
-    the links to its archive and its checksum file. OpenReliant's GET MODS screen reads it to list
-    and install the mods from the game. The game's documentation defines the keys
-    (docs/guide/modding.md, "The catalogue's format"). Mods that aren't released yet, and keys
-    without a value, are left out."""
-    # Each asset's size, by its release's tag and its name.
+    """mods.json: every mod that has a release, in its latest version, with what its card shows, the
+    link to its archive, and the archive's size and sha256 digest, which pin the exact archive the
+    game installs. OpenReliant's GET MODS screen reads it to list and install the mods from the
+    game. The game's documentation defines the keys (docs/guide/modding.md, "The catalogue's
+    format"). Mods that aren't released yet, and keys without a value, are left out. So is a mod
+    whose archive's size or digest isn't known, as when GitHub couldn't be read: the game would skip
+    it anyway, and the message says which."""
+    # Each asset's size and digest, by its release's tag and its name. GitHub writes the digest as
+    # sha256:<hex>; the index keeps the hex digits.
     sizes: dict[tuple[str, str], int] = {}
+    digests: dict[tuple[str, str], str] = {}
     for release in releases:
         for asset in release["assets"]:
             sizes[(release["tag"], asset["name"])] = asset["size"]
+            if digest := asset.get("digest"):
+                digests[(release["tag"], asset["name"])] = digest.removeprefix("sha256:")
     listed = []
     for mod in sorted(mods, key=lambda mod: mod.id):
         if not mod.released():
+            continue
+        size = sizes.get((mod.tag, mod.archive))
+        digest = digests.get((mod.tag, mod.archive))
+        if size is None or digest is None:
+            print(f"mods.json leaves out {mod.id}: the size or the digest of {mod.archive} in {mod.tag} isn't known", file=sys.stderr)
             continue
         entry = {
             "id": mod.id,
@@ -681,9 +693,9 @@ def index_json(mods: list[Mod], releases: list[dict], updated_at: dict[str, str]
             "description": mod.description,
             "openreliant": mod.needs,
             "updated": updated_at.get(mod.id, ""),
-            "size": sizes.get((mod.tag, mod.archive)),
+            "size": size,
             "archive": mod.download(),
-            "checksum": mod.download() + ".sha256",
+            "sha256": digest,
             "thumbnail": f"{SITE_URL}thumbs/{mod.id}.png" if mod.thumbnail else None,
             "url": SITE_URL + mod.page,
         }
