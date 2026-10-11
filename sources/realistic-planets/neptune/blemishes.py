@@ -6,23 +6,24 @@ rest averages out. The mosaic divides each frame by this pattern within the ring
     python3 blemishes.py data frames.json pattern.npy
 """
 import json
+import os
 import sys
 
 import numpy as np
 from scipy import ndimage
 
-import geomed
-import nepgeo
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import voyager  # noqa: E402
 
 data, listing, out = sys.argv[1], sys.argv[2], sys.argv[3]
 total = np.zeros((1000, 1000))
 count = np.zeros((1000, 1000))
 for frame in json.load(open(listing))['frames']:
     name = frame['name']
-    img, _ = geomed.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
+    img, _ = voyager.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
     med = ndimage.median_filter(img, size=3)
     clean = np.where(np.abs(img - med) > 0.02, med, img)
-    disk = ndimage.binary_erosion((clean > 0.1) & (nepgeo.frame_mask(img) > 0), iterations=15)
+    disk = ndimage.binary_erosion((clean > 0.1) & (voyager.frame_mask(img) > 0), iterations=15)
     smooth = ndimage.gaussian_filter(clean, 10)
     band = (ndimage.gaussian_filter(clean, 1.5) - smooth) / np.maximum(smooth, 0.02)
     total += np.where(disk, band, 0)

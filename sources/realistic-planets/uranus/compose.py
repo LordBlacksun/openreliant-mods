@@ -122,10 +122,8 @@ for wavelength, m in maps.items():
 # The spectrum bent through each filter by hat functions that sum to one, flat beyond them.
 lam, albedo = tc.karkoschka(spectrum, 'uranus')
 M = tc.matrix(lam)
-blue, green, red = wavelengths
-hat_b = np.interp(lam, [blue, green], [1, 0])
-hat_r = np.interp(lam, [green, red], [0, 1])
-hats = {blue: hat_b, green: 1 - hat_b - hat_r, red: hat_r}
+_, green, _ = wavelengths
+hats = dict(zip(wavelengths, tc.hats(lam, wavelengths)))
 K = {w: ((albedo * h)[:, None] * M).sum(axis=0) for w, h in hats.items()}
 geometric = sum(K.values())
 texture = sum(ratio[w][..., None] * K[w] for w in wavelengths)

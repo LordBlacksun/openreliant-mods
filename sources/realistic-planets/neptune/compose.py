@@ -24,10 +24,9 @@ import sys
 import numpy as np
 from scipy import ndimage
 
-import nepgeo
-
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import truecolour as tc  # noqa: E402
+import voyager  # noqa: E402
 
 maps, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
 enhance, key_blue = float(sys.argv[4]), float(sys.argv[5])
@@ -49,15 +48,13 @@ def on_luminance_grid(a):
 
 # Each filter's map relative to its mean over the well-seen latitudes, smoothed.
 seen = (clats > -60) & (clats < 20)
-ratio = {f: on_luminance_grid(nepgeo.smooth(m['albedo'] / np.nanmean(m['albedo'][seen]), 2.0, cstep)) for f, m in colour.items()}
+ratio = {f: on_luminance_grid(voyager.smooth(m['albedo'] / np.nanmean(m['albedo'][seen]), 2.0, cstep)) for f, m in colour.items()}
 
 # The spectrum, bent through each filter by hat functions that sum to one: blue at 479 nm, green at
 # 566, orange at 591, flat beyond them.
 lam, ref = tc.karkoschka(spectrum, 'neptune')
 M = tc.matrix(lam)
-hat_b = np.interp(lam, [479, 566], [1, 0])
-hat_o = np.interp(lam, [566, 591], [0, 1])
-hats = {'Blue': hat_b, 'Green': 1 - hat_b - hat_o, 'Orange': hat_o}
+hats = dict(zip(('Blue', 'Green', 'Orange'), tc.hats(lam, [479.0, 566.0, 591.0])))
 K = {f: ((ref * h)[:, None] * M).sum(axis=0) for f, h in hats.items()}
 mean_rgb = sum(K.values())
 
@@ -76,7 +73,7 @@ print(f"normal albedo over the spectrum's geometric albedo, in green: {normal_ov
 relative = L / np.nanmean(L[(lats > -60) & (lats < 20)])
 
 # The far north.
-mirror = nepgeo.smooth(relative[::-1], 0.3, step)
+mirror = voyager.smooth(relative[::-1], 0.3, step)
 mirror = ndimage.uniform_filter1d(np.nan_to_num(mirror, nan=1.0), size=int(round(45 / step)), axis=1, mode='wrap')
 blend = np.clip((lats[:, None] - 32.0) / 8.0, 0, 1) * np.ones((1, relative.shape[1]))
 blend = blend * blend * (3 - 2 * blend)

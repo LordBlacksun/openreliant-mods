@@ -15,30 +15,32 @@ comes from the frames themselves:
 `twists.json` keeps each frame's cost curve, over its mean, and each day's twist.
 """
 import json
+import os
 import sys
 from collections import defaultdict
 
 import numpy as np
 
-import geomed
-import nepgeo
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import nepgeo  # noqa: E402
+import voyager  # noqa: E402
 
 data, listing, out, twists_out = sys.argv[1:5]
 frames = {f['name']: f for f in json.load(open(listing))['frames']}
 
 images, views, ks = {}, {}, {}
 for name, frame in frames.items():
-    img, _ = geomed.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
+    img, _ = voyager.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
     images[name] = img
-    view, n, rms = nepgeo.fit_limb(img, nepgeo.first_guess(img, frame), nepgeo.frame_mask(img))
-    views[name], ks[name] = view, nepgeo.minnaert(img, view)[0]
+    view, n, rms = voyager.fit_limb(img, voyager.first_guess(img, nepgeo.NEPTUNE, nepgeo.PIXEL, frame), voyager.frame_mask(img))
+    views[name], ks[name] = view, voyager.minnaert(img, view)[0]
     print(f"{name} {frame['filter']:6s} limb {n:3d} points, {rms:.2f} px", flush=True)
 
 twists = np.deg2rad(np.arange(-25, 10.01, 0.5))
 by_day, curves = defaultdict(list), {}
 for name, frame in frames.items():
     img, view = images[name], views[name].copy()
-    mask = nepgeo.frame_mask(img)
+    mask = voyager.frame_mask(img)
     curve = []
     for tw in twists:
         view.set(view.cx, view.cy, tw, view.scale)
@@ -50,7 +52,7 @@ for name, frame in frames.items():
 
 day_twist = {}
 for day, day_curves in sorted(by_day.items()):
-    day_twist[day] = nepgeo.least(np.sum(day_curves, axis=0), twists)
+    day_twist[day] = voyager.least(np.sum(day_curves, axis=0), twists)
     print(f"{day}: twist {np.rad2deg(day_twist[day]):.2f} degrees, from {len(day_curves)} frames", flush=True)
 json.dump(dict(twists_deg=np.rad2deg(twists).round(2).tolist(), days={d: np.rad2deg(t) for d, t in day_twist.items()},
                curves={n: c.round(5).tolist() for n, c in curves.items()}), open(twists_out, 'w'), indent=1)
@@ -59,8 +61,8 @@ fits = {}
 for name, frame in frames.items():
     img, view = images[name], views[name]
     view.set(view.cx, view.cy, day_twist[frame['time'][:10]], view.scale)
-    view, n, rms = nepgeo.fit_limb(img, view, nepgeo.frame_mask(img))
-    k, b = nepgeo.minnaert(img, view)
+    view, n, rms = voyager.fit_limb(img, view, voyager.frame_mask(img))
+    k, b = voyager.minnaert(img, view)
     fits[name] = dict(cx=view.cx, cy=view.cy, twist=view.twist, scale=view.scale, k=k, albedo=b, limb_points=n, limb_rms=rms)
     print(f"{name} centre ({view.cx:7.2f}, {view.cy:7.2f}) scale {view.scale:.5f} k {k:.3f} B {b:.3f} limb {rms:.2f} px", flush=True)
 json.dump(fits, open(out, 'w'), indent=1)

@@ -20,14 +20,16 @@ angles, so a gain for each frame and a smooth error in the viewing and lighting 
 every frame are fitted to the overlaps' brightness ratios, robustly, and divided out.
 """
 import json
+import os
 import sys
 from datetime import datetime
 
 import numpy as np
 from scipy import ndimage
 
-import geomed
-import nepgeo
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import nepgeo  # noqa: E402
+import voyager  # noqa: E402
 
 data, listing, fits_path, pattern_path, which, epoch, step, out = sys.argv[1:9]
 frames = json.load(open(listing))['frames']
@@ -52,20 +54,20 @@ POWER = 3.0
 albedos, weights, mus, mu0s = [], [], [], []
 for name in names:
     frame, f = frames[name], fits[name]
-    img, _ = geomed.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
+    img, _ = voyager.image(f"{data}/{name}_GEOMED.IMG", f"{data}/{name}_GEOMED.LBL")
     med = ndimage.median_filter(img, size=3)
     img = np.where(np.abs(img - med) > 0.02, med, img) / (1.0 + pattern)
-    view = nepgeo.View(frame, f['cx'], f['cy'], f['twist'], f['scale'])
-    mask = nepgeo.frame_mask(img)
+    view = nepgeo.view(frame, f['cx'], f['cy'], f['twist'], f['scale'])
+    mask = voyager.frame_mask(img)
     inside = ndimage.distance_transform_edt(mask > 0)
     seconds = (epoch - datetime.fromisoformat(frame['time'][:19])).total_seconds()
     shift = nepgeo.drift(lats, seconds)
-    a, mu, mu0 = nepgeo.albedo_grid(img, view, f['k'], lats, lons, least=0.25, mask=mask, shift=shift)
+    a, mu, mu0 = voyager.albedo_grid(img, view, f['k'], lats, lons, least=0.25, mask=mask, shift=shift)
     if relative:
         a = a / f['albedo']
     la, lo = np.meshgrid(lats, lons, indexing='ij')
-    x, y = view.project(nepgeo.surface(la, lo - shift[:, None]))
-    edge = np.clip(nepgeo.sample(inside, x, y) / 40.0, 0, 1)
+    x, y = view.project(nepgeo.NEPTUNE.surface(la, lo - shift[:, None]))
+    edge = np.clip(voyager.sample(inside, x, y) / 40.0, 0, 1)
     w = np.where(np.isfinite(a), (np.clip(mu, 0, 1) * np.clip(mu0, 0, 1)) ** 2 * np.nan_to_num(edge) / frame['resolution_km'] ** 2, 0.0)
     albedos.append(a.astype(np.float32))
     weights.append(w ** POWER)
