@@ -33,3 +33,23 @@ shaders.register_surface({
     textures = { "realistic_planets_uranus" },
     parameters = { 0.702, 0.805, 0.850, 0.25 },
 })
+
+-- Saturn: the exponents of Hubble's OPAL maps of August 2025 (0.40 at 395 nm, 0.65 at 502 and 0.80
+-- at 631), at the red, green and blue channels' wavelengths for Saturn's spectrum (605, 542 and 455
+-- nm), and the same least cosine.
+shaders.register_surface({
+    name = "saturn",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_saturn" },
+    parameters = { 0.770, 0.697, 0.540, 0.25 },
+})
+
+-- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least
+-- 1.1 degrees from edge on, and blended to suit the planet's lit side behind it, about 0.5 encoded.
+shaders.register_surface({
+    name = "saturn_rings",
+    shader = "rings.glsl",
+    textures = { "realistic_planets_saturn_rings" },
+    see_through = true,
+    parameters = { 0.5, 0.02, 0.5 },
+})

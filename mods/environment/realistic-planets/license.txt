@@ -3,12 +3,15 @@ Realistic Planets, a mod for OpenReliant
 
 The textures (realistic_planets_*.png) and the thumbnail (mod.png) are made by OpenReliant: Neptune's
 from NASA/JPL's Voyager 2 images and Jupiter's from NASA/JPL/Space Science Institute's Cassini map,
-both in the public domain, Jupiter's calibrated with Hubble's OPAL maps, and Uranus's from Hubble's
-OPAL maps (CC BY 4.0). They, and the note on how Neptune's is made (neptune-voyager-map.pdf), are
-shared under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/): you may share and adapt them
-for any purpose, crediting "OpenReliant, from NASA/JPL Voyager 2 data" for Neptune, "OpenReliant,
-from NASA/JPL/Space Science Institute Cassini data and NASA/ESA Hubble OPAL data" for Jupiter, and
-"OpenReliant, from NASA/ESA Hubble OPAL data" for Uranus.
+both in the public domain, Jupiter's calibrated with Hubble's OPAL maps (CC BY 4.0), Uranus's from
+Hubble's OPAL maps, and Saturn's and its ring's from Cassini's maps and pictures, Hubble's OPAL maps
+and Voyager 2's measurements of the rings. They, and the note on how Neptune's is made
+(neptune-voyager-map.pdf), are shared under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/):
+you may share and adapt them for any purpose, crediting "OpenReliant, from NASA/JPL Voyager 2 data"
+for Neptune, "OpenReliant, from NASA/JPL/Space Science Institute Cassini data and NASA/ESA Hubble
+OPAL data" for Jupiter, "OpenReliant, from NASA/ESA Hubble OPAL data" for Uranus, and "OpenReliant,
+from NASA/JPL/Space Science Institute Cassini data, NASA/ESA Hubble OPAL data and NASA/JPL Voyager 2
+data" for Saturn and its ring.
 
 The spheres (*.shp), mod.ini and the scripts that make the mod's files are OpenReliant's, under the
 Mozilla Public License 2.0.

@@ -6,7 +6,7 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune, Jupiter and Uranus are done. The other bodies follow.
+**Status:** Neptune, Jupiter, Uranus and Saturn are done. The other bodies follow.
 
 ## The game's planets
 
@@ -18,7 +18,7 @@ Each body comes as a detailed model and a far one, as separate object types (`0x
 | Neptune | `neptune_hi_1.shp` | `neptune_lo_1.shp` | `neptune_2` |
 | Triton | `triton_hi_1.shp` | `triton_lo_1.shp` | `triton_4`, with polar caps `triton_top`, `triton_bot` |
 | Uranus | `uranus_hi_1.shp` | `uranus_lo_1.shp` | `uranus_1` |
-| Saturn and its ring | `saturn_hi_ring_2.shp` | `saturn_lo_ring_1.shp` | `saturn_2`, `saturn6` |
+| Saturn and its ring | `saturn_hi_ring_2.shp` | `saturn_lo_ring_1.shp` | `saturn_2`, `saturn6`, and `rings_2` for the ring |
 | Titan | `titan_hi_1.shp` | `titan_lo_1.shp` | `Titon_1` |
 | Jupiter | `jupiter_hi_1.shp` | `jupiter_lo_1.shp` | `jupiter_1` |
 | Europa | `europa_hi_1.shp` | `europa_lo_1.shp` | `europa_5` |
@@ -48,6 +48,11 @@ What OpenReliant's source and `sltool` show about them:
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
+- Saturn's models have a second part, its ring: a flat square of 8 triangles, 9.7 million units
+  across, drawn unlit, added to what's behind it, and from both sides. Its texture, `rings_2`, is a
+  quarter of a disk, which draws the ring from 3.22 to 4.64 million units out, 1.25 to 1.81 of the
+  planet's radius of 2,571,536 units, with a thin outer ring at 4.75 million. The real A ring reaches
+  2.27 of Saturn's radius. Saturn doesn't turn, and has no atmosphere band.
 - The views that come closest, from the missions' nav points and starts:
 
   | Body | Mission | Point | Distance from the centre, units |
@@ -58,6 +63,8 @@ What OpenReliant's source and `sltool` show about them:
   | Neptune | 3 | Sci pat point 2 | 1.87 million, 0.59 million above the clouds |
   | Venus | 3 | patrol_route | 2.68 million |
   | Neptune | 4 | FinishedStorks | 3.13 million |
+  | Saturn | 21 | 2nd def move in point | 3.97 million, 27 degrees above the ring's plane |
+  | Saturn | 24 | Prowler1 EP | 4.83 million, in the ring's plane |
 
   From mission 3's point, Neptune spans about 86 degrees and fills the screen, so its map has to
   hold up at that size.
@@ -76,9 +83,20 @@ What OpenReliant's source and `sltool` show about them:
 - The seam's and the poles' vertices are shared, and the texture coordinates go with each corner, so
   the normals the engine works out stay smooth across the seam, where split vertices would show a
   line.
-- Jupiter and Uranus are flattened, as the real planets are: their spheres' polar radius is 0.935 of
-  their equator's for Jupiter, 66,854 km to 71,492, and 0.977 for Uranus, 24,973 km to 25,559
-  (IAU). The rings stand at planetocentric latitudes; on a sphere both kinds of latitude agree.
+- Jupiter, Uranus and Saturn are flattened, as the real planets are: their spheres' polar radius is
+  0.935 of their equator's for Jupiter, 66,854 km to 71,492, 0.977 for Uranus, 24,973 km to 25,559,
+  and 0.902 for Saturn, 54,364 km to 60,268 (IAU). The spheres' rows of vertices stand at
+  planetocentric latitudes; on a sphere both kinds of latitude agree.
+- Saturn's models add its ring: a flat annulus in the plane of the equator, from 74,000 to 141,000 km
+  out, the ring texture's width. It has a layer facing north and one facing south, so that the
+  normals the engine works out stay flat, with 512 segments round in the detailed model and 128 in
+  the far one.
+- Saturn and its ring keep their real proportions, scaled so that the A ring's outer edge, 136,770 km
+  out, falls where the original's ring ends, 4,640,000 units out: 33.93 units a km. The F ring then
+  falls on the original's thin outer ring, and the planet's equatorial radius is 2,044,626 units, 80%
+  of the original's. Around the original's planet, the real ring would reach 6 million units, and
+  in mission 24 the player, who starts in the ring's plane 4.97 million units out, would start over
+  the B ring. The far model's planet is 0.988 of the detailed one's size, as the original's is.
 - The textures are named `realistic_planets_<body>`, so the game's own stay for any other model that
   uses them.
 
@@ -332,6 +350,115 @@ Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from K
 Uranus really turns westward, so it's the one planet the game turns the right way, if too fast
 ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 
+## Saturn
+
+Saturn's map takes its detail from Cassini's global maps of August 2011, the brightness of its bands
+from Hubble's calibrated maps of August 2025, and its north polar cap from Hubble's maps of June 2018.
+Its colour comes from Karkoschka's spectrum. Its ring is made from Voyager 2's measurements and
+Cassini's colours.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [Cassini's global maps](https://atmos.nmsu.edu/data_and_services/atmospheres_data/Cassini/sat_global_map.html), by L. Li, R. A. West, X. Jiang and B. Knowles | Maps in Cassini's red, green and blue filters from 11 August 2011, at 0.1 degrees a pixel, made from frames of about 160 km a pixel | NASA Planetary Data System | Yes, for the detail |
+| [Hubble OPAL](https://archive.stsci.edu/hlsp/opal), August 2025 | Calibrated maps from 395 to 763 nm, in I/F, the limb darkening taken out by Minnaert's law, at 0.2 degrees a pixel. Three months after Saturn's equinox, both hemispheres show | CC BY 4.0 | Yes, for the bands' brightness, and where Cassini's maps hold nothing |
+| Hubble OPAL, June 2018 | The same, of the north, seen from 26 degrees above | CC BY 4.0 | For the north polar cap and its hexagon |
+| E. Karkoschka's spectra, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Saturn's albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | For the colour |
+| Voyager 2's photopolarimeter, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/voyager/pps/profiles.html) | The rings' optical depth, measured as they passed in front of the star delta Scorpii in August 1981, at 10 km a sample | Public domain (NASA/JPL) | For how much light the ring stops |
+| Voyager 2's imaging, through the same node | The lit rings' brightness in I/F, from its finest mosaic of them, August 1981, at 10 km a sample | Public domain (NASA/JPL) | For the ring's brightness |
+| [Cassini's sweep across the rings](https://pds-rings.seti.org/press_releases/pages/PIA11xxx/PIA11142.html) (PIA11142) | A natural colour mosaic across the lit rings, November 2008 | Public domain (NASA/JPL/Space Science Institute) | For the ring's colour |
+
+### The planet's map
+
+- Cassini's maps resolve about twice as much as Hubble's, but they need work before they can be used:
+  - Their values are levels for display, not I/F. Their makers took the light's angle out by a
+    method of their own, and stretched each filter's map on its own: measured against Hubble's maps
+    over the same latitudes, they have 2.1 to 5.3 times the contrast, the green the most. So each
+    filter's contrast is brought to Hubble's at its wavelength, and along each latitude the maps are
+    scaled to Hubble's mean there, smoothed over 3 degrees. The bands' brightness is then Hubble's,
+    calibrated, and the detail Cassini's.
+  - The pieces of the mosaic meet in seams at ten longitudes. Each row's step at a seam is taken out
+    and spread over 5 degrees either side. The pieces were taken hours apart and the winds moved the
+    clouds between them, so where the clouds don't line up across a seam, the map is blurred a
+    little along the latitude there.
+  - In August 2011 the sun stood 10.7 degrees north of the rings, so their shadow blanks the maps
+    from 5.4 to 17.1 degrees south, and the C ring's thin shadow darkens the latitudes between that
+    and the equator. A few bands have streaks, where the maps were drawn from too few of the frames'
+    pixels: near the equator, and at 12 and 70 degrees north. They're found as rows whose fine detail
+    repeats on the row half a degree south, which clouds' detail doesn't.
+  - Hubble's maps fill all of those, the equator, and the poles past 79 degrees north and 82 south,
+    blended over 1.5 degrees.
+- Hubble's maps of 2025 show both hemispheres, from 84 degrees south to 77 north:
+  - Moons and their shadows cross them, and are filled from their latitude around them.
+  - Hubble mapped Saturn twice, 9.4 hours apart. In between, the clouds near the equator moved 14
+    degrees east, about 450 m/s, as Saturn's equatorial jet blows, which confirms that the files put
+    east to the right. The second map is moved back by the winds measured at each latitude, and the
+    two are averaged.
+  - Near the equator, broad patches along each latitude, where Hubble's orbits meet, are taken out,
+    and the line along the equator where the rings and their shadow crossed the disk is filled from
+    the latitudes either side.
+  - The 467 nm maps aren't used: their limb-darkening exponent, 0.86 against 0.65 at 502 nm,
+    over-corrects near the limb, so that at 70 degrees north they read brighter than the 502 nm
+    maps, which Saturn's spectrum never does.
+- Past 77 degrees north Hubble saw the clouds edge on in 2025, so the north polar cap, with Saturn's
+  hexagon, comes from the maps of June 2018, when Hubble saw the north from 26 degrees above. It's
+  scaled to 2025's brightness and blended in from 70 to 76 degrees. Past 84 degrees south the map
+  fades into the last degrees' mean colour.
+- Saturn doesn't turn in the game, so a mission shows whichever side it sets toward the player. The
+  map keeps System III longitudes, 0 in the middle column.
+
+### Colour, contrast and brightness
+
+- The colour is Karkoschka's spectrum of Saturn through the CIE 1931 observer, as for Neptune: sRGB
+  (195, 184, 153), a pale cream yellow. At each place it's varied by Cassini's three maps' ratios to
+  their means.
+- For the game, the luminance's contrast is stretched threefold, as the other planets' is.
+- At its true normal albedo, 1.16 times the spectrum's geometric albedo at 502 nm, Saturn's mean
+  luminance is about 0.56. The texture's is 0.22, the same share of its true brightness as
+  Jupiter's 0.3 is of Jupiter's, so the two keep their real proportion.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
+### The ring
+
+- The ring's texture, `realistic_planets_saturn_rings`, is a strip of 4096 by 8 texels, 16 km each,
+  from 74,000 to 141,000 km out, every row alike.
+- Its alpha is the share of the light the ring stops seen face on, 1 - exp(-tau), from the optical
+  depth tau that Voyager 2 measured as the star shone through the rings: about 0.1 in the C ring and
+  the Cassini Division, 0.5 in the A ring, and 1.6 and more in the B ring, whose core hid the star.
+- Its colour's brightness is the reflectance of the ring's particles. Voyager 2's camera measured how
+  bright the lit rings are, with the sun 8 degrees above them and the camera 23 degrees above. Light
+  scattered once in a layer of optical depth tau gives
+  I/F = S mu0 / (mu + mu0) (1 - exp(-tau (1/mu + 1/mu0))), where mu and mu0 are the cosines of the
+  view's and the sun's angles from the ring's pole, and that gives S, the particles' reflectance:
+  about 0.09 in the C ring, 0.27 in the B ring, 0.14 in the Cassini Division and 0.21 in the A ring.
+  The C ring's particles are the darkest, as they really are.
+- Its hue comes from Cassini's natural colour mosaic across the lit rings, put at its radii by eight
+  ring edges that both it and Voyager's mosaic show sharply, and smoothed over 300 km.
+- The B ring at its brightest, seen and lit from the same height, is as bright as the planet's
+  equatorial zone seen and lit from overhead, as the two look about alike from Earth.
+- The mod's player script draws the ring with a surface function, `rings.glsl`, registered
+  see-through. Seen at a slant, the ring lets less of the light behind it through, exp(-tau / mu),
+  so the C ring is see-through face on and opaque edge on, and its particles scatter the share of
+  the sunlight the law above gives toward the eye. A surface function can't read where the light
+  comes from, so the ring is lit as if the sun stood 30 degrees above it, and it looks the same from
+  both sides, as the original's ring does.
+- The game blends colours as they're encoded, not in linear light, so a faint layer that looks right
+  against the black sky comes out too bright over the planet. The function sets its colour and alpha
+  so that the result is exact over the sky, and right over a planet behind it at about 0.5 encoded.
+- The ring casts no shadow on the planet, nor the planet on the ring, and the side of the ring away
+  from the sun looks lit. Seen from that side, the real C ring and Cassini Division glow and the B
+  ring is dark. All of this needs surface functions to read the light's direction
+  ([OpenReliant/openreliant#1084](https://github.com/OpenReliant/openreliant/issues/1084),
+  [#33](https://github.com/OpenReliant/openreliant-mods/issues/33)).
+
+### Sharper maps
+
+These are the sharpest open global maps of Saturn there are. At mission 21's viewpoint, the closest,
+the middle of the disk shows about 116 km a pixel at 1080p, against the map's 160 or so. A sharper
+map would take a mosaic of Cassini's own frames, taken on many days
+([#34](https://github.com/OpenReliant/openreliant-mods/issues/34)).
+
 ## The limb
 
 A planet's haze makes its sunlit limb brighter than a plain ball's would be. The mod's player
@@ -349,8 +476,12 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 - Uranus's come from OPAL's maps of 2022, whose exponents are 0.85 at 467 nm, 0.80 at 547 and 0.57
   at 657: 0.702 for red, 0.805 for green and 0.85 for blue. Its methane brightens the limb most in
   red, as Neptune's does, so its limb is paler too.
+- Saturn's come from OPAL's maps of 2025, whose exponents are 0.40 at 395 nm, 0.65 at 502 and 0.80 at
+  631: 0.770 for red, 0.697 for green and 0.540 for blue. Its haze brightens the limb most in blue, so
+  its limb turns paler and a little blue.
 - The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
-  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue.
+  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue and for
+  Saturn 1.89 in blue.
   The middle of the disk is unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
@@ -364,20 +495,27 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
-Jupiter and 3 MB for Uranus, and makes the same textures again.
+Jupiter, 3 MB for Uranus and 180 MB for Saturn, and makes the same textures again.
 
 ## Credits and licences
 
 - Voyager 2 imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node's
   VGISS_8xxx volumes.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
-  (PIA07782).
-- Hubble OPAL, for Jupiter's calibration and Uranus's map: this work used data acquired from the
+  (PIA07782 and PIA11142).
+- Cassini's global maps of Saturn: L. Li, R. West, X. Jiang and B. Knowles, "Cassini ISS Global Maps
+  of Jupiter and Saturn Bundle", NASA Planetary Data System (2023), from the PDS Atmospheres Node;
+  X. Wang, L. Li, X. Jiang and R. A. West, "Multi-wavelength global maps of Jupiter and Saturn using
+  Cassini imaging system data", Scientific Data 12, 45 (2025).
+- Voyager 2's profiles of Saturn's rings: NASA/JPL, in the public domain, from the PDS Ring-Moon
+  Systems Node: the photopolarimeter's occultation of delta Scorpii (VG_2801), and M. R. Showalter
+  and M. K. Gordon, "VG1/VG2 SR ISS RING PROFILES V1.0" (VG_2810, 2004).
+- Hubble OPAL, for Jupiter's calibration and Uranus's and Saturn's maps: this work used data acquired from the
   NASA/ESA HST Space Telescope, associated with OPAL program (PI: Simon, GO13937), CC BY 4.0,
   [doi:10.17909/T9G593](https://doi.org/10.17909/T9G593);
   A. A. Simon, M. H. Wong and G. S. Orton, "First results from the Hubble OPAL program: Jupiter in
   2015", The Astrophysical Journal 812 (2015).
-- The spectra of Neptune, Jupiter and Uranus: E. Karkoschka, "Spectrophotometry of the Jovian planets and
+- The spectra of Neptune, Jupiter, Uranus and Saturn: E. Karkoschka, "Spectrophotometry of the Jovian planets and
   Titan at 300- to 1000-nm wavelength: the methane spectrum", Icarus 111 (1994), from the PDS
   Atmospheres Node.
 - Neptune's wind profile: L. A. Sromovsky, S. S. Limaye and P. M. Fry, "Dynamics of Neptune's major
@@ -385,6 +523,8 @@ Jupiter and 3 MB for Uranus, and makes the same textures again.
 - The textures made from the data, the thumbnail and the note are OpenReliant's, shared under
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): credit OpenReliant, and for Neptune
   NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
-  and NASA/ESA Hubble OPAL for its calibration, and for Uranus NASA/ESA Hubble OPAL.
+  and NASA/ESA Hubble OPAL for its calibration, for Uranus NASA/ESA Hubble OPAL, and for Saturn
+  NASA/JPL/Space Science Institute for the Cassini data, NASA/ESA Hubble OPAL, and NASA/JPL for the
+  Voyager data.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.

@@ -30,9 +30,14 @@ Run each script from its own folder, in this order:
    93 MB, into `jupiter/data`, and makes `realistic_planets_jupiter.png`. It takes a few seconds.
 3. `uranus/build.sh` downloads Hubble's OPAL maps of Uranus and Karkoschka's spectrum, about 3 MB,
    into `uranus/data`, and makes `realistic_planets_uranus.png`.
-4. `build.sh` builds the spheres with `sphere.py` and `sltool shp from-obj`, and the thumbnail,
-   `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your `PATH`.
-5. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+4. `saturn/build.sh` downloads Cassini's global maps of Saturn, Hubble's OPAL maps, Karkoschka's
+   spectrum, Voyager 2's profiles of the rings and Cassini's mosaic across them, about 180 MB, into
+   `saturn/data`, and makes `realistic_planets_saturn.png` and the ring's,
+   `realistic_planets_saturn_rings.png`. It takes about 15 seconds.
+5. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
+   from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
+   `PATH`.
+6. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -40,8 +45,8 @@ Run each script from its own folder, in this order:
 
 | File | What it does |
 |---|---|
-| `sphere.py` | Writes a sphere for a planet as an OBJ file, with an equirectangular map, flattened if asked |
-| `render.py` | Draws a planet from its texture, for the thumbnail and the note's figures |
+| `sphere.py` | Writes a sphere for a planet as an OBJ file, with an equirectangular map, flattened if asked, and a ring if asked |
+| `render.py` | Draws a planet from its texture, and its ring, for the thumbnail and the note's figures |
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, for the bodies' fetch scripts |
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
@@ -58,6 +63,9 @@ Run each script from its own folder, in this order:
 | `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture |
 | `uranus/fetch.py` | Downloads Hubble's OPAL maps of Uranus and the spectrum |
 | `uranus/compose.py` | Composes the texture from OPAL's maps and the spectrum |
+| `saturn/fetch.py` | Downloads Cassini's and Hubble's maps, the spectrum, Voyager's ring profiles and Cassini's mosaic of the rings |
+| `saturn/compose.py` | Composes the planet's texture from Cassini's maps, calibrated with Hubble's, and the spectrum |
+| `saturn/rings.py` | Composes the ring's texture from Voyager's profiles and Cassini's mosaic |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 
