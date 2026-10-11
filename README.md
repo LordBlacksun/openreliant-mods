@@ -12,6 +12,8 @@ work over your copy of the game.
 
 **[Browse and download the mods](https://openreliant.github.io/openreliant-mods/)**, by category,
 each from its latest release, and see [the latest updates](https://openreliant.github.io/openreliant-mods/updates/).
+The released mods are also listed as data in [`mods.json`](https://openreliant.github.io/openreliant-mods/mods.json),
+which OpenReliant reads to list and install them from its mods screen.
 
 ## Mods
 

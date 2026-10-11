@@ -1,7 +1,8 @@
 """Writes the mods' site into site/: the index page, which browses the mods by category, with each
 mod's thumbnail, name, version, author, what it needs, its description and the download of its
 latest release; a page for each mod, mods/<mod>/, with its pictures, what it is, its download and
-its releases; and updates/, every mod's releases, newest first.
+its releases; updates/, every mod's releases, newest first; and mods.json, the released mods as
+data, which OpenReliant's GET MODS screen reads to list and install them from the game.
 
     python3 .github/scripts/site.py
 """
@@ -15,9 +16,14 @@ import shutil
 import subprocess
 import sys
 
-from mods import ROOT, REPOSITORY, Category, all_categories, git, problems, tree, version_tuple
+from mods import ROOT, REPOSITORY, Category, Mod, all_categories, git, problems, tree, version_tuple
 
 SITE = ROOT / "site"
+# The site's address. mods.json uses absolute links, since the game reads it from anywhere.
+SITE_URL = "https://openreliant.github.io/openreliant-mods/"
+# The format number of mods.json. Raise it when a key changes meaning. Adding a key doesn't need
+# it: OpenReliant ignores keys it doesn't know.
+INDEX_FORMAT = 1
 
 STYLE = """
 /* Newtown, by Roger White, from Roger's Fonts: the face OpenReliant draws the game's menus in, from
@@ -370,13 +376,14 @@ def latest_openreliant() -> dict | None:
 
 
 def mod_releases() -> list[dict]:
-    """The mods' releases, newest first, each with its tag, its date and its notes: from GitHub, or
-    from the git tags, without notes, where GitHub can't be read."""
+    """The mods' releases, newest first, each with its tag, its date, its notes and its assets, each
+    with its name, size and sha256 digest: from GitHub, or from the git tags, without notes or
+    assets, where GitHub can't be read."""
     try:
         found = subprocess.run(
             ["gh", "api", f"repos/{REPOSITORY}/releases", "--paginate",
              "--jq", ".[] | select(.draft | not) | {tag: .tag_name, date: .published_at, notes: .body, "
-                     "assets: [.assets[] | {name, size}]}"],
+                     "assets: [.assets[] | {name, size, digest}]}"],
             check=True, capture_output=True, text=True,
         ).stdout
         releases = [json.loads(line) for line in found.splitlines() if line.strip()]
@@ -651,6 +658,51 @@ def updates_page(root: Category, releases: list[dict], updated: str) -> str:
     return page("Updates: OpenReliant mods", "The latest releases of the mods for OpenReliant.", "updates", "../", body, [])
 
 
+def index_json(mods: list[Mod], releases: list[dict], updated_at: dict[str, str], updated: str) -> str:
+    """mods.json: every mod that has a release, in its latest version, with what its card shows, the
+    link to its archive, and the archive's size and sha256 digest, which pin the exact archive the
+    game installs. OpenReliant's GET MODS screen reads it to list and install the mods from the
+    game. The game's documentation defines the keys (docs/guide/modding.md, "The catalogue's
+    format"). Mods that aren't released yet, and keys without a value, are left out. So is a mod
+    whose archive's size or digest isn't known, as when GitHub couldn't be read: the game would skip
+    it anyway, and the message says which."""
+    # Each asset's size and digest, by its release's tag and its name. GitHub writes the digest as
+    # sha256:<hex>; the index keeps the hex digits.
+    sizes: dict[tuple[str, str], int] = {}
+    digests: dict[tuple[str, str], str] = {}
+    for release in releases:
+        for asset in release["assets"]:
+            sizes[(release["tag"], asset["name"])] = asset["size"]
+            if digest := asset.get("digest"):
+                digests[(release["tag"], asset["name"])] = digest.removeprefix("sha256:")
+    listed = []
+    for mod in sorted(mods, key=lambda mod: mod.id):
+        if not mod.released():
+            continue
+        size = sizes.get((mod.tag, mod.archive))
+        digest = digests.get((mod.tag, mod.archive))
+        if size is None or digest is None:
+            print(f"mods.json leaves out {mod.id}: the size or the digest of {mod.archive} in {mod.tag} isn't known", file=sys.stderr)
+            continue
+        entry = {
+            "id": mod.id,
+            "name": mod.name,
+            "category": mod.category,
+            "version": mod.version,
+            "author": mod.author,
+            "description": mod.description,
+            "openreliant": mod.needs,
+            "updated": updated_at.get(mod.id, ""),
+            "size": size,
+            "archive": mod.download(),
+            "sha256": digest,
+            "thumbnail": f"{SITE_URL}thumbs/{mod.id}.png" if mod.thumbnail else None,
+            "url": SITE_URL + mod.page,
+        }
+        listed.append({key: value for key, value in entry.items() if value not in ("", None)})
+    return json.dumps({"format": INDEX_FORMAT, "generated": updated, "mods": listed}, indent=2, ensure_ascii=False) + "\n"
+
+
 def main() -> int:
     root = tree()
     if found := problems(root):
@@ -673,6 +725,7 @@ def main() -> int:
     updated = git("log", "-1", "--format=%cs")
     (SITE / "index.html").write_text(index_page(root, release, updated_at, updated), encoding="utf-8")
     (SITE / "updates" / "index.html").write_text(updates_page(root, releases, updated), encoding="utf-8")
+    (SITE / "mods.json").write_text(index_json(mods, releases, updated_at, updated), encoding="utf-8")
     by_path = {category.path: category for category in all_categories(root)}
     for mod in mods:
         folder = SITE / mod.page
@@ -680,7 +733,7 @@ def main() -> int:
         for picture in mod.screenshots():
             shutil.copy(picture, folder / picture.name)
         (folder / "index.html").write_text(mod_page(mod, by_path, release, releases, updated_at.get(mod.id, ""), updated), encoding="utf-8")
-    print(f"wrote {SITE / 'index.html'}, {SITE / 'updates' / 'index.html'} and a page for each mod: {len(mods)} mods, {len(releases)} releases")
+    print(f"wrote {SITE / 'index.html'}, {SITE / 'updates' / 'index.html'}, {SITE / 'mods.json'} and a page for each mod: {len(mods)} mods, {len(releases)} releases")
     return 0
 
 
