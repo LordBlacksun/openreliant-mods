@@ -23,3 +23,13 @@ shaders.register_surface({
     textures = { "realistic_planets_jupiter" },
     parameters = { 0.988, 0.965, 0.905, 0.25 },
 })
+
+-- Uranus: the exponents of Hubble's OPAL maps of November 2022 (0.85 at 467 nm, 0.80 at 547 and 0.57
+-- at 657), at the red, green and blue channels' wavelengths for Uranus's spectrum (594, 539 and 453
+-- nm, the blue taking 467's), and the same least cosine.
+shaders.register_surface({
+    name = "uranus",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_uranus" },
+    parameters = { 0.702, 0.805, 0.850, 0.25 },
+})
