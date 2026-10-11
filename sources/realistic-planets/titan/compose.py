@@ -196,11 +196,7 @@ for name, wavelength in FILTERS.items():
 lam, albedo = tc.karkoschka(spectrum, 'titan')
 M = tc.matrix(lam)
 wavelengths = sorted(profile)
-hats = {}
-for i, w in enumerate(wavelengths):
-    points = [wavelengths[i - 1] if i > 0 else w - 1, w, wavelengths[i + 1] if i + 1 < len(wavelengths) else w + 1]
-    values = [0.0 if i > 0 else 1.0, 1.0, 0.0 if i + 1 < len(wavelengths) else 1.0]
-    hats[w] = np.interp(lam, points, values)
+hats = dict(zip(wavelengths, tc.hats(lam, wavelengths)))
 K = {w: ((albedo * h)[:, None] * M).sum(axis=0) for w, h in hats.items()}
 geometric = sum(K.values())
 

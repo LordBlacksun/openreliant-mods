@@ -17,10 +17,10 @@ import numpy as np
 
 neptune, true_colour, shipped, out = sys.argv[1:5]
 sys.path[:0] = [os.path.abspath(neptune), os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')]
-import geomed  # noqa: E402
 import nepgeo  # noqa: E402
 import render  # noqa: E402
 import truecolour as tc  # noqa: E402
+import voyager  # noqa: E402
 
 frames = {f['name']: f for f in json.load(open(f"{neptune}/frames.json"))['frames']}
 fits = json.load(open(f"{neptune}/fits.json"))
@@ -94,18 +94,18 @@ def resized(path, width, height):
 
 def frame_figure():
     frame, fit = frames[FRAME], fits[FRAME]
-    img, _ = geomed.image(f"{neptune}/data/{FRAME}_GEOMED.IMG", f"{neptune}/data/{FRAME}_GEOMED.LBL")
-    view = nepgeo.View(frame, fit['cx'], fit['cy'], fit['twist'], fit['scale'])
+    img, _ = voyager.image(f"{neptune}/data/{FRAME}_GEOMED.IMG", f"{neptune}/data/{FRAME}_GEOMED.LBL")
+    view = nepgeo.view(frame, fit['cx'], fit['cy'], fit['twist'], fit['scale'])
     # Darker mid-tones bring out the clouds on the bright disk.
     shown = np.clip(img / np.percentile(img[img > 0.02], 99.9), 0, 1) ** 1.8
     # Cropped to the disk, with a margin.
-    half = int(1.08 * fit['scale'] * nepgeo.A / frame['distance_km'] / nepgeo.PIXEL)
+    half = int(1.08 * fit['scale'] * nepgeo.NEPTUNE.a / frame['distance_km'] / nepgeo.PIXEL)
     x0, y0 = int(round(fit['cx'])) - half, int(round(fit['cy'])) - half
     shown = np.pad(shown, half)[y0 + half:y0 + 3 * half, x0 + half:x0 + 3 * half]
     grid, marked = [], []
 
     def line(lats, lons, strokes, colour, width):
-        p = nepgeo.surface(lats, lons)
+        p = nepgeo.NEPTUNE.surface(lats, lons)
         mu, _ = view.angles(p)
         x, y = view.project(p)
         x, y = x - x0, y - y0
@@ -153,7 +153,7 @@ def features():
     """Where the largest storms are on the map: the Great Dark Spot, the Scooter and the second dark
     spot, as the darkest or brightest place, smoothed, in their bands."""
     a, lats, lons = luminance['albedo'], luminance['lats'], luminance['lons']
-    smooth = nepgeo.smooth(a, 1.0, lats[1] - lats[0])
+    smooth = voyager.smooth(a, 1.0, lats[1] - lats[0])
     found = {}
     for name, (south, north, darkest) in {'Great Dark Spot': (-28, -14, True), 'Scooter': (-46, -38, False),
                                           'Dark Spot 2': (-60, -48, True)}.items():
@@ -226,12 +226,12 @@ def facts(spots):
     rng = np.random.default_rng(0)
     for day, curves in sorted(by_day.items()):
         curves = np.array(curves)
-        again = [nepgeo.least(curves[rng.integers(0, len(curves), len(curves))].sum(axis=0), xs) for _ in range(2000)]
+        again = [voyager.least(curves[rng.integers(0, len(curves), len(curves))].sum(axis=0), xs) for _ in range(2000)]
         print(f"{day}: twist {twists['days'][day]:.2f} from {len(curves)} frames, bootstrap standard deviation "
               f"{np.std(again):.2f}, 16th to 84th percentile {np.percentile(again, 16):.2f} to {np.percentile(again, 84):.2f}")
     near = 0
     for name, curve in twists['curves'].items():
-        near += abs(nepgeo.least(np.array(curve), xs) - twists['days'][frames[name]['time'][:10]]) <= 1.0
+        near += abs(voyager.least(np.array(curve), xs) - twists['days'][frames[name]['time'][:10]]) <= 1.0
     print(f"frames whose own minimum is within a degree of their day's: {near} of {len(twists['curves'])}")
     rms = [f['limb_rms'] for f in fits.values()]
     print('limb points', span([f['limb_points'] for f in fits.values()], 0), 'rms', span(rms), f"median {np.median(rms):.2f}")

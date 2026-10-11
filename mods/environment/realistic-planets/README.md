@@ -6,7 +6,8 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune, Jupiter, Uranus, Saturn, Venus and Titan are done. The other bodies follow.
+**Status:** Neptune, Jupiter, Uranus, Saturn, Venus, Titan and Jupiter's moons Io, Europa, Ganymede
+and Callisto are done. Triton and Earth follow.
 
 ## The game's planets
 
@@ -97,6 +98,12 @@ What OpenReliant's source and `sltool` show about them:
   of the original's. Around the original's planet, the real ring would reach 6 million units, and
   in mission 24 the player, who starts in the ring's plane 4.97 million units out, would start over
   the B ring. The far model's planet is 0.988 of the detailed one's size, as the original's is.
+- Jupiter's moons keep the sizes of the game's models, which aren't in proportion to each other.
+  Europa's and Ganymede's detailed models have a radius of 288,141 units. Io's near level is uneven,
+  270,744 to 273,753 units from its middle, so its sphere takes their median, 270,949. Callisto's
+  are 1,280,625 units, as large as Neptune's. Europa's far model is a little larger than its
+  detailed one, 331,938 units, and Ganymede's is 50 times smaller, 5,763 units, both as the game's
+  are.
 - The textures are named `realistic_planets_<body>`, so the game's own stay for any other model that
   uses them.
 
@@ -572,11 +579,93 @@ which only shows in the near infrared.
   as Jupiter's 0.3 is of Jupiter's.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
+## Jupiter's moons
+
+Io's, Europa's, Ganymede's and Callisto's maps take their detail from the USGS's global maps, made
+from Voyager's and Galileo's pictures, and their colour from Voyager's colour frames of 1979. Most
+published pictures of these moons are false colour: they show near-infrared light as red and turn
+the colour up, to show what the ground is made of. Here they're in true colour: Io a pale yellow
+with whiter frost plains and black volcanoes, Europa a creamy white with tan streaks and a darker,
+browner trailing side, and Ganymede and Callisto a faintly warm grey.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [The USGS's global maps](https://astrogeology.usgs.gov/search/map/jupiter-voyager-and-galileo-global-mosaics) | Greyscale maps of each moon from Voyager's and Galileo's pictures, the light's angles taken out, at 1 km a pixel, Europa's at 500 m | Public domain | Yes, for the detail |
+| The USGS's colour maps of Ganymede and Io | Galileo's violet, green and near-infrared pictures shown as blue, green and red, Ganymede's "enhanced using commercial software" | Public domain | No: false colour |
+| Voyager 1's and 2's narrow-angle camera, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Frames of 1979 in violet, blue, green and orange, calibrated to I/F with the camera's distortion removed | Public domain (NASA/JPL) | Yes, 55 colour sets, for the colour and the limb |
+| Galileo's camera, through the same node | Frames of 1996 to 2003 | Public domain (NASA/JPL) | No: only the raw frames are there |
+| Cassini's camera, in its flyby of Jupiter in 2000 and 2001 | Calibrated frames, the moons at 55 km a pixel at best | Public domain (NASA/JPL/Space Science Institute) | No: Voyager's frames are much sharper |
+| [Constantine Thomas's mosaic of Ganymede](https://www.planetary.org/space-images/20130620_ganymedevgr2) (2013) | Voyager 2's close-up frames of one side, at 2 km a pixel, orange, blue and violet shown as red, green and blue | CC BY 3.0 | No: one side only, and not true colour |
+| [NASA's Jovian Satellite Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/joviansatfact.html) | The moons' visual geometric albedos | Public domain | For the brightness |
+
+### The maps
+
+- The USGS's maps hold 11,445 by 5,723 pixels for Io, 19,631 by 9,816 for Europa, 16,539 by 8,270
+  for Ganymede and 15,138 by 7,569 for Callisto. Each joins many pictures, with the light's angles
+  taken out by a Lunar-Lambert function, so they hold the ground's brightness.
+- Their columns run east from their left edge, which stands at 0 degrees for Europa, Ganymede and
+  Callisto and at 180 west for Io, as their GeoTIFF tags give. Landmarks confirm it: Valhalla on
+  Callisto, Tros and Osiris on Ganymede, and Loki, Pele and Prometheus on Io.
+- Their values rise from 0.5 in proportion to the ground's brightness. Io's, Europa's and Ganymede's
+  GeoTIFF tags say so, and with the tags' scale, the maps' means come to 0.64 for Io and 0.43 for
+  Ganymede, against geometric albedos of 0.62 and 0.44, and 0.88 for Europa, the brightest.
+  Callisto's map carries no such tags, and is taken to rise from the same value.
+- Where the maps hold nothing, around Callisto's south pole and at the other maps' polar edges, the
+  texture takes each latitude's mean. The maps join pictures of very different sharpness, so in
+  places sharp strips meet blurred ground, with small steps of brightness between them.
+
+### The Voyager frames
+
+- `frames.json` lists one colour set for each 20 degrees of each moon's longitude, the set with the
+  largest disk: violet, blue, green and orange frames taken within minutes, by Voyager 1 in February
+  and March 1979 or Voyager 2 in June and July, the moon 55 to 945 pixels across. That's 11 sets of
+  Io, 14 of Europa, 14 of Ganymede and 16 of Callisto. Two green frames of Io and an orange frame of
+  Ganymede are left out, as they show nothing or only noise. Io's sets see it all round, but from
+  about 280 to 330 degrees west only at a slant.
+- The camera's pointing isn't archived for 1979 either, so `fit.py` fits it to each frame and keeps
+  it in `fits.json`. The disk's size comes from the moon's distance, so each sharp edge in the frame
+  votes for the point a radius inward along its gradient, and the lit limb's votes meet at the
+  centre. The twist, where north points, comes from matching the frame against the moon's map, seen
+  as the frame would see it, at twists all round. Then the limb is fitted to a fraction of a pixel.
+  A set's frames share their twist, and a frame that strays from its set's is fitted again near it.
+- The frames match the maps closely: by a correlation of 0.88 on Europa and 0.87 on Ganymede, the
+  median of their frames, 0.75 on Callisto, whose disks are the smallest, and 0.71 on Io, whose
+  ground its volcanoes changed between Voyager's visits and Galileo's. The limbs fit to about a
+  quarter of a pixel on Europa, Ganymede and Callisto, and to a pixel on Io, where the largest disks
+  miss by up to six, as Io isn't quite round.
+- Each frame's sky, more than 1.2 of the disk's radii from its centre, is taken off it first: most
+  frames read within half a per cent of the disk's brightness there, but a few several per cent.
+
+### Colour, detail and brightness
+
+- Each set's frames are mapped onto latitude and longitude with their limb darkening taken out, and
+  the violet, blue and orange maps are divided by the green one. The four frames share a phase
+  angle, so the ratios hold the colour alone. The sets' ratios are averaged, the best view of each
+  place counting the most.
+- On these moons, darker ground is redder. So each ratio is fitted to the map's brightness, and at
+  each texel the colour follows the texel's own brightness, a small bright crater taking the bluer
+  colour of bright ground, times what the fit leaves, smoothed over six of the frames' pixels: from
+  about 2.5 degrees on Io to 9 on Callisto, whose frames are the coarsest. Io's colour follows its
+  frames the most, as its yellow sulphur, white frost and dark lava don't line up with brightness
+  alone.
+- Each texel's spectrum runs through the filters' wavelengths, 416, 479, 566 and 591 nm, straight
+  between them and flat beyond, and is taken through the CIE 1931 observer, as for the other bodies.
+  At their true brightness, the moons' mean colours are sRGB (231, 225, 175) for Io, (235, 232, 206)
+  for Europa, (186, 183, 163) for Ganymede and (129, 125, 109) for Callisto.
+- Each texture's mean luminance is the same share of the moon's true brightness as Jupiter's 0.3 is
+  of Jupiter's: 0.29 for Io, 0.31 for Europa, 0.18 for Ganymede and 0.08 for Callisto, from NASA's
+  visual geometric albedos of 0.62, 0.68, 0.44 and 0.19 and Minnaert's law in green.
+- Ganymede's texture is 8192 by 4096, as mission 83 shows it from close by; the other moons' are
+  4096 by 2048.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
 ## The limb
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
 The mod's player script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on
-each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
+each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
 
 - The function applies the part of Minnaert's law that depends on the view, mu^(k-1), in linear
   light, with an exponent k for each channel, measured for each planet.
@@ -601,10 +690,18 @@ each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are 
 - Titan's come from the same Cassini frames as its haze. Their exponents are 0.876 at 463 nm, 0.897
   at 568 and 0.855 at 647: 0.877 for red, 0.892 for green and 0.876 for blue. Titan's haze brightens
   its limb a little, about as much in each colour, so the limb keeps its colour.
-- The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
-  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue, for
-  Saturn 1.89 in blue, for Venus 0.90 in green, and for Titan 1.19 in red and blue. The middle of
-  the disk is unchanged.
+- Jupiter's moons' come from the frames that give their colour, each frame's pixels sorted by its
+  map's brightness and each group given its own albedo, and each filter's exponent is the median of
+  its frames'. Io's are 0.733 at 416 nm, 0.678 at 479, 0.692 at 566 and 0.685 at 591: 0.685 for red,
+  0.688 for green and 0.697 for blue. Europa's are 0.669, 0.670 and 0.663, Ganymede's 0.580, 0.561
+  and 0.539, and Callisto's 0.578, 0.563 and 0.532. The moons have no air, but their ground scatters
+  light as the Moon's dust does, which makes the full Moon look almost evenly bright to its edge, so
+  their limbs brighten, Ganymede's and Callisto's the most and a little more in blue.
+- The planets' and Titan's laws were fitted where mu is at least 0.25, and the moons' where it's at
+  least 0.2. Nearer the limb, the factor stays as it is there: for Neptune and Uranus at most about
+  1.5 times brighter in red, for Jupiter 1.14 in blue, for Saturn 1.89 in blue, for Venus 0.90 in
+  green, for Titan 1.19 in red and blue, and for the moons from 1.63 for Io in blue to 2.12 for
+  Callisto in blue. The middle of the disk is unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
   the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
@@ -617,13 +714,16 @@ each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are 
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus and 62 MB for Titan, and makes the same
-textures again.
+Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus, 62 MB for Titan and 970 MB for
+Jupiter's moons, and makes the same textures again.
 
 ## Credits and licences
 
-- Voyager 2 imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node's
-  VGISS_8xxx volumes.
+- Voyager imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node:
+  Voyager 2's frames of Neptune from its VGISS_8xxx volumes, and Voyager 1's and 2's frames of
+  Jupiter's moons from its VGISS_5xxx volumes.
+- The global maps of Io, Europa, Ganymede and Callisto: USGS Astrogeology Science Center, from
+  NASA's Voyager and Galileo pictures, in the public domain.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
   (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2060
   volume, calibrated with CISSCAL.
@@ -656,6 +756,7 @@ textures again.
 - Venus's albedos and phase curves: A. Mallama, B. Krobusek and H. Pavlov, "Comprehensive wide-band
   magnitudes and albedos for the planets, with applications to exo-planets and Planet Nine", Icarus
   282 (2017).
+- The Galilean moons' geometric albedos: NASA's Jovian Satellite Fact Sheet.
 - Venus's spectrum considered: A. Payne, G. L. Villanueva and others, "A comprehensive spectroscopic
   reference of the solar system and its application to exoplanet direct imaging", The Planetary
   Science Journal (2025).
@@ -664,8 +765,9 @@ textures again.
   NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
   and NASA/ESA Hubble OPAL for its calibration, for Uranus NASA/ESA Hubble OPAL, for Saturn
   NASA/JPL/Space Science Institute for the Cassini data, NASA/ESA Hubble OPAL, and NASA/JPL for the
-  Voyager data, for Venus JAXA/ISAS for the Akatsuki data, and for Titan NASA/JPL/Space Science
+  Voyager data, for Venus JAXA/ISAS for the Akatsuki data, for Titan NASA/JPL/Space Science
   Institute for the Cassini data and NASA/JPL-Caltech/University of Arizona for the map of its
-  surface.
+  surface, and for Jupiter's moons NASA/JPL for the Voyager data and the USGS Astrogeology Science
+  Center for its maps.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.

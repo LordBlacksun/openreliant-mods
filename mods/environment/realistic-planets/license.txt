@@ -6,17 +6,19 @@ from NASA/JPL's Voyager 2 images and Jupiter's from NASA/JPL/Space Science Insti
 both in the public domain, Jupiter's calibrated with Hubble's OPAL maps (CC BY 4.0), Uranus's from
 Hubble's OPAL maps, Saturn's and its ring's from Cassini's maps and pictures, Hubble's OPAL maps
 and Voyager 2's measurements of the rings, Venus's from JAXA/ISAS's Akatsuki maps (CC BY 4.0),
-and Titan's from NASA/JPL/Space Science Institute's Cassini pictures, in the public domain, and
+Titan's from NASA/JPL/Space Science Institute's Cassini pictures, in the public domain, and
 NASA/JPL-Caltech/University of Arizona's Cassini map of its surface (PIA22770), free to use with
-that credit.
+that credit, and Io's, Europa's, Ganymede's and Callisto's from the USGS Astrogeology Science
+Center's maps and NASA/JPL's Voyager pictures, in the public domain.
 They, and the note on how Neptune's is made (neptune-voyager-map.pdf), are shared under CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/): you may share and adapt them for any purpose,
 crediting "OpenReliant, from NASA/JPL Voyager 2 data" for Neptune, "OpenReliant, from NASA/JPL/Space
 Science Institute Cassini data and NASA/ESA Hubble OPAL data" for Jupiter, "OpenReliant, from
 NASA/ESA Hubble OPAL data" for Uranus, "OpenReliant, from NASA/JPL/Space Science Institute Cassini
 data, NASA/ESA Hubble OPAL data and NASA/JPL Voyager 2 data" for Saturn and its ring,
-"OpenReliant, from JAXA/ISAS Akatsuki UVI data" for Venus, and "OpenReliant, from NASA/JPL/Space
-Science Institute Cassini data and NASA/JPL-Caltech/University of Arizona's map" for Titan.
+"OpenReliant, from JAXA/ISAS Akatsuki UVI data" for Venus, "OpenReliant, from NASA/JPL/Space
+Science Institute Cassini data and NASA/JPL-Caltech/University of Arizona's map" for Titan, and
+"OpenReliant, from USGS maps and NASA/JPL Voyager data" for Jupiter's moons.
 
 The spheres (*.shp), mod.ini and the scripts that make the mod's files are OpenReliant's, under the
 Mozilla Public License 2.0.

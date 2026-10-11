@@ -65,6 +65,18 @@ def encode(linear):
     return np.where(linear <= 0.0031308, 12.92 * linear, 1.055 * linear ** (1 / 2.4) - 0.055)
 
 
+def hats(lam, wavelengths):
+    """Hat functions over `lam` that bend a spectrum through filters at `wavelengths`, in order: each
+    rises from 0 at the filter before to 1 at its own and falls to 0 at the next, the first held at 1
+    below its filter and the last above its, so that they sum to one."""
+    out = []
+    for i, w in enumerate(wavelengths):
+        points = [wavelengths[i - 1] if i > 0 else w - 1, w, wavelengths[i + 1] if i + 1 < len(wavelengths) else w + 1]
+        values = [0.0 if i > 0 else 1.0, 1.0, 0.0 if i + 1 < len(wavelengths) else 1.0]
+        out.append(np.interp(lam, points, values))
+    return out
+
+
 def channels(lam, albedo, matrix):
     """Each sRGB channel's wavelength for a spectrum, nm: the mean of the wavelengths it takes in,
     weighted by how much of each it takes in. `matrix` is `matrix(lam)`."""

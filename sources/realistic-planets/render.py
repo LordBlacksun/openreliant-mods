@@ -6,6 +6,8 @@ are then planetocentric, as `sphere.py`'s spheres take them.
 
     python3 render.py texture.png out.png --size 512 --lat -25 --lon 0 --sun-lat -20 --sun-lon 20 --k 0.75
 
+`--k` takes one exponent, or one each for red, green and blue, as the mod's surface functions do, and
+`--least` holds the limb's factor at its value at that cosine of the view, as they do too.
 `--light 1 1 0.8` lights the planet as StarLancer does, apart from the game's tone curve.
 
 `--ring` adds a ring in the plane of the equator, from its strip of a texture, as `sphere.py` writes it,
@@ -34,9 +36,11 @@ def unit(lat, lon):
     return np.array([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
 
 
-def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), polar=1.0, ring=None, extent=1.0, aspect=1.0):
-    """The picture, `size` pixels high. `ring` is the ring's texture, its inner and outer radius, and
-    the cosine of the sun's angle from its pole that it's lit for, or None."""
+def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), polar=1.0, ring=None, extent=1.0, aspect=1.0, least=0.0):
+    """The picture, `size` pixels high. `k` is Minnaert's exponent, or one for each channel. `ring`
+    is the ring's texture, its inner and outer radius, and the cosine of the sun's angle from its
+    pole that it's lit for, or None. Nearer the limb than `least`, the cosine of the view, the limb's
+    factor stays as it is there."""
     view = unit(lat, lon)                       # from the planet's centre toward the viewer
     north = np.array([0.0, 0.0, 1.0]) - view[2] * view
     north /= np.linalg.norm(north)
@@ -66,8 +70,9 @@ def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), pola
     row = np.clip(((90 - plat) / 180 * h).astype(int), 0, h - 1)
     albedo = tex[row, col]
     mu, mu0 = np.clip(normal @ view, 0, 1), np.clip(normal @ sun, 0, 1)
-    shade = np.where(mu0 > 0, mu0 ** k * np.clip(mu, 1e-3, 1) ** (k - 1), 0)
-    out = np.where(disk[..., None], albedo * shade[..., None] * np.asarray(light), 0)
+    k = np.broadcast_to(np.asarray(k, dtype=float), (3,))
+    shade = np.where(mu0[..., None] > 0, mu0[..., None] ** k * np.clip(mu, max(least, 1e-3), 1)[..., None] ** (k - 1), 0)
+    out = np.where(disk[..., None], albedo * shade * np.asarray(light), 0)
     if ring is not None and abs(view[2]) > 1e-6:
         strip, inner, outer, ring_sun = ring
         # Where each ray crosses the plane of the equator, and whether that's in front of the planet.
@@ -97,7 +102,8 @@ def main():
     p.add_argument('--size', type=int, default=512, help="the picture's height in pixels")
     p.add_argument('--lat', type=float, default=-25); p.add_argument('--lon', type=float, default=0)
     p.add_argument('--sun-lat', type=float, default=-20); p.add_argument('--sun-lon', type=float, default=20)
-    p.add_argument('--k', type=float, default=0.75, help="Minnaert's exponent")
+    p.add_argument('--k', type=float, nargs='+', default=[0.75], help="Minnaert's exponent, or one for each of red, green and blue")
+    p.add_argument('--least', type=float, default=0.0, help="the cosine of the view nearer the limb than which the limb's factor holds")
     p.add_argument('--light', type=float, nargs=3, default=(1.0, 1.0, 1.0), metavar=('R', 'G', 'B'), help="the light's colour")
     p.add_argument('--polar', type=float, default=1.0, help="the polar radius over the equator's")
     p.add_argument('--ring', nargs=3, metavar=('TEXTURE', 'INNER', 'OUTER'), help="a ring's texture, and its radii in the equator's")
@@ -106,7 +112,8 @@ def main():
     p.add_argument('--aspect', type=float, default=1.0, help="the picture's width over its height")
     a = p.parse_args()
     ring = (load(a.ring[0], alpha=True), float(a.ring[1]), float(a.ring[2]), a.ring_sun) if a.ring else None
-    save(render(load(a.texture), a.size, a.lat, a.lon, a.sun_lat, a.sun_lon, a.k, a.light, a.polar, ring, a.extent, a.aspect), a.out)
+    k = a.k[0] if len(a.k) == 1 else a.k
+    save(render(load(a.texture), a.size, a.lat, a.lon, a.sun_lat, a.sun_lon, k, a.light, a.polar, ring, a.extent, a.aspect, a.least), a.out)
 
 
 if __name__ == '__main__':

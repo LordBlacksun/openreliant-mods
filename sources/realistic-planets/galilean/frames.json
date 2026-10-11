@@ -1,0 +1,4185 @@
+{
+ "about": "Voyager 1's and 2's narrow-angle frames of the Galilean moons from 1979, in the violet, blue, green and orange filters, calibrated to I/F with the camera's distortion removed (GEOMED), from the PDS Ring-Moon Systems Node (OPUS): one set for each 20 degrees of longitude, the one with the largest disc, leaving out two green frames of Io of 1979-07-09 that show nothing and an orange frame of Ganymede of 1979-07-01 that holds only noise. The geometry is OPUS's: the distance to the moon's centre, km, planetocentric latitudes and east longitudes of the points below the spacecraft and the sun, and the phase angle. The camera's pointing isn't known; it's fitted to each frame.",
+ "frames": [
+  {
+   "moon": "Io",
+   "name": "C1634516",
+   "opus_id": "vg-iss-1-j-c1634516",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1634518",
+   "time": "1979-03-04T00:46:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634516_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634516_GEOMED.LBL"
+   ],
+   "distance_km": 2617800.3,
+   "observer_lat": 1.189,
+   "observer_east_lon": 342.865,
+   "sun_lat": 0.497,
+   "sun_east_lon": 347.885,
+   "phase": 5.08,
+   "disc_pixels": 177.6
+  },
+  {
+   "moon": "Io",
+   "name": "C1634526",
+   "opus_id": "vg-iss-1-j-c1634526",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1634518",
+   "time": "1979-03-04T00:54:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634526_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634526_GEOMED.LBL"
+   ],
+   "distance_km": 2608562.7,
+   "observer_lat": 1.185,
+   "observer_east_lon": 341.964,
+   "sun_lat": 0.497,
+   "sun_east_lon": 346.755,
+   "phase": 4.852,
+   "disc_pixels": 178.2
+  },
+  {
+   "moon": "Io",
+   "name": "C1634518",
+   "opus_id": "vg-iss-1-j-c1634518",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1634518",
+   "time": "1979-03-04T00:47:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634518_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634518_GEOMED.LBL"
+   ],
+   "distance_km": 2615960.8,
+   "observer_lat": 1.188,
+   "observer_east_lon": 342.684,
+   "sun_lat": 0.497,
+   "sun_east_lon": 347.659,
+   "phase": 5.035,
+   "disc_pixels": 177.7
+  },
+  {
+   "moon": "Io",
+   "name": "C1634528",
+   "opus_id": "vg-iss-1-j-c1634528",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1634518",
+   "time": "1979-03-04T00:55:46.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634528_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16345XX/C1634528_GEOMED.LBL"
+   ],
+   "distance_km": 2606707.3,
+   "observer_lat": 1.184,
+   "observer_east_lon": 341.785,
+   "sun_lat": 0.497,
+   "sun_east_lon": 346.53,
+   "phase": 4.807,
+   "disc_pixels": 178.3
+  },
+  {
+   "moon": "Io",
+   "name": "C2059215",
+   "opus_id": "vg-iss-2-j-c2059215",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2059221",
+   "time": "1979-07-07T16:42:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059215_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059215_GEOMED.LBL"
+   ],
+   "distance_km": 3048738.9,
+   "observer_lat": 3.264,
+   "observer_east_lon": 338.803,
+   "sun_lat": -0.03,
+   "sun_east_lon": 346.648,
+   "phase": 8.513,
+   "disc_pixels": 152.5
+  },
+  {
+   "moon": "Io",
+   "name": "C2059217",
+   "opus_id": "vg-iss-2-j-c2059217",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2059221",
+   "time": "1979-07-07T16:43:58.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059217_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059217_GEOMED.LBL"
+   ],
+   "distance_km": 3047112.2,
+   "observer_lat": 3.263,
+   "observer_east_lon": 338.617,
+   "sun_lat": -0.03,
+   "sun_east_lon": 346.421,
+   "phase": 8.476,
+   "disc_pixels": 152.6
+  },
+  {
+   "moon": "Io",
+   "name": "C2059221",
+   "opus_id": "vg-iss-2-j-c2059221",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2059221",
+   "time": "1979-07-07T16:47:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059221_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059221_GEOMED.LBL"
+   ],
+   "distance_km": 3043849.2,
+   "observer_lat": 3.261,
+   "observer_east_lon": 338.246,
+   "sun_lat": -0.03,
+   "sun_east_lon": 345.97,
+   "phase": 8.401,
+   "disc_pixels": 152.7
+  },
+  {
+   "moon": "Io",
+   "name": "C2059219",
+   "opus_id": "vg-iss-2-j-c2059219",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2059221",
+   "time": "1979-07-07T16:45:34.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059219_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20592XX/C2059219_GEOMED.LBL"
+   ],
+   "distance_km": 3045484.7,
+   "observer_lat": 3.262,
+   "observer_east_lon": 338.431,
+   "sun_lat": -0.03,
+   "sun_east_lon": 346.196,
+   "phase": 8.439,
+   "disc_pixels": 152.6
+  },
+  {
+   "moon": "Io",
+   "name": "C1635136",
+   "opus_id": "vg-iss-1-j-c1635136",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1635130",
+   "time": "1979-03-04T05:50:11.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635136_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635136_GEOMED.LBL"
+   ],
+   "distance_km": 2191029.1,
+   "observer_lat": 1.032,
+   "observer_east_lon": 308.836,
+   "sun_lat": 0.498,
+   "sun_east_lon": 304.96,
+   "phase": 3.906,
+   "disc_pixels": 212.2
+  },
+  {
+   "moon": "Io",
+   "name": "C1635138",
+   "opus_id": "vg-iss-1-j-c1635138",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1635130",
+   "time": "1979-03-04T05:51:47.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635138_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635138_GEOMED.LBL"
+   ],
+   "distance_km": 2188421.6,
+   "observer_lat": 1.031,
+   "observer_east_lon": 308.656,
+   "sun_lat": 0.498,
+   "sun_east_lon": 304.734,
+   "phase": 3.952,
+   "disc_pixels": 212.5
+  },
+  {
+   "moon": "Io",
+   "name": "C1635130",
+   "opus_id": "vg-iss-1-j-c1635130",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1635130",
+   "time": "1979-03-04T05:45:23.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635130_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635130_GEOMED.LBL"
+   ],
+   "distance_km": 2198815.5,
+   "observer_lat": 1.035,
+   "observer_east_lon": 309.374,
+   "sun_lat": 0.497,
+   "sun_east_lon": 305.638,
+   "phase": 3.768,
+   "disc_pixels": 211.5
+  },
+  {
+   "moon": "Io",
+   "name": "C1635140",
+   "opus_id": "vg-iss-1-j-c1635140",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1635130",
+   "time": "1979-03-04T05:53:23.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635140_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16351XX/C1635140_GEOMED.LBL"
+   ],
+   "distance_km": 2185824.0,
+   "observer_lat": 1.03,
+   "observer_east_lon": 308.477,
+   "sun_lat": 0.498,
+   "sun_east_lon": 304.509,
+   "phase": 3.997,
+   "disc_pixels": 212.7
+  },
+  {
+   "moon": "Io",
+   "name": "C1635438",
+   "opus_id": "vg-iss-1-j-c1635438",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1635432",
+   "time": "1979-03-04T08:15:47.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635438_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635438_GEOMED.LBL"
+   ],
+   "distance_km": 1943319.2,
+   "observer_lat": 0.952,
+   "observer_east_lon": 292.385,
+   "sun_lat": 0.498,
+   "sun_east_lon": 284.398,
+   "phase": 7.997,
+   "disc_pixels": 239.3
+  },
+  {
+   "moon": "Io",
+   "name": "C1635440",
+   "opus_id": "vg-iss-1-j-c1635440",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1635432",
+   "time": "1979-03-04T08:17:23.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635440_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635440_GEOMED.LBL"
+   ],
+   "distance_km": 1940488.6,
+   "observer_lat": 0.951,
+   "observer_east_lon": 292.202,
+   "sun_lat": 0.498,
+   "sun_east_lon": 284.172,
+   "phase": 8.04,
+   "disc_pixels": 239.6
+  },
+  {
+   "moon": "Io",
+   "name": "C1635432",
+   "opus_id": "vg-iss-1-j-c1635432",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1635432",
+   "time": "1979-03-04T08:10:59.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635432_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635432_GEOMED.LBL"
+   ],
+   "distance_km": 1951780.8,
+   "observer_lat": 0.955,
+   "observer_east_lon": 292.932,
+   "sun_lat": 0.498,
+   "sun_east_lon": 285.076,
+   "phase": 7.867,
+   "disc_pixels": 238.2
+  },
+  {
+   "moon": "Io",
+   "name": "C1635442",
+   "opus_id": "vg-iss-1-j-c1635442",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1635432",
+   "time": "1979-03-04T08:18:59.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635442_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16354XX/C1635442_GEOMED.LBL"
+   ],
+   "distance_km": 1937670.2,
+   "observer_lat": 0.95,
+   "observer_east_lon": 292.02,
+   "sun_lat": 0.498,
+   "sun_east_lon": 283.946,
+   "phase": 8.084,
+   "disc_pixels": 240.0
+  },
+  {
+   "moon": "Io",
+   "name": "C1636046",
+   "opus_id": "vg-iss-1-j-c1636046",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1636052",
+   "time": "1979-03-04T13:10:11.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636046_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636046_GEOMED.LBL"
+   ],
+   "distance_km": 1408829.2,
+   "observer_lat": 0.716,
+   "observer_east_lon": 257.491,
+   "sun_lat": 0.498,
+   "sun_east_lon": 242.808,
+   "phase": 14.687,
+   "disc_pixels": 330.2
+  },
+  {
+   "moon": "Io",
+   "name": "C1636048",
+   "opus_id": "vg-iss-1-j-c1636048",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1636052",
+   "time": "1979-03-04T13:11:47.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636048_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636048_GEOMED.LBL"
+   ],
+   "distance_km": 1405935.3,
+   "observer_lat": 0.715,
+   "observer_east_lon": 257.291,
+   "sun_lat": 0.498,
+   "sun_east_lon": 242.582,
+   "phase": 14.713,
+   "disc_pixels": 330.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1636052",
+   "opus_id": "vg-iss-1-j-c1636052",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1636052",
+   "time": "1979-03-04T13:14:59.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636052_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636052_GEOMED.LBL"
+   ],
+   "distance_km": 1400154.6,
+   "observer_lat": 0.711,
+   "observer_east_lon": 256.891,
+   "sun_lat": 0.498,
+   "sun_east_lon": 242.13,
+   "phase": 14.765,
+   "disc_pixels": 332.2
+  },
+  {
+   "moon": "Io",
+   "name": "C1636050",
+   "opus_id": "vg-iss-1-j-c1636050",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1636052",
+   "time": "1979-03-04T13:13:23.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636050_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636050_GEOMED.LBL"
+   ],
+   "distance_km": 1403046.1,
+   "observer_lat": 0.713,
+   "observer_east_lon": 257.091,
+   "sun_lat": 0.498,
+   "sun_east_lon": 242.356,
+   "phase": 14.739,
+   "disc_pixels": 331.5
+  },
+  {
+   "moon": "Io",
+   "name": "C2061151",
+   "opus_id": "vg-iss-2-j-c2061151",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2061139",
+   "time": "1979-07-08T08:23:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061151_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061151_GEOMED.LBL"
+   ],
+   "distance_km": 1676724.7,
+   "observer_lat": 2.935,
+   "observer_east_lon": 218.895,
+   "sun_lat": -0.03,
+   "sun_east_lon": 213.761,
+   "phase": 5.933,
+   "disc_pixels": 277.4
+  },
+  {
+   "moon": "Io",
+   "name": "C2061131",
+   "opus_id": "vg-iss-2-j-c2061131",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2061139",
+   "time": "1979-07-08T08:07:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061131_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061131_GEOMED.LBL"
+   ],
+   "distance_km": 1697476.2,
+   "observer_lat": 2.951,
+   "observer_east_lon": 221.307,
+   "sun_lat": -0.03,
+   "sun_east_lon": 216.022,
+   "phase": 6.071,
+   "disc_pixels": 274.0
+  },
+  {
+   "moon": "Io",
+   "name": "C2061139",
+   "opus_id": "vg-iss-2-j-c2061139",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2061139",
+   "time": "1979-07-08T08:13:34.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061139_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061139_GEOMED.LBL"
+   ],
+   "distance_km": 1689118.4,
+   "observer_lat": 2.945,
+   "observer_east_lon": 220.344,
+   "sun_lat": -0.03,
+   "sun_east_lon": 215.117,
+   "phase": 6.017,
+   "disc_pixels": 275.3
+  },
+  {
+   "moon": "Io",
+   "name": "C2061135",
+   "opus_id": "vg-iss-2-j-c2061135",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2061139",
+   "time": "1979-07-08T08:10:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061135_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061135_GEOMED.LBL"
+   ],
+   "distance_km": 1693289.7,
+   "observer_lat": 2.948,
+   "observer_east_lon": 220.826,
+   "sun_lat": -0.03,
+   "sun_east_lon": 215.57,
+   "phase": 6.044,
+   "disc_pixels": 274.7
+  },
+  {
+   "moon": "Io",
+   "name": "C1636836",
+   "opus_id": "vg-iss-1-j-c1636836",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1636848",
+   "time": "1979-03-04T19:26:11.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636836_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636836_GEOMED.LBL"
+   ],
+   "distance_km": 801855.0,
+   "observer_lat": -0.097,
+   "observer_east_lon": 204.402,
+   "sun_lat": 0.497,
+   "sun_east_lon": 189.67,
+   "phase": 14.747,
+   "disc_pixels": 580.7
+  },
+  {
+   "moon": "Io",
+   "name": "C1636840",
+   "opus_id": "vg-iss-1-j-c1636840",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1636848",
+   "time": "1979-03-04T19:29:23.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636840_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636840_GEOMED.LBL"
+   ],
+   "distance_km": 797661.8,
+   "observer_lat": -0.109,
+   "observer_east_lon": 203.879,
+   "sun_lat": 0.497,
+   "sun_east_lon": 189.217,
+   "phase": 14.677,
+   "disc_pixels": 583.8
+  },
+  {
+   "moon": "Io",
+   "name": "C1636848",
+   "opus_id": "vg-iss-1-j-c1636848",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1636848",
+   "time": "1979-03-04T19:35:47.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636848_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636848_GEOMED.LBL"
+   ],
+   "distance_km": 789347.4,
+   "observer_lat": -0.133,
+   "observer_east_lon": 202.827,
+   "sun_lat": 0.497,
+   "sun_east_lon": 188.312,
+   "phase": 14.531,
+   "disc_pixels": 589.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1636844",
+   "opus_id": "vg-iss-1-j-c1636844",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1636848",
+   "time": "1979-03-04T19:32:35.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636844_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16368XX/C1636844_GEOMED.LBL"
+   ],
+   "distance_km": 793496.1,
+   "observer_lat": -0.121,
+   "observer_east_lon": 203.354,
+   "sun_lat": 0.497,
+   "sun_east_lon": 188.765,
+   "phase": 14.605,
+   "disc_pixels": 586.8
+  },
+  {
+   "moon": "Io",
+   "name": "C2061515",
+   "opus_id": "vg-iss-2-j-c2061515",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2061524",
+   "time": "1979-07-08T11:06:22.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061515_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061515_GEOMED.LBL"
+   ],
+   "distance_km": 1496374.3,
+   "observer_lat": 2.69,
+   "observer_east_lon": 193.343,
+   "sun_lat": -0.031,
+   "sun_east_lon": 190.694,
+   "phase": 3.8,
+   "disc_pixels": 310.8
+  },
+  {
+   "moon": "Io",
+   "name": "C2061518",
+   "opus_id": "vg-iss-2-j-c2061518",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2061524",
+   "time": "1979-07-08T11:08:46.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061518_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061518_GEOMED.LBL"
+   ],
+   "distance_km": 1494192.7,
+   "observer_lat": 2.685,
+   "observer_east_lon": 192.956,
+   "sun_lat": -0.031,
+   "sun_east_lon": 190.355,
+   "phase": 3.763,
+   "disc_pixels": 311.3
+  },
+  {
+   "moon": "Io",
+   "name": "C2061524",
+   "opus_id": "vg-iss-2-j-c2061524",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2061524",
+   "time": "1979-07-08T11:13:34.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061524_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061524_GEOMED.LBL"
+   ],
+   "distance_km": 1489876.2,
+   "observer_lat": 2.675,
+   "observer_east_lon": 192.181,
+   "sun_lat": -0.031,
+   "sun_east_lon": 189.676,
+   "phase": 3.689,
+   "disc_pixels": 312.2
+  },
+  {
+   "moon": "Io",
+   "name": "C2061521",
+   "opus_id": "vg-iss-2-j-c2061521",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2061524",
+   "time": "1979-07-08T11:11:10.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061521_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20615XX/C2061521_GEOMED.LBL"
+   ],
+   "distance_km": 1492028.5,
+   "observer_lat": 2.68,
+   "observer_east_lon": 192.569,
+   "sun_lat": -0.031,
+   "sun_east_lon": 190.016,
+   "phase": 3.726,
+   "disc_pixels": 311.8
+  },
+  {
+   "moon": "Io",
+   "name": "C1637242",
+   "opus_id": "vg-iss-1-j-c1637242",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1637248",
+   "time": "1979-03-04T22:42:59.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637242_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637242_GEOMED.LBL"
+   ],
+   "distance_km": 589140.3,
+   "observer_lat": -1.098,
+   "observer_east_lon": 169.478,
+   "sun_lat": 0.496,
+   "sun_east_lon": 161.852,
+   "phase": 7.79,
+   "disc_pixels": 791.0
+  },
+  {
+   "moon": "Io",
+   "name": "C1637244",
+   "opus_id": "vg-iss-1-j-c1637244",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1637248",
+   "time": "1979-03-04T22:44:35.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637244_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637244_GEOMED.LBL"
+   ],
+   "distance_km": 587805.9,
+   "observer_lat": -1.109,
+   "observer_east_lon": 169.174,
+   "sun_lat": 0.496,
+   "sun_east_lon": 161.626,
+   "phase": 7.716,
+   "disc_pixels": 792.8
+  },
+  {
+   "moon": "Io",
+   "name": "C1637248",
+   "opus_id": "vg-iss-1-j-c1637248",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1637248",
+   "time": "1979-03-04T22:47:47.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637248_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637248_GEOMED.LBL"
+   ],
+   "distance_km": 585156.5,
+   "observer_lat": -1.13,
+   "observer_east_lon": 168.564,
+   "sun_lat": 0.496,
+   "sun_east_lon": 161.173,
+   "phase": 7.567,
+   "disc_pixels": 796.4
+  },
+  {
+   "moon": "Io",
+   "name": "C1637246",
+   "opus_id": "vg-iss-1-j-c1637246",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1637248",
+   "time": "1979-03-04T22:46:11.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637246_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16372XX/C1637246_GEOMED.LBL"
+   ],
+   "distance_km": 586478.8,
+   "observer_lat": -1.119,
+   "observer_east_lon": 168.869,
+   "sun_lat": 0.496,
+   "sun_east_lon": 161.4,
+   "phase": 7.641,
+   "disc_pixels": 794.6
+  },
+  {
+   "moon": "Io",
+   "name": "C1637536",
+   "opus_id": "vg-iss-1-j-c1637536",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1637542",
+   "time": "1979-03-05T01:02:11.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637536_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637536_GEOMED.LBL"
+   ],
+   "distance_km": 495873.2,
+   "observer_lat": -2.106,
+   "observer_east_lon": 142.503,
+   "sun_lat": 0.495,
+   "sun_east_lon": 142.177,
+   "phase": 2.621,
+   "disc_pixels": 940.3
+  },
+  {
+   "moon": "Io",
+   "name": "C1637538",
+   "opus_id": "vg-iss-1-j-c1637538",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1637542",
+   "time": "1979-03-05T01:03:47.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637538_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637538_GEOMED.LBL"
+   ],
+   "distance_km": 495045.7,
+   "observer_lat": -2.118,
+   "observer_east_lon": 142.192,
+   "sun_lat": 0.495,
+   "sun_east_lon": 141.951,
+   "phase": 2.625,
+   "disc_pixels": 941.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1637542",
+   "opus_id": "vg-iss-1-j-c1637542",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1637542",
+   "time": "1979-03-05T01:06:59.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637542_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637542_GEOMED.LBL"
+   ],
+   "distance_km": 493405.2,
+   "observer_lat": -2.144,
+   "observer_east_lon": 141.572,
+   "sun_lat": 0.495,
+   "sun_east_lon": 141.499,
+   "phase": 2.64,
+   "disc_pixels": 945.1
+  },
+  {
+   "moon": "Io",
+   "name": "C1637540",
+   "opus_id": "vg-iss-1-j-c1637540",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1637542",
+   "time": "1979-03-05T01:05:23.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637540_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16375XX/C1637540_GEOMED.LBL"
+   ],
+   "distance_km": 494223.1,
+   "observer_lat": -2.131,
+   "observer_east_lon": 141.882,
+   "sun_lat": 0.495,
+   "sun_east_lon": 141.725,
+   "phase": 2.631,
+   "disc_pixels": 943.5
+  },
+  {
+   "moon": "Io",
+   "name": "C1632220",
+   "opus_id": "vg-iss-1-j-c1632220",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1632214",
+   "time": "1979-03-03T06:25:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632220_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632220_GEOMED.LBL"
+   ],
+   "distance_km": 2889305.6,
+   "observer_lat": 2.111,
+   "observer_east_lon": 123.447,
+   "sun_lat": 0.502,
+   "sun_east_lon": 143.363,
+   "phase": 19.978,
+   "disc_pixels": 160.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1632222",
+   "opus_id": "vg-iss-1-j-c1632222",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1632214",
+   "time": "1979-03-03T06:26:58.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632222_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632222_GEOMED.LBL"
+   ],
+   "distance_km": 2889357.3,
+   "observer_lat": 2.109,
+   "observer_east_lon": 123.206,
+   "sun_lat": 0.502,
+   "sun_east_lon": 143.136,
+   "phase": 19.993,
+   "disc_pixels": 160.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1632214",
+   "opus_id": "vg-iss-1-j-c1632214",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1632214",
+   "time": "1979-03-03T06:20:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632214_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632214_GEOMED.LBL"
+   ],
+   "distance_km": 2889173.0,
+   "observer_lat": 2.115,
+   "observer_east_lon": 124.172,
+   "sun_lat": 0.502,
+   "sun_east_lon": 144.041,
+   "phase": 19.932,
+   "disc_pixels": 160.9
+  },
+  {
+   "moon": "Io",
+   "name": "C1632224",
+   "opus_id": "vg-iss-1-j-c1632224",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1632214",
+   "time": "1979-03-03T06:28:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632224_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16322XX/C1632224_GEOMED.LBL"
+   ],
+   "distance_km": 2889412.5,
+   "observer_lat": 2.108,
+   "observer_east_lon": 122.965,
+   "sun_lat": 0.502,
+   "sun_east_lon": 142.911,
+   "phase": 20.008,
+   "disc_pixels": 160.9
+  },
+  {
+   "moon": "Europa",
+   "name": "C2058609",
+   "opus_id": "vg-iss-2-j-c2058609",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2058615",
+   "time": "1979-07-07T11:49:34.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058609_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058609_GEOMED.LBL"
+   ],
+   "distance_km": 3491588.2,
+   "observer_lat": 3.629,
+   "observer_east_lon": 341.94,
+   "sun_lat": 0.437,
+   "sun_east_lon": 350.873,
+   "phase": 9.489,
+   "disc_pixels": 114.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C2058611",
+   "opus_id": "vg-iss-2-j-c2058611",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2058615",
+   "time": "1979-07-07T11:51:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058611_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058611_GEOMED.LBL"
+   ],
+   "distance_km": 3490190.2,
+   "observer_lat": 3.628,
+   "observer_east_lon": 341.857,
+   "sun_lat": 0.437,
+   "sun_east_lon": 350.76,
+   "phase": 9.46,
+   "disc_pixels": 114.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C2058615",
+   "opus_id": "vg-iss-2-j-c2058615",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2058615",
+   "time": "1979-07-07T11:54:22.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058615_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058615_GEOMED.LBL"
+   ],
+   "distance_km": 3487391.9,
+   "observer_lat": 3.626,
+   "observer_east_lon": 341.692,
+   "sun_lat": 0.437,
+   "sun_east_lon": 350.536,
+   "phase": 9.404,
+   "disc_pixels": 114.2
+  },
+  {
+   "moon": "Europa",
+   "name": "C2058613",
+   "opus_id": "vg-iss-2-j-c2058613",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2058615",
+   "time": "1979-07-07T11:52:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058613_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20586XX/C2058613_GEOMED.LBL"
+   ],
+   "distance_km": 3488793.2,
+   "observer_lat": 3.627,
+   "observer_east_lon": 341.774,
+   "sun_lat": 0.437,
+   "sun_east_lon": 350.648,
+   "phase": 9.432,
+   "disc_pixels": 114.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C2059319",
+   "opus_id": "vg-iss-2-j-c2059319",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2059325",
+   "time": "1979-07-07T17:33:34.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059319_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059319_GEOMED.LBL"
+   ],
+   "distance_km": 3155999.5,
+   "observer_lat": 3.426,
+   "observer_east_lon": 324.373,
+   "sun_lat": 0.436,
+   "sun_east_lon": 326.694,
+   "phase": 3.786,
+   "disc_pixels": 126.2
+  },
+  {
+   "moon": "Europa",
+   "name": "C2059321",
+   "opus_id": "vg-iss-2-j-c2059321",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2059325",
+   "time": "1979-07-07T17:35:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059321_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059321_GEOMED.LBL"
+   ],
+   "distance_km": 3154285.0,
+   "observer_lat": 3.425,
+   "observer_east_lon": 324.292,
+   "sun_lat": 0.436,
+   "sun_east_lon": 326.581,
+   "phase": 3.766,
+   "disc_pixels": 126.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C2059325",
+   "opus_id": "vg-iss-2-j-c2059325",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2059325",
+   "time": "1979-07-07T17:38:22.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059325_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059325_GEOMED.LBL"
+   ],
+   "distance_km": 3150855.2,
+   "observer_lat": 3.423,
+   "observer_east_lon": 324.131,
+   "sun_lat": 0.436,
+   "sun_east_lon": 326.356,
+   "phase": 3.726,
+   "disc_pixels": 126.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C2059323",
+   "opus_id": "vg-iss-2-j-c2059323",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2059325",
+   "time": "1979-07-07T17:36:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059323_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20593XX/C2059323_GEOMED.LBL"
+   ],
+   "distance_km": 3152572.4,
+   "observer_lat": 3.424,
+   "observer_east_lon": 324.212,
+   "sun_lat": 0.436,
+   "sun_east_lon": 326.469,
+   "phase": 3.746,
+   "disc_pixels": 126.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C2061155",
+   "opus_id": "vg-iss-2-j-c2061155",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2061207",
+   "time": "1979-07-08T08:26:22.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061155_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061155_GEOMED.LBL"
+   ],
+   "distance_km": 2060315.5,
+   "observer_lat": 2.83,
+   "observer_east_lon": 280.538,
+   "sun_lat": 0.435,
+   "sun_east_lon": 263.913,
+   "phase": 16.79,
+   "disc_pixels": 193.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C2061159",
+   "opus_id": "vg-iss-2-j-c2061159",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2061207",
+   "time": "1979-07-08T08:29:34.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061159_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20611XX/C2061159_GEOMED.LBL"
+   ],
+   "distance_km": 2056120.3,
+   "observer_lat": 2.827,
+   "observer_east_lon": 280.384,
+   "sun_lat": 0.435,
+   "sun_east_lon": 263.688,
+   "phase": 16.86,
+   "disc_pixels": 193.7
+  },
+  {
+   "moon": "Europa",
+   "name": "C2061207",
+   "opus_id": "vg-iss-2-j-c2061207",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2061207",
+   "time": "1979-07-08T08:35:58.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20612XX/C2061207_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20612XX/C2061207_GEOMED.LBL"
+   ],
+   "distance_km": 2047733.5,
+   "observer_lat": 2.821,
+   "observer_east_lon": 280.077,
+   "sun_lat": 0.435,
+   "sun_east_lon": 263.238,
+   "phase": 17.001,
+   "disc_pixels": 194.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C2061203",
+   "opus_id": "vg-iss-2-j-c2061203",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2061207",
+   "time": "1979-07-08T08:32:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20612XX/C2061203_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20612XX/C2061203_GEOMED.LBL"
+   ],
+   "distance_km": 2051928.9,
+   "observer_lat": 2.824,
+   "observer_east_lon": 280.231,
+   "sun_lat": 0.435,
+   "sun_east_lon": 263.463,
+   "phase": 16.931,
+   "disc_pixels": 194.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C2062516",
+   "opus_id": "vg-iss-2-j-c2062516",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2062526",
+   "time": "1979-07-08T19:07:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062516_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062516_GEOMED.LBL"
+   ],
+   "distance_km": 1244052.8,
+   "observer_lat": 1.69,
+   "observer_east_lon": 250.378,
+   "sun_lat": 0.434,
+   "sun_east_lon": 218.818,
+   "phase": 31.582,
+   "disc_pixels": 320.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C2062518",
+   "opus_id": "vg-iss-2-j-c2062518",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2062526",
+   "time": "1979-07-08T19:08:46.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062518_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062518_GEOMED.LBL"
+   ],
+   "distance_km": 1242137.3,
+   "observer_lat": 1.685,
+   "observer_east_lon": 250.304,
+   "sun_lat": 0.434,
+   "sun_east_lon": 218.705,
+   "phase": 31.621,
+   "disc_pixels": 320.9
+  },
+  {
+   "moon": "Europa",
+   "name": "C2062526",
+   "opus_id": "vg-iss-2-j-c2062526",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2062526",
+   "time": "1979-07-08T19:15:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062526_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062526_GEOMED.LBL"
+   ],
+   "distance_km": 1234490.6,
+   "observer_lat": 1.665,
+   "observer_east_lon": 250.011,
+   "sun_lat": 0.434,
+   "sun_east_lon": 218.254,
+   "phase": 31.777,
+   "disc_pixels": 322.9
+  },
+  {
+   "moon": "Europa",
+   "name": "C2062520",
+   "opus_id": "vg-iss-2-j-c2062520",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2062526",
+   "time": "1979-07-08T19:10:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062520_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5213/DATA/C20625XX/C2062520_GEOMED.LBL"
+   ],
+   "distance_km": 1240226.3,
+   "observer_lat": 1.68,
+   "observer_east_lon": 250.231,
+   "sun_lat": 0.434,
+   "sun_east_lon": 218.592,
+   "phase": 31.66,
+   "disc_pixels": 321.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1630443",
+   "opus_id": "vg-iss-1-j-c1630443",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1630449",
+   "time": "1979-03-02T16:19:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630443_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630443_GEOMED.LBL"
+   ],
+   "distance_km": 3346405.6,
+   "observer_lat": 2.865,
+   "observer_east_lon": 228.137,
+   "sun_lat": 0.928,
+   "sun_east_lon": 236.387,
+   "phase": 8.468,
+   "disc_pixels": 119.0
+  },
+  {
+   "moon": "Europa",
+   "name": "C1630445",
+   "opus_id": "vg-iss-1-j-c1630445",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1630449",
+   "time": "1979-03-02T16:21:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630445_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630445_GEOMED.LBL"
+   ],
+   "distance_km": 3344185.2,
+   "observer_lat": 2.866,
+   "observer_east_lon": 228.017,
+   "sun_lat": 0.928,
+   "sun_east_lon": 236.274,
+   "phase": 8.475,
+   "disc_pixels": 119.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C1630449",
+   "opus_id": "vg-iss-1-j-c1630449",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1630449",
+   "time": "1979-03-02T16:24:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630449_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630449_GEOMED.LBL"
+   ],
+   "distance_km": 3339757.8,
+   "observer_lat": 2.867,
+   "observer_east_lon": 227.777,
+   "sun_lat": 0.928,
+   "sun_east_lon": 236.049,
+   "phase": 8.49,
+   "disc_pixels": 119.2
+  },
+  {
+   "moon": "Europa",
+   "name": "C1630447",
+   "opus_id": "vg-iss-1-j-c1630447",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1630449",
+   "time": "1979-03-02T16:22:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630447_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16304XX/C1630447_GEOMED.LBL"
+   ],
+   "distance_km": 3341974.9,
+   "observer_lat": 2.866,
+   "observer_east_lon": 227.897,
+   "sun_lat": 0.928,
+   "sun_east_lon": 236.162,
+   "phase": 8.483,
+   "disc_pixels": 119.2
+  },
+  {
+   "moon": "Europa",
+   "name": "C1631245",
+   "opus_id": "vg-iss-1-j-c1631245",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1631251",
+   "time": "1979-03-02T22:45:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631245_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631245_GEOMED.LBL"
+   ],
+   "distance_km": 2869352.3,
+   "observer_lat": 2.964,
+   "observer_east_lon": 197.973,
+   "sun_lat": 0.928,
+   "sun_east_lon": 209.245,
+   "phase": 11.445,
+   "disc_pixels": 138.8
+  },
+  {
+   "moon": "Europa",
+   "name": "C1631247",
+   "opus_id": "vg-iss-1-j-c1631247",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1631251",
+   "time": "1979-03-02T22:46:58.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631247_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631247_GEOMED.LBL"
+   ],
+   "distance_km": 2867648.6,
+   "observer_lat": 2.964,
+   "observer_east_lon": 197.843,
+   "sun_lat": 0.928,
+   "sun_east_lon": 209.132,
+   "phase": 11.462,
+   "disc_pixels": 138.9
+  },
+  {
+   "moon": "Europa",
+   "name": "C1631251",
+   "opus_id": "vg-iss-1-j-c1631251",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1631251",
+   "time": "1979-03-02T22:50:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631251_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631251_GEOMED.LBL"
+   ],
+   "distance_km": 2864255.2,
+   "observer_lat": 2.964,
+   "observer_east_lon": 197.583,
+   "sun_lat": 0.928,
+   "sun_east_lon": 208.907,
+   "phase": 11.497,
+   "disc_pixels": 139.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C1631249",
+   "opus_id": "vg-iss-1-j-c1631249",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1631251",
+   "time": "1979-03-02T22:48:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631249_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16312XX/C1631249_GEOMED.LBL"
+   ],
+   "distance_km": 2865953.8,
+   "observer_lat": 2.964,
+   "observer_east_lon": 197.713,
+   "sun_lat": 0.928,
+   "sun_east_lon": 209.019,
+   "phase": 11.479,
+   "disc_pixels": 139.0
+  },
+  {
+   "moon": "Europa",
+   "name": "C2052341",
+   "opus_id": "vg-iss-2-j-c2052341",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2052350",
+   "time": "1979-07-05T09:51:10.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052341_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052341_GEOMED.LBL"
+   ],
+   "distance_km": 4080761.7,
+   "observer_lat": 6.834,
+   "observer_east_lon": 178.102,
+   "sun_lat": 0.447,
+   "sun_east_lon": 201.815,
+   "phase": 24.497,
+   "disc_pixels": 97.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C2052344",
+   "opus_id": "vg-iss-2-j-c2052344",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2052350",
+   "time": "1979-07-05T09:53:34.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052344_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052344_GEOMED.LBL"
+   ],
+   "distance_km": 4079303.6,
+   "observer_lat": 6.834,
+   "observer_east_lon": 177.911,
+   "sun_lat": 0.447,
+   "sun_east_lon": 201.646,
+   "phase": 24.518,
+   "disc_pixels": 97.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C2052350",
+   "opus_id": "vg-iss-2-j-c2052350",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2052350",
+   "time": "1979-07-05T09:58:22.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052350_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052350_GEOMED.LBL"
+   ],
+   "distance_km": 4076408.1,
+   "observer_lat": 6.833,
+   "observer_east_lon": 177.53,
+   "sun_lat": 0.447,
+   "sun_east_lon": 201.308,
+   "phase": 24.56,
+   "disc_pixels": 97.7
+  },
+  {
+   "moon": "Europa",
+   "name": "C2052347",
+   "opus_id": "vg-iss-2-j-c2052347",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2052350",
+   "time": "1979-07-05T09:55:58.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052347_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20523XX/C2052347_GEOMED.LBL"
+   ],
+   "distance_km": 4077853.6,
+   "observer_lat": 6.834,
+   "observer_east_lon": 177.721,
+   "sun_lat": 0.447,
+   "sun_east_lon": 201.477,
+   "phase": 24.539,
+   "disc_pixels": 97.7
+  },
+  {
+   "moon": "Europa",
+   "name": "C1632320",
+   "opus_id": "vg-iss-1-j-c1632320",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1632314",
+   "time": "1979-03-03T07:13:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632320_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632320_GEOMED.LBL"
+   ],
+   "distance_km": 2466928.3,
+   "observer_lat": 2.86,
+   "observer_east_lon": 155.344,
+   "sun_lat": 0.926,
+   "sun_east_lon": 173.479,
+   "phase": 18.227,
+   "disc_pixels": 161.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1632322",
+   "opus_id": "vg-iss-1-j-c1632322",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1632314",
+   "time": "1979-03-03T07:14:58.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632322_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632322_GEOMED.LBL"
+   ],
+   "distance_km": 2466101.4,
+   "observer_lat": 2.859,
+   "observer_east_lon": 155.208,
+   "sun_lat": 0.926,
+   "sun_east_lon": 173.366,
+   "phase": 18.25,
+   "disc_pixels": 161.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1632314",
+   "opus_id": "vg-iss-1-j-c1632314",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1632314",
+   "time": "1979-03-03T07:08:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632314_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632314_GEOMED.LBL"
+   ],
+   "distance_km": 2469422.0,
+   "observer_lat": 2.863,
+   "observer_east_lon": 155.752,
+   "sun_lat": 0.926,
+   "sun_east_lon": 173.817,
+   "phase": 18.158,
+   "disc_pixels": 161.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C1632324",
+   "opus_id": "vg-iss-1-j-c1632324",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1632314",
+   "time": "1979-03-03T07:16:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632324_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16323XX/C1632324_GEOMED.LBL"
+   ],
+   "distance_km": 2465280.2,
+   "observer_lat": 2.858,
+   "observer_east_lon": 155.072,
+   "sun_lat": 0.926,
+   "sun_east_lon": 173.254,
+   "phase": 18.273,
+   "disc_pixels": 161.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C1633454",
+   "opus_id": "vg-iss-1-j-c1633454",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1633448",
+   "time": "1979-03-03T16:28:34.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633454_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633454_GEOMED.LBL"
+   ],
+   "distance_km": 2310831.7,
+   "observer_lat": 2.354,
+   "observer_east_lon": 109.756,
+   "sun_lat": 0.924,
+   "sun_east_lon": 134.391,
+   "phase": 24.67,
+   "disc_pixels": 172.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1633456",
+   "opus_id": "vg-iss-1-j-c1633456",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1633448",
+   "time": "1979-03-03T16:30:10.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633456_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633456_GEOMED.LBL"
+   ],
+   "distance_km": 2310656.6,
+   "observer_lat": 2.352,
+   "observer_east_lon": 109.632,
+   "sun_lat": 0.924,
+   "sun_east_lon": 134.279,
+   "phase": 24.681,
+   "disc_pixels": 172.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1633448",
+   "opus_id": "vg-iss-1-j-c1633448",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1633448",
+   "time": "1979-03-03T16:23:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633448_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633448_GEOMED.LBL"
+   ],
+   "distance_km": 2311362.5,
+   "observer_lat": 2.359,
+   "observer_east_lon": 110.128,
+   "sun_lat": 0.924,
+   "sun_east_lon": 134.729,
+   "phase": 24.637,
+   "disc_pixels": 172.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C1633458",
+   "opus_id": "vg-iss-1-j-c1633458",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1633448",
+   "time": "1979-03-03T16:31:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633458_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16334XX/C1633458_GEOMED.LBL"
+   ],
+   "distance_km": 2310482.6,
+   "observer_lat": 2.35,
+   "observer_east_lon": 109.509,
+   "sun_lat": 0.924,
+   "sun_east_lon": 134.166,
+   "phase": 24.692,
+   "disc_pixels": 172.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634218",
+   "opus_id": "vg-iss-1-j-c1634218",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1634212",
+   "time": "1979-03-03T22:23:46.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634218_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634218_GEOMED.LBL"
+   ],
+   "distance_km": 2283274.8,
+   "observer_lat": 1.921,
+   "observer_east_lon": 83.761,
+   "sun_lat": 0.922,
+   "sun_east_lon": 109.392,
+   "phase": 25.65,
+   "disc_pixels": 174.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634220",
+   "opus_id": "vg-iss-1-j-c1634220",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1634212",
+   "time": "1979-03-03T22:25:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634220_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634220_GEOMED.LBL"
+   ],
+   "distance_km": 2283154.7,
+   "observer_lat": 1.919,
+   "observer_east_lon": 83.651,
+   "sun_lat": 0.922,
+   "sun_east_lon": 109.279,
+   "phase": 25.647,
+   "disc_pixels": 174.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634212",
+   "opus_id": "vg-iss-1-j-c1634212",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1634212",
+   "time": "1979-03-03T22:18:58.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634212_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634212_GEOMED.LBL"
+   ],
+   "distance_km": 2283632.9,
+   "observer_lat": 1.927,
+   "observer_east_lon": 84.091,
+   "sun_lat": 0.922,
+   "sun_east_lon": 109.729,
+   "phase": 25.657,
+   "disc_pixels": 174.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634222",
+   "opus_id": "vg-iss-1-j-c1634222",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1634212",
+   "time": "1979-03-03T22:26:58.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634222_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634222_GEOMED.LBL"
+   ],
+   "distance_km": 2283034.3,
+   "observer_lat": 1.917,
+   "observer_east_lon": 83.541,
+   "sun_lat": 0.922,
+   "sun_east_lon": 109.167,
+   "phase": 25.645,
+   "disc_pixels": 174.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634920",
+   "opus_id": "vg-iss-1-j-c1634920",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1634914",
+   "time": "1979-03-04T04:01:22.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634920_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634920_GEOMED.LBL"
+   ],
+   "distance_km": 2242741.4,
+   "observer_lat": 1.5,
+   "observer_east_lon": 61.94,
+   "sun_lat": 0.92,
+   "sun_east_lon": 85.639,
+   "phase": 23.711,
+   "disc_pixels": 177.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634922",
+   "opus_id": "vg-iss-1-j-c1634922",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1634914",
+   "time": "1979-03-04T04:02:58.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634922_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634922_GEOMED.LBL"
+   ],
+   "distance_km": 2242446.1,
+   "observer_lat": 1.498,
+   "observer_east_lon": 61.843,
+   "sun_lat": 0.92,
+   "sun_east_lon": 85.526,
+   "phase": 23.695,
+   "disc_pixels": 177.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634914",
+   "opus_id": "vg-iss-1-j-c1634914",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1634914",
+   "time": "1979-03-04T03:56:34.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634914_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634914_GEOMED.LBL"
+   ],
+   "distance_km": 2243619.8,
+   "observer_lat": 1.506,
+   "observer_east_lon": 62.23,
+   "sun_lat": 0.92,
+   "sun_east_lon": 85.976,
+   "phase": 23.758,
+   "disc_pixels": 177.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1634924",
+   "opus_id": "vg-iss-1-j-c1634924",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1634914",
+   "time": "1979-03-04T04:04:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634924_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16349XX/C1634924_GEOMED.LBL"
+   ],
+   "distance_km": 2242150.0,
+   "observer_lat": 1.496,
+   "observer_east_lon": 61.746,
+   "sun_lat": 0.92,
+   "sun_east_lon": 85.414,
+   "phase": 23.68,
+   "disc_pixels": 177.7
+  },
+  {
+   "moon": "Europa",
+   "name": "C1635210",
+   "opus_id": "vg-iss-1-j-c1635210",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1635204",
+   "time": "1979-03-04T06:17:23.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635210_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635210_GEOMED.LBL"
+   ],
+   "distance_km": 2212967.9,
+   "observer_lat": 1.332,
+   "observer_east_lon": 53.939,
+   "sun_lat": 0.92,
+   "sun_east_lon": 76.071,
+   "phase": 22.144,
+   "disc_pixels": 180.0
+  },
+  {
+   "moon": "Europa",
+   "name": "C1635212",
+   "opus_id": "vg-iss-1-j-c1635212",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1635204",
+   "time": "1979-03-04T06:18:59.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635212_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635212_GEOMED.LBL"
+   ],
+   "distance_km": 2212558.0,
+   "observer_lat": 1.33,
+   "observer_east_lon": 53.847,
+   "sun_lat": 0.92,
+   "sun_east_lon": 75.959,
+   "phase": 22.123,
+   "disc_pixels": 180.0
+  },
+  {
+   "moon": "Europa",
+   "name": "C1635204",
+   "opus_id": "vg-iss-1-j-c1635204",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1635204",
+   "time": "1979-03-04T06:12:35.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635204_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635204_GEOMED.LBL"
+   ],
+   "distance_km": 2214188.6,
+   "observer_lat": 1.338,
+   "observer_east_lon": 54.213,
+   "sun_lat": 0.92,
+   "sun_east_lon": 76.409,
+   "phase": 22.207,
+   "disc_pixels": 179.9
+  },
+  {
+   "moon": "Europa",
+   "name": "C1635214",
+   "opus_id": "vg-iss-1-j-c1635214",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1635204",
+   "time": "1979-03-04T06:20:35.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635214_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16352XX/C1635214_GEOMED.LBL"
+   ],
+   "distance_km": 2212147.2,
+   "observer_lat": 1.328,
+   "observer_east_lon": 53.756,
+   "sun_lat": 0.92,
+   "sun_east_lon": 75.846,
+   "phase": 22.102,
+   "disc_pixels": 180.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636029",
+   "opus_id": "vg-iss-1-j-c1636029",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1636035",
+   "time": "1979-03-04T12:56:35.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636029_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636029_GEOMED.LBL"
+   ],
+   "distance_km": 2060992.8,
+   "observer_lat": 0.827,
+   "observer_east_lon": 33.071,
+   "sun_lat": 0.918,
+   "sun_east_lon": 47.999,
+   "phase": 14.941,
+   "disc_pixels": 193.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636031",
+   "opus_id": "vg-iss-1-j-c1636031",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1636035",
+   "time": "1979-03-04T12:58:11.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636031_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636031_GEOMED.LBL"
+   ],
+   "distance_km": 2060169.7,
+   "observer_lat": 0.825,
+   "observer_east_lon": 32.995,
+   "sun_lat": 0.918,
+   "sun_east_lon": 47.886,
+   "phase": 14.904,
+   "disc_pixels": 193.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636035",
+   "opus_id": "vg-iss-1-j-c1636035",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1636035",
+   "time": "1979-03-04T13:01:23.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636035_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636035_GEOMED.LBL"
+   ],
+   "distance_km": 2058519.7,
+   "observer_lat": 0.821,
+   "observer_east_lon": 32.845,
+   "sun_lat": 0.918,
+   "sun_east_lon": 47.662,
+   "phase": 14.83,
+   "disc_pixels": 193.5
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636033",
+   "opus_id": "vg-iss-1-j-c1636033",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1636035",
+   "time": "1979-03-04T12:59:47.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636033_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16360XX/C1636033_GEOMED.LBL"
+   ],
+   "distance_km": 2059346.9,
+   "observer_lat": 0.823,
+   "observer_east_lon": 32.92,
+   "sun_lat": 0.918,
+   "sun_east_lon": 47.774,
+   "phase": 14.867,
+   "disc_pixels": 193.4
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636902",
+   "opus_id": "vg-iss-1-j-c1636902",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1636908",
+   "time": "1979-03-04T19:46:59.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636902_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636902_GEOMED.LBL"
+   ],
+   "distance_km": 1793504.6,
+   "observer_lat": 0.22,
+   "observer_east_lon": 16.199,
+   "sun_lat": 0.917,
+   "sun_east_lon": 19.149,
+   "phase": 3.047,
+   "disc_pixels": 222.1
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636904",
+   "opus_id": "vg-iss-1-j-c1636904",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1636908",
+   "time": "1979-03-04T19:48:35.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636904_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636904_GEOMED.LBL"
+   ],
+   "distance_km": 1792249.9,
+   "observer_lat": 0.217,
+   "observer_east_lon": 16.144,
+   "sun_lat": 0.917,
+   "sun_east_lon": 19.037,
+   "phase": 2.991,
+   "disc_pixels": 222.3
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636908",
+   "opus_id": "vg-iss-1-j-c1636908",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1636908",
+   "time": "1979-03-04T19:51:47.520",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636908_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636908_GEOMED.LBL"
+   ],
+   "distance_km": 1789738.5,
+   "observer_lat": 0.211,
+   "observer_east_lon": 16.035,
+   "sun_lat": 0.917,
+   "sun_east_lon": 18.812,
+   "phase": 2.88,
+   "disc_pixels": 222.6
+  },
+  {
+   "moon": "Europa",
+   "name": "C1636906",
+   "opus_id": "vg-iss-1-j-c1636906",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1636908",
+   "time": "1979-03-04T19:50:11.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636906_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16369XX/C1636906_GEOMED.LBL"
+   ],
+   "distance_km": 1790996.9,
+   "observer_lat": 0.214,
+   "observer_east_lon": 16.09,
+   "sun_lat": 0.917,
+   "sun_east_lon": 18.924,
+   "phase": 2.935,
+   "disc_pixels": 222.5
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2051416",
+   "opus_id": "vg-iss-2-j-c2051416",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2051425",
+   "time": "1979-07-05T02:19:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051416_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051416_GEOMED.LBL"
+   ],
+   "distance_km": 6032283.0,
+   "observer_lat": 4.678,
+   "observer_east_lon": 341.129,
+   "sun_lat": 0.06,
+   "sun_east_lon": 2.351,
+   "phase": 21.704,
+   "disc_pixels": 111.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2051419",
+   "opus_id": "vg-iss-2-j-c2051419",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2051425",
+   "time": "1979-07-05T02:21:34.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051419_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051419_GEOMED.LBL"
+   ],
+   "distance_km": 6030427.4,
+   "observer_lat": 4.678,
+   "observer_east_lon": 341.065,
+   "sun_lat": 0.06,
+   "sun_east_lon": 2.267,
+   "phase": 21.685,
+   "disc_pixels": 111.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2051425",
+   "opus_id": "vg-iss-2-j-c2051425",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2051425",
+   "time": "1979-07-05T02:26:22.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051425_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051425_GEOMED.LBL"
+   ],
+   "distance_km": 6026711.1,
+   "observer_lat": 4.677,
+   "observer_east_lon": 340.935,
+   "sun_lat": 0.06,
+   "sun_east_lon": 2.1,
+   "phase": 21.648,
+   "disc_pixels": 111.4
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2051422",
+   "opus_id": "vg-iss-2-j-c2051422",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2051425",
+   "time": "1979-07-05T02:23:58.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051422_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20514XX/C2051422_GEOMED.LBL"
+   ],
+   "distance_km": 6028573.2,
+   "observer_lat": 4.678,
+   "observer_east_lon": 341.0,
+   "sun_lat": 0.06,
+   "sun_east_lon": 2.184,
+   "phase": 21.667,
+   "disc_pixels": 111.4
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1620551",
+   "opus_id": "vg-iss-1-j-c1620551",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1620557",
+   "time": "1979-02-27T09:14:10.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620551_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620551_GEOMED.LBL"
+   ],
+   "distance_km": 7658708.1,
+   "observer_lat": 2.598,
+   "observer_east_lon": 284.867,
+   "sun_lat": 0.57,
+   "sun_east_lon": 298.414,
+   "phase": 13.698,
+   "disc_pixels": 87.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1620553",
+   "opus_id": "vg-iss-1-j-c1620553",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1620557",
+   "time": "1979-02-27T09:15:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620553_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620553_GEOMED.LBL"
+   ],
+   "distance_km": 7656569.0,
+   "observer_lat": 2.598,
+   "observer_east_lon": 284.815,
+   "sun_lat": 0.57,
+   "sun_east_lon": 298.358,
+   "phase": 13.693,
+   "disc_pixels": 87.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1620557",
+   "opus_id": "vg-iss-1-j-c1620557",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1620557",
+   "time": "1979-02-27T09:18:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620557_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620557_GEOMED.LBL"
+   ],
+   "distance_km": 7652298.0,
+   "observer_lat": 2.599,
+   "observer_east_lon": 284.712,
+   "sun_lat": 0.57,
+   "sun_east_lon": 298.247,
+   "phase": 13.685,
+   "disc_pixels": 87.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1620555",
+   "opus_id": "vg-iss-1-j-c1620555",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1620557",
+   "time": "1979-02-27T09:17:21.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620555_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16205XX/C1620555_GEOMED.LBL"
+   ],
+   "distance_km": 7654445.7,
+   "observer_lat": 2.599,
+   "observer_east_lon": 284.764,
+   "sun_lat": 0.57,
+   "sun_east_lon": 298.303,
+   "phase": 13.689,
+   "disc_pixels": 87.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2056845",
+   "opus_id": "vg-iss-2-j-c2056845",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2056851",
+   "time": "1979-07-06T21:54:22.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056845_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056845_GEOMED.LBL"
+   ],
+   "distance_km": 3312478.5,
+   "observer_lat": 4.765,
+   "observer_east_lon": 272.266,
+   "sun_lat": 0.054,
+   "sun_east_lon": 271.195,
+   "phase": 4.83,
+   "disc_pixels": 202.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2056847",
+   "opus_id": "vg-iss-2-j-c2056847",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2056851",
+   "time": "1979-07-06T21:55:58.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056847_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056847_GEOMED.LBL"
+   ],
+   "distance_km": 3310592.5,
+   "observer_lat": 4.766,
+   "observer_east_lon": 272.224,
+   "sun_lat": 0.054,
+   "sun_east_lon": 271.139,
+   "phase": 4.834,
+   "disc_pixels": 202.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2056851",
+   "opus_id": "vg-iss-2-j-c2056851",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2056851",
+   "time": "1979-07-06T21:59:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056851_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056851_GEOMED.LBL"
+   ],
+   "distance_km": 3306820.5,
+   "observer_lat": 4.766,
+   "observer_east_lon": 272.14,
+   "sun_lat": 0.054,
+   "sun_east_lon": 271.027,
+   "phase": 4.841,
+   "disc_pixels": 203.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2056849",
+   "opus_id": "vg-iss-2-j-c2056849",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2056851",
+   "time": "1979-07-06T21:57:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056849_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5212/DATA/C20568XX/C2056849_GEOMED.LBL"
+   ],
+   "distance_km": 3308711.2,
+   "observer_lat": 4.766,
+   "observer_east_lon": 272.182,
+   "sun_lat": 0.054,
+   "sun_east_lon": 271.083,
+   "phase": 4.837,
+   "disc_pixels": 203.0
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1622809",
+   "opus_id": "vg-iss-1-j-c1622809",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1622815",
+   "time": "1979-02-28T03:04:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622809_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622809_GEOMED.LBL"
+   ],
+   "distance_km": 6207590.9,
+   "observer_lat": 2.795,
+   "observer_east_lon": 249.109,
+   "sun_lat": 0.568,
+   "sun_east_lon": 261.081,
+   "phase": 12.173,
+   "disc_pixels": 108.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1622811",
+   "opus_id": "vg-iss-1-j-c1622811",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1622815",
+   "time": "1979-02-28T03:06:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622811_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622811_GEOMED.LBL"
+   ],
+   "distance_km": 6205450.9,
+   "observer_lat": 2.795,
+   "observer_east_lon": 249.053,
+   "sun_lat": 0.568,
+   "sun_east_lon": 261.025,
+   "phase": 12.173,
+   "disc_pixels": 108.2
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1622815",
+   "opus_id": "vg-iss-1-j-c1622815",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1622815",
+   "time": "1979-02-28T03:09:22.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622815_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622815_GEOMED.LBL"
+   ],
+   "distance_km": 6201179.7,
+   "observer_lat": 2.796,
+   "observer_east_lon": 248.941,
+   "sun_lat": 0.568,
+   "sun_east_lon": 260.913,
+   "phase": 12.173,
+   "disc_pixels": 108.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1622813",
+   "opus_id": "vg-iss-1-j-c1622813",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1622815",
+   "time": "1979-02-28T03:07:45.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622813_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16228XX/C1622813_GEOMED.LBL"
+   ],
+   "distance_km": 6203327.2,
+   "observer_lat": 2.795,
+   "observer_east_lon": 248.998,
+   "sun_lat": 0.568,
+   "sun_east_lon": 260.969,
+   "phase": 12.173,
+   "disc_pixels": 108.2
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1623338",
+   "opus_id": "vg-iss-1-j-c1623338",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1623344",
+   "time": "1979-02-28T07:27:46.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623338_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623338_GEOMED.LBL"
+   ],
+   "distance_km": 5860684.6,
+   "observer_lat": 2.852,
+   "observer_east_lon": 239.777,
+   "sun_lat": 0.567,
+   "sun_east_lon": 251.896,
+   "phase": 12.327,
+   "disc_pixels": 114.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1623340",
+   "opus_id": "vg-iss-1-j-c1623340",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1623344",
+   "time": "1979-02-28T07:29:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623340_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623340_GEOMED.LBL"
+   ],
+   "distance_km": 5858606.4,
+   "observer_lat": 2.853,
+   "observer_east_lon": 239.72,
+   "sun_lat": 0.567,
+   "sun_east_lon": 251.84,
+   "phase": 12.329,
+   "disc_pixels": 114.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1623344",
+   "opus_id": "vg-iss-1-j-c1623344",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1623344",
+   "time": "1979-02-28T07:32:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623344_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623344_GEOMED.LBL"
+   ],
+   "distance_km": 5854459.0,
+   "observer_lat": 2.853,
+   "observer_east_lon": 239.604,
+   "sun_lat": 0.567,
+   "sun_east_lon": 251.728,
+   "phase": 12.332,
+   "disc_pixels": 114.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1623342",
+   "opus_id": "vg-iss-1-j-c1623342",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1623344",
+   "time": "1979-02-28T07:30:57.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623342_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16233XX/C1623342_GEOMED.LBL"
+   ],
+   "distance_km": 5856544.1,
+   "observer_lat": 2.853,
+   "observer_east_lon": 239.662,
+   "sun_lat": 0.567,
+   "sun_east_lon": 251.784,
+   "phase": 12.33,
+   "disc_pixels": 114.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1625259",
+   "opus_id": "vg-iss-1-j-c1625259",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1625305",
+   "time": "1979-02-28T22:56:34.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16252XX/C1625259_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16252XX/C1625259_GEOMED.LBL"
+   ],
+   "distance_km": 4762460.5,
+   "observer_lat": 3.039,
+   "observer_east_lon": 204.571,
+   "sun_lat": 0.565,
+   "sun_east_lon": 219.468,
+   "phase": 15.092,
+   "disc_pixels": 141.0
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1625301",
+   "opus_id": "vg-iss-1-j-c1625301",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1625305",
+   "time": "1979-02-28T22:58:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625301_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625301_GEOMED.LBL"
+   ],
+   "distance_km": 4760801.4,
+   "observer_lat": 3.039,
+   "observer_east_lon": 204.507,
+   "sun_lat": 0.565,
+   "sun_east_lon": 219.412,
+   "phase": 15.1,
+   "disc_pixels": 141.0
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1625305",
+   "opus_id": "vg-iss-1-j-c1625305",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1625305",
+   "time": "1979-02-28T23:01:22.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625305_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625305_GEOMED.LBL"
+   ],
+   "distance_km": 4757492.3,
+   "observer_lat": 3.04,
+   "observer_east_lon": 204.38,
+   "sun_lat": 0.565,
+   "sun_east_lon": 219.3,
+   "phase": 15.116,
+   "disc_pixels": 141.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1625303",
+   "opus_id": "vg-iss-1-j-c1625303",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1625305",
+   "time": "1979-02-28T22:59:45.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625303_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16253XX/C1625303_GEOMED.LBL"
+   ],
+   "distance_km": 4759155.7,
+   "observer_lat": 3.039,
+   "observer_east_lon": 204.444,
+   "sun_lat": 0.565,
+   "sun_east_lon": 219.357,
+   "phase": 15.108,
+   "disc_pixels": 141.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1626437",
+   "opus_id": "vg-iss-1-j-c1626437",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1626443",
+   "time": "1979-03-01T08:14:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626437_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626437_GEOMED.LBL"
+   ],
+   "distance_km": 4247311.3,
+   "observer_lat": 3.087,
+   "observer_east_lon": 181.642,
+   "sun_lat": 0.564,
+   "sun_east_lon": 199.964,
+   "phase": 18.483,
+   "disc_pixels": 158.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1626439",
+   "opus_id": "vg-iss-1-j-c1626439",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1626443",
+   "time": "1979-03-01T08:16:34.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626439_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626439_GEOMED.LBL"
+   ],
+   "distance_km": 4246026.1,
+   "observer_lat": 3.087,
+   "observer_east_lon": 181.575,
+   "sun_lat": 0.564,
+   "sun_east_lon": 199.908,
+   "phase": 18.495,
+   "disc_pixels": 158.1
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1626443",
+   "opus_id": "vg-iss-1-j-c1626443",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1626443",
+   "time": "1979-03-01T08:19:46.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626443_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626443_GEOMED.LBL"
+   ],
+   "distance_km": 4243463.8,
+   "observer_lat": 3.087,
+   "observer_east_lon": 181.441,
+   "sun_lat": 0.564,
+   "sun_east_lon": 199.796,
+   "phase": 18.517,
+   "disc_pixels": 158.2
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1626441",
+   "opus_id": "vg-iss-1-j-c1626441",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1626443",
+   "time": "1979-03-01T08:18:09.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626441_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16264XX/C1626441_GEOMED.LBL"
+   ],
+   "distance_km": 4244751.6,
+   "observer_lat": 3.087,
+   "observer_east_lon": 181.508,
+   "sun_lat": 0.564,
+   "sun_east_lon": 199.852,
+   "phase": 18.506,
+   "disc_pixels": 158.2
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1627357",
+   "opus_id": "vg-iss-1-j-c1627357",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1627346",
+   "time": "1979-03-01T15:42:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16273XX/C1627357_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16273XX/C1627357_GEOMED.LBL"
+   ],
+   "distance_km": 3932975.2,
+   "observer_lat": 3.053,
+   "observer_east_lon": 162.551,
+   "sun_lat": 0.562,
+   "sun_east_lon": 184.313,
+   "phase": 21.892,
+   "disc_pixels": 170.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1627400",
+   "opus_id": "vg-iss-1-j-c1627400",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1627346",
+   "time": "1979-03-01T15:45:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16274XX/C1627400_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16274XX/C1627400_GEOMED.LBL"
+   ],
+   "distance_km": 3931533.1,
+   "observer_lat": 3.052,
+   "observer_east_lon": 162.448,
+   "sun_lat": 0.562,
+   "sun_east_lon": 184.229,
+   "phase": 21.911,
+   "disc_pixels": 170.8
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1627346",
+   "opus_id": "vg-iss-1-j-c1627346",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1627346",
+   "time": "1979-03-01T15:34:10.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16273XX/C1627346_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16273XX/C1627346_GEOMED.LBL"
+   ],
+   "distance_km": 3938280.2,
+   "observer_lat": 3.054,
+   "observer_east_lon": 162.929,
+   "sun_lat": 0.563,
+   "sun_east_lon": 184.62,
+   "phase": 21.822,
+   "disc_pixels": 170.5
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1627404",
+   "opus_id": "vg-iss-1-j-c1627404",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1627346",
+   "time": "1979-03-01T15:48:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16274XX/C1627404_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16274XX/C1627404_GEOMED.LBL"
+   ],
+   "distance_km": 3929619.5,
+   "observer_lat": 3.052,
+   "observer_east_lon": 162.31,
+   "sun_lat": 0.562,
+   "sun_east_lon": 184.117,
+   "phase": 21.937,
+   "disc_pixels": 170.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1628938",
+   "opus_id": "vg-iss-1-j-c1628938",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1628932",
+   "time": "1979-03-02T04:15:46.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628938_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628938_GEOMED.LBL"
+   ],
+   "distance_km": 3596589.5,
+   "observer_lat": 2.817,
+   "observer_east_lon": 130.326,
+   "sun_lat": 0.56,
+   "sun_east_lon": 158.013,
+   "phase": 27.768,
+   "disc_pixels": 186.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1628940",
+   "opus_id": "vg-iss-1-j-c1628940",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1628932",
+   "time": "1979-03-02T04:17:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628940_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628940_GEOMED.LBL"
+   ],
+   "distance_km": 3596091.9,
+   "observer_lat": 2.816,
+   "observer_east_lon": 130.258,
+   "sun_lat": 0.56,
+   "sun_east_lon": 157.957,
+   "phase": 27.779,
+   "disc_pixels": 186.7
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1628932",
+   "opus_id": "vg-iss-1-j-c1628932",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1628932",
+   "time": "1979-03-02T04:10:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628932_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628932_GEOMED.LBL"
+   ],
+   "distance_km": 3598084.8,
+   "observer_lat": 2.819,
+   "observer_east_lon": 130.528,
+   "sun_lat": 0.56,
+   "sun_east_lon": 158.181,
+   "phase": 27.734,
+   "disc_pixels": 186.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1628942",
+   "opus_id": "vg-iss-1-j-c1628942",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1628932",
+   "time": "1979-03-02T04:18:57.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628942_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628942_GEOMED.LBL"
+   ],
+   "distance_km": 3595597.7,
+   "observer_lat": 2.816,
+   "observer_east_lon": 130.191,
+   "sun_lat": 0.56,
+   "sun_east_lon": 157.902,
+   "phase": 27.79,
+   "disc_pixels": 186.8
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2042224",
+   "opus_id": "vg-iss-2-j-c2042224",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2042230",
+   "time": "1979-07-02T00:49:34.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042224_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042224_GEOMED.LBL"
+   ],
+   "distance_km": 6968176.3,
+   "observer_lat": 6.854,
+   "observer_east_lon": 118.987,
+   "sun_lat": 0.074,
+   "sun_east_lon": 156.176,
+   "phase": 37.714,
+   "disc_pixels": 96.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2042226",
+   "opus_id": "vg-iss-2-j-c2042226",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2042230",
+   "time": "1979-07-02T00:51:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042226_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042226_GEOMED.LBL"
+   ],
+   "distance_km": 6968144.7,
+   "observer_lat": 6.853,
+   "observer_east_lon": 118.927,
+   "sun_lat": 0.074,
+   "sun_east_lon": 156.12,
+   "phase": 37.717,
+   "disc_pixels": 96.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2042230",
+   "opus_id": "vg-iss-2-j-c2042230",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2042230",
+   "time": "1979-07-02T00:54:22.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042230_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042230_GEOMED.LBL"
+   ],
+   "distance_km": 6968083.1,
+   "observer_lat": 6.851,
+   "observer_east_lon": 118.808,
+   "sun_lat": 0.074,
+   "sun_east_lon": 156.009,
+   "phase": 37.725,
+   "disc_pixels": 96.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2042228",
+   "opus_id": "vg-iss-2-j-c2042228",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2042230",
+   "time": "1979-07-02T00:52:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042228_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042228_GEOMED.LBL"
+   ],
+   "distance_km": 6968113.7,
+   "observer_lat": 6.852,
+   "observer_east_lon": 118.868,
+   "sun_lat": 0.074,
+   "sun_east_lon": 156.065,
+   "phase": 37.721,
+   "disc_pixels": 96.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1630826",
+   "opus_id": "vg-iss-1-j-c1630826",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1630832",
+   "time": "1979-03-02T19:18:10.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630826_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630826_GEOMED.LBL"
+   ],
+   "distance_km": 3401496.1,
+   "observer_lat": 2.306,
+   "observer_east_lon": 94.259,
+   "sun_lat": 0.557,
+   "sun_east_lon": 126.495,
+   "phase": 32.277,
+   "disc_pixels": 197.4
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1630828",
+   "opus_id": "vg-iss-1-j-c1630828",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1630832",
+   "time": "1979-03-02T19:19:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630828_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630828_GEOMED.LBL"
+   ],
+   "distance_km": 3401232.6,
+   "observer_lat": 2.305,
+   "observer_east_lon": 94.199,
+   "sun_lat": 0.557,
+   "sun_east_lon": 126.439,
+   "phase": 32.281,
+   "disc_pixels": 197.4
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1630832",
+   "opus_id": "vg-iss-1-j-c1630832",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1630832",
+   "time": "1979-03-02T19:22:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630832_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630832_GEOMED.LBL"
+   ],
+   "distance_km": 3400706.7,
+   "observer_lat": 2.303,
+   "observer_east_lon": 94.079,
+   "sun_lat": 0.557,
+   "sun_east_lon": 126.327,
+   "phase": 32.289,
+   "disc_pixels": 197.5
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1630830",
+   "opus_id": "vg-iss-1-j-c1630830",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1630832",
+   "time": "1979-03-02T19:21:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630830_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16308XX/C1630830_GEOMED.LBL"
+   ],
+   "distance_km": 3400970.5,
+   "observer_lat": 2.304,
+   "observer_east_lon": 94.139,
+   "sun_lat": 0.557,
+   "sun_east_lon": 126.383,
+   "phase": 32.285,
+   "disc_pixels": 197.5
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1634231",
+   "opus_id": "vg-iss-1-j-c1634231",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1634225",
+   "time": "1979-03-03T22:34:10.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634231_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634231_GEOMED.LBL"
+   ],
+   "distance_km": 2974876.9,
+   "observer_lat": 1.186,
+   "observer_east_lon": 41.781,
+   "sun_lat": 0.551,
+   "sun_east_lon": 69.402,
+   "phase": 27.636,
+   "disc_pixels": 225.8
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1634233",
+   "opus_id": "vg-iss-1-j-c1634233",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1634225",
+   "time": "1979-03-03T22:35:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634233_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634233_GEOMED.LBL"
+   ],
+   "distance_km": 2974165.2,
+   "observer_lat": 1.185,
+   "observer_east_lon": 41.738,
+   "sun_lat": 0.551,
+   "sun_east_lon": 69.347,
+   "phase": 27.623,
+   "disc_pixels": 225.8
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1634225",
+   "opus_id": "vg-iss-1-j-c1634225",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1634225",
+   "time": "1979-03-03T22:29:22.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634225_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634225_GEOMED.LBL"
+   ],
+   "distance_km": 2977005.0,
+   "observer_lat": 1.19,
+   "observer_east_lon": 41.908,
+   "sun_lat": 0.551,
+   "sun_east_lon": 69.57,
+   "phase": 27.676,
+   "disc_pixels": 225.6
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1634235",
+   "opus_id": "vg-iss-1-j-c1634235",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1634225",
+   "time": "1979-03-03T22:37:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634235_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5115/DATA/C16342XX/C1634235_GEOMED.LBL"
+   ],
+   "distance_km": 2973456.2,
+   "observer_lat": 1.184,
+   "observer_east_lon": 41.696,
+   "sun_lat": 0.551,
+   "sun_east_lon": 69.291,
+   "phase": 27.609,
+   "disc_pixels": 225.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1635657",
+   "opus_id": "vg-iss-1-j-c1635657",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1635651",
+   "time": "1979-03-04T10:06:59.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635657_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635657_GEOMED.LBL"
+   ],
+   "distance_km": 2591660.8,
+   "observer_lat": 0.62,
+   "observer_east_lon": 25.343,
+   "sun_lat": 0.548,
+   "sun_east_lon": 45.247,
+   "phase": 19.916,
+   "disc_pixels": 259.2
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1635659",
+   "opus_id": "vg-iss-1-j-c1635659",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1635651",
+   "time": "1979-03-04T10:08:35.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635659_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635659_GEOMED.LBL"
+   ],
+   "distance_km": 2590593.0,
+   "observer_lat": 0.619,
+   "observer_east_lon": 25.31,
+   "sun_lat": 0.548,
+   "sun_east_lon": 45.191,
+   "phase": 19.893,
+   "disc_pixels": 259.3
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1635651",
+   "opus_id": "vg-iss-1-j-c1635651",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1635651",
+   "time": "1979-03-04T10:02:11.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635651_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16356XX/C1635651_GEOMED.LBL"
+   ],
+   "distance_km": 2594855.2,
+   "observer_lat": 0.625,
+   "observer_east_lon": 25.442,
+   "sun_lat": 0.548,
+   "sun_east_lon": 45.414,
+   "phase": 19.984,
+   "disc_pixels": 258.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C1635701",
+   "opus_id": "vg-iss-1-j-c1635701",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1635651",
+   "time": "1979-03-04T10:10:10.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16357XX/C1635701_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16357XX/C1635701_GEOMED.LBL"
+   ],
+   "distance_km": 2589529.6,
+   "observer_lat": 0.617,
+   "observer_east_lon": 25.277,
+   "sun_lat": 0.548,
+   "sun_east_lon": 45.136,
+   "phase": 19.87,
+   "disc_pixels": 259.4
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2049336",
+   "opus_id": "vg-iss-2-j-c2049336",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2049345",
+   "time": "1979-07-04T09:47:10.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049336_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049336_GEOMED.LBL"
+   ],
+   "distance_km": 6652005.8,
+   "observer_lat": 4.921,
+   "observer_east_lon": 8.475,
+   "sun_lat": 0.063,
+   "sun_east_lon": 36.918,
+   "phase": 28.829,
+   "disc_pixels": 100.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2049339",
+   "opus_id": "vg-iss-2-j-c2049339",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2049345",
+   "time": "1979-07-04T09:49:34.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049339_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049339_GEOMED.LBL"
+   ],
+   "distance_km": 6650873.1,
+   "observer_lat": 4.92,
+   "observer_east_lon": 8.408,
+   "sun_lat": 0.063,
+   "sun_east_lon": 36.834,
+   "phase": 28.814,
+   "disc_pixels": 100.9
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2049345",
+   "opus_id": "vg-iss-2-j-c2049345",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2049345",
+   "time": "1979-07-04T09:54:22.760",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049345_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049345_GEOMED.LBL"
+   ],
+   "distance_km": 6648602.1,
+   "observer_lat": 4.919,
+   "observer_east_lon": 8.272,
+   "sun_lat": 0.063,
+   "sun_east_lon": 36.667,
+   "phase": 28.782,
+   "disc_pixels": 101.0
+  },
+  {
+   "moon": "Ganymede",
+   "name": "C2049342",
+   "opus_id": "vg-iss-2-j-c2049342",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2049345",
+   "time": "1979-07-04T09:51:58.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049342_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20493XX/C2049342_GEOMED.LBL"
+   ],
+   "distance_km": 6649740.4,
+   "observer_lat": 4.92,
+   "observer_east_lon": 8.34,
+   "sun_lat": 0.063,
+   "sun_east_lon": 36.75,
+   "phase": 28.798,
+   "disc_pixels": 101.0
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2035839",
+   "opus_id": "vg-iss-2-j-c2035839",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2035833",
+   "time": "1979-06-29T21:49:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035839_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035839_GEOMED.LBL"
+   ],
+   "distance_km": 10875870.0,
+   "observer_lat": 5.559,
+   "observer_east_lon": 332.023,
+   "sun_lat": 0.02,
+   "sun_east_lon": 358.526,
+   "phase": 27.042,
+   "disc_pixels": 56.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2035841",
+   "opus_id": "vg-iss-2-j-c2035841",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2035833",
+   "time": "1979-06-29T21:51:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035841_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035841_GEOMED.LBL"
+   ],
+   "distance_km": 10874632.4,
+   "observer_lat": 5.559,
+   "observer_east_lon": 332.004,
+   "sun_lat": 0.02,
+   "sun_east_lon": 358.502,
+   "phase": 27.037,
+   "disc_pixels": 56.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2035833",
+   "opus_id": "vg-iss-2-j-c2035833",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2035833",
+   "time": "1979-06-29T21:44:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035833_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035833_GEOMED.LBL"
+   ],
+   "distance_km": 10879567.4,
+   "observer_lat": 5.559,
+   "observer_east_lon": 332.08,
+   "sun_lat": 0.02,
+   "sun_east_lon": 358.597,
+   "phase": 27.056,
+   "disc_pixels": 56.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2035843",
+   "opus_id": "vg-iss-2-j-c2035843",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2035833",
+   "time": "1979-06-29T21:52:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035843_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5209/DATA/C20358XX/C2035843_GEOMED.LBL"
+   ],
+   "distance_km": 10873403.9,
+   "observer_lat": 5.559,
+   "observer_east_lon": 331.985,
+   "sun_lat": 0.02,
+   "sun_east_lon": 358.478,
+   "phase": 27.032,
+   "disc_pixels": 56.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2040300",
+   "opus_id": "vg-iss-2-j-c2040300",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2040309",
+   "time": "1979-07-01T09:18:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040300_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040300_GEOMED.LBL"
+   ],
+   "distance_km": 9064284.2,
+   "observer_lat": 5.685,
+   "observer_east_lon": 306.783,
+   "sun_lat": 0.014,
+   "sun_east_lon": 326.823,
+   "phase": 20.8,
+   "disc_pixels": 67.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2040303",
+   "opus_id": "vg-iss-2-j-c2040303",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2040309",
+   "time": "1979-07-01T09:20:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040303_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040303_GEOMED.LBL"
+   ],
+   "distance_km": 9062069.8,
+   "observer_lat": 5.685,
+   "observer_east_lon": 306.755,
+   "sun_lat": 0.014,
+   "sun_east_lon": 326.787,
+   "phase": 20.793,
+   "disc_pixels": 67.9
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2040309",
+   "opus_id": "vg-iss-2-j-c2040309",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2040309",
+   "time": "1979-07-01T09:25:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040309_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040309_GEOMED.LBL"
+   ],
+   "distance_km": 9057656.6,
+   "observer_lat": 5.686,
+   "observer_east_lon": 306.698,
+   "sun_lat": 0.014,
+   "sun_east_lon": 326.716,
+   "phase": 20.779,
+   "disc_pixels": 67.9
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2040306",
+   "opus_id": "vg-iss-2-j-c2040306",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2040309",
+   "time": "1979-07-01T09:23:09.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040306_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20403XX/C2040306_GEOMED.LBL"
+   ],
+   "distance_km": 9059866.1,
+   "observer_lat": 5.685,
+   "observer_east_lon": 306.726,
+   "sun_lat": 0.014,
+   "sun_east_lon": 326.751,
+   "phase": 20.786,
+   "disc_pixels": 67.9
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2042246",
+   "opus_id": "vg-iss-2-j-c2042246",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2042252",
+   "time": "1979-07-02T01:07:09.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042246_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042246_GEOMED.LBL"
+   ],
+   "distance_km": 8169333.9,
+   "observer_lat": 5.813,
+   "observer_east_lon": 295.565,
+   "sun_lat": 0.012,
+   "sun_east_lon": 312.687,
+   "phase": 18.054,
+   "disc_pixels": 75.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2042248",
+   "opus_id": "vg-iss-2-j-c2042248",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2042252",
+   "time": "1979-07-02T01:08:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042248_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042248_GEOMED.LBL"
+   ],
+   "distance_km": 8167786.4,
+   "observer_lat": 5.814,
+   "observer_east_lon": 295.546,
+   "sun_lat": 0.012,
+   "sun_east_lon": 312.663,
+   "phase": 18.049,
+   "disc_pixels": 75.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2042252",
+   "opus_id": "vg-iss-2-j-c2042252",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2042252",
+   "time": "1979-07-02T01:11:57.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042252_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042252_GEOMED.LBL"
+   ],
+   "distance_km": 8164708.6,
+   "observer_lat": 5.814,
+   "observer_east_lon": 295.509,
+   "sun_lat": 0.012,
+   "sun_east_lon": 312.615,
+   "phase": 18.04,
+   "disc_pixels": 75.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2042250",
+   "opus_id": "vg-iss-2-j-c2042250",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2042252",
+   "time": "1979-07-02T01:10:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042250_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20422XX/C2042250_GEOMED.LBL"
+   ],
+   "distance_km": 8166250.4,
+   "observer_lat": 5.814,
+   "observer_east_lon": 295.528,
+   "sun_lat": 0.012,
+   "sun_east_lon": 312.639,
+   "phase": 18.045,
+   "disc_pixels": 75.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2047924",
+   "opus_id": "vg-iss-2-j-c2047924",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2047930",
+   "time": "1979-07-03T22:25:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047924_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047924_GEOMED.LBL"
+   ],
+   "distance_km": 5477108.0,
+   "observer_lat": 6.511,
+   "observer_east_lon": 262.916,
+   "sun_lat": 0.005,
+   "sun_east_lon": 272.149,
+   "phase": 11.28,
+   "disc_pixels": 112.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2047926",
+   "opus_id": "vg-iss-2-j-c2047926",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2047930",
+   "time": "1979-07-03T22:27:10.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047926_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047926_GEOMED.LBL"
+   ],
+   "distance_km": 5475513.0,
+   "observer_lat": 6.511,
+   "observer_east_lon": 262.896,
+   "sun_lat": 0.005,
+   "sun_east_lon": 272.125,
+   "phase": 11.277,
+   "disc_pixels": 112.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2047930",
+   "opus_id": "vg-iss-2-j-c2047930",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2047930",
+   "time": "1979-07-03T22:30:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047930_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047930_GEOMED.LBL"
+   ],
+   "distance_km": 5472340.9,
+   "observer_lat": 6.512,
+   "observer_east_lon": 262.857,
+   "sun_lat": 0.005,
+   "sun_east_lon": 272.077,
+   "phase": 11.27,
+   "disc_pixels": 112.4
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2047928",
+   "opus_id": "vg-iss-2-j-c2047928",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2047930",
+   "time": "1979-07-03T22:28:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047928_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20479XX/C2047928_GEOMED.LBL"
+   ],
+   "distance_km": 5473929.9,
+   "observer_lat": 6.512,
+   "observer_east_lon": 262.877,
+   "sun_lat": 0.005,
+   "sun_east_lon": 272.101,
+   "phase": 11.274,
+   "disc_pixels": 112.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2049506",
+   "opus_id": "vg-iss-2-j-c2049506",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2049512",
+   "time": "1979-07-04T10:59:09.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049506_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049506_GEOMED.LBL"
+   ],
+   "distance_km": 4734545.2,
+   "observer_lat": 6.821,
+   "observer_east_lon": 253.546,
+   "sun_lat": 0.003,
+   "sun_east_lon": 260.899,
+   "phase": 10.015,
+   "disc_pixels": 129.9
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2049508",
+   "opus_id": "vg-iss-2-j-c2049508",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2049512",
+   "time": "1979-07-04T11:00:46.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049508_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049508_GEOMED.LBL"
+   ],
+   "distance_km": 4732978.3,
+   "observer_lat": 6.821,
+   "observer_east_lon": 253.526,
+   "sun_lat": 0.003,
+   "sun_east_lon": 260.875,
+   "phase": 10.013,
+   "disc_pixels": 129.9
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2049512",
+   "opus_id": "vg-iss-2-j-c2049512",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2049512",
+   "time": "1979-07-04T11:03:57.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049512_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049512_GEOMED.LBL"
+   ],
+   "distance_km": 4729862.4,
+   "observer_lat": 6.823,
+   "observer_east_lon": 253.486,
+   "sun_lat": 0.003,
+   "sun_east_lon": 260.828,
+   "phase": 10.009,
+   "disc_pixels": 130.0
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2049510",
+   "opus_id": "vg-iss-2-j-c2049510",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2049512",
+   "time": "1979-07-04T11:02:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049510_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5210/DATA/C20495XX/C2049510_GEOMED.LBL"
+   ],
+   "distance_km": 4731423.2,
+   "observer_lat": 6.822,
+   "observer_east_lon": 253.506,
+   "sun_lat": 0.003,
+   "sun_east_lon": 260.851,
+   "phase": 10.011,
+   "disc_pixels": 130.0
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2052131",
+   "opus_id": "vg-iss-2-j-c2052131",
+   "filter": "Violet",
+   "set": "vg-iss-2-j-c2052143",
+   "time": "1979-07-05T08:07:09.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052131_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052131_GEOMED.LBL"
+   ],
+   "distance_km": 3528426.2,
+   "observer_lat": 7.515,
+   "observer_east_lon": 237.145,
+   "sun_lat": -0.001,
+   "sun_east_lon": 241.959,
+   "phase": 8.918,
+   "disc_pixels": 174.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2052135",
+   "opus_id": "vg-iss-2-j-c2052135",
+   "filter": "Blue",
+   "set": "vg-iss-2-j-c2052143",
+   "time": "1979-07-05T08:10:22.280",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052135_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052135_GEOMED.LBL"
+   ],
+   "distance_km": 3525471.2,
+   "observer_lat": 7.517,
+   "observer_east_lon": 237.103,
+   "sun_lat": -0.001,
+   "sun_east_lon": 241.911,
+   "phase": 8.917,
+   "disc_pixels": 174.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2052143",
+   "opus_id": "vg-iss-2-j-c2052143",
+   "filter": "Green",
+   "set": "vg-iss-2-j-c2052143",
+   "time": "1979-07-05T08:16:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052143_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052143_GEOMED.LBL"
+   ],
+   "distance_km": 3519579.4,
+   "observer_lat": 7.521,
+   "observer_east_lon": 237.017,
+   "sun_lat": -0.001,
+   "sun_east_lon": 241.816,
+   "phase": 8.915,
+   "disc_pixels": 174.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C2052139",
+   "opus_id": "vg-iss-2-j-c2052139",
+   "filter": "Orange",
+   "set": "vg-iss-2-j-c2052143",
+   "time": "1979-07-05T08:13:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052139_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5211/DATA/C20521XX/C2052139_GEOMED.LBL"
+   ],
+   "distance_km": 3522527.8,
+   "observer_lat": 7.519,
+   "observer_east_lon": 237.06,
+   "sun_lat": -0.001,
+   "sun_east_lon": 241.864,
+   "phase": 8.916,
+   "disc_pixels": 174.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1604416",
+   "opus_id": "vg-iss-1-j-c1604416",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1604422",
+   "time": "1979-02-21T23:58:09.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604416_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604416_GEOMED.LBL"
+   ],
+   "distance_km": 11228354.1,
+   "observer_lat": 3.353,
+   "observer_east_lon": 207.606,
+   "sun_lat": 0.546,
+   "sun_east_lon": 227.605,
+   "phase": 20.183,
+   "disc_pixels": 54.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1604418",
+   "opus_id": "vg-iss-1-j-c1604418",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1604422",
+   "time": "1979-02-21T23:59:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604418_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604418_GEOMED.LBL"
+   ],
+   "distance_km": 11226883.3,
+   "observer_lat": 3.353,
+   "observer_east_lon": 207.579,
+   "sun_lat": 0.546,
+   "sun_east_lon": 227.581,
+   "phase": 20.186,
+   "disc_pixels": 54.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1604422",
+   "opus_id": "vg-iss-1-j-c1604422",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1604422",
+   "time": "1979-02-22T00:02:56.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604422_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604422_GEOMED.LBL"
+   ],
+   "distance_km": 11223961.1,
+   "observer_lat": 3.353,
+   "observer_east_lon": 207.526,
+   "sun_lat": 0.546,
+   "sun_east_lon": 227.533,
+   "phase": 20.192,
+   "disc_pixels": 54.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1604420",
+   "opus_id": "vg-iss-1-j-c1604420",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1604422",
+   "time": "1979-02-22T00:01:20.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604420_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16044XX/C1604420_GEOMED.LBL"
+   ],
+   "distance_km": 11225427.6,
+   "observer_lat": 3.353,
+   "observer_east_lon": 207.552,
+   "sun_lat": 0.546,
+   "sun_east_lon": 227.557,
+   "phase": 20.189,
+   "disc_pixels": 54.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1606528",
+   "opus_id": "vg-iss-1-j-c1606528",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1606534",
+   "time": "1979-02-22T16:55:45.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606528_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606528_GEOMED.LBL"
+   ],
+   "distance_km": 10362145.3,
+   "observer_lat": 3.411,
+   "observer_east_lon": 190.277,
+   "sun_lat": 0.544,
+   "sun_east_lon": 212.39,
+   "phase": 22.284,
+   "disc_pixels": 59.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1606530",
+   "opus_id": "vg-iss-1-j-c1606530",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1606534",
+   "time": "1979-02-22T16:57:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606530_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606530_GEOMED.LBL"
+   ],
+   "distance_km": 10360890.9,
+   "observer_lat": 3.411,
+   "observer_east_lon": 190.249,
+   "sun_lat": 0.544,
+   "sun_east_lon": 212.366,
+   "phase": 22.287,
+   "disc_pixels": 59.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1606534",
+   "opus_id": "vg-iss-1-j-c1606534",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1606534",
+   "time": "1979-02-22T17:00:32.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606534_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606534_GEOMED.LBL"
+   ],
+   "distance_km": 10358398.7,
+   "observer_lat": 3.411,
+   "observer_east_lon": 190.194,
+   "sun_lat": 0.544,
+   "sun_east_lon": 212.318,
+   "phase": 22.295,
+   "disc_pixels": 59.4
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1606532",
+   "opus_id": "vg-iss-1-j-c1606532",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1606534",
+   "time": "1979-02-22T16:58:56.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606532_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16065XX/C1606532_GEOMED.LBL"
+   ],
+   "distance_km": 10359649.3,
+   "observer_lat": 3.411,
+   "observer_east_lon": 190.222,
+   "sun_lat": 0.544,
+   "sun_east_lon": 212.342,
+   "phase": 22.291,
+   "disc_pixels": 59.4
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1608058",
+   "opus_id": "vg-iss-1-j-c1608058",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1608104",
+   "time": "1979-02-23T05:19:45.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16080XX/C1608058_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16080XX/C1608058_GEOMED.LBL"
+   ],
+   "distance_km": 9819951.9,
+   "observer_lat": 3.427,
+   "observer_east_lon": 177.29,
+   "sun_lat": 0.542,
+   "sun_east_lon": 201.262,
+   "phase": 24.13,
+   "disc_pixels": 62.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1608100",
+   "opus_id": "vg-iss-1-j-c1608100",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1608104",
+   "time": "1979-02-23T05:21:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608100_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608100_GEOMED.LBL"
+   ],
+   "distance_km": 9818870.0,
+   "observer_lat": 3.427,
+   "observer_east_lon": 177.261,
+   "sun_lat": 0.542,
+   "sun_east_lon": 201.238,
+   "phase": 24.134,
+   "disc_pixels": 62.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1608104",
+   "opus_id": "vg-iss-1-j-c1608104",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1608104",
+   "time": "1979-02-23T05:24:32.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608104_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608104_GEOMED.LBL"
+   ],
+   "distance_km": 9816720.7,
+   "observer_lat": 3.427,
+   "observer_east_lon": 177.205,
+   "sun_lat": 0.542,
+   "sun_east_lon": 201.19,
+   "phase": 24.142,
+   "disc_pixels": 62.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1608102",
+   "opus_id": "vg-iss-1-j-c1608102",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1608104",
+   "time": "1979-02-23T05:22:56.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608102_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5111/DATA/C16081XX/C1608102_GEOMED.LBL"
+   ],
+   "distance_km": 9817799.2,
+   "observer_lat": 3.427,
+   "observer_east_lon": 177.233,
+   "sun_lat": 0.542,
+   "sun_east_lon": 201.214,
+   "phase": 24.138,
+   "disc_pixels": 62.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1610220",
+   "opus_id": "vg-iss-1-j-c1610220",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1610226",
+   "time": "1979-02-23T22:25:21.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610220_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610220_GEOMED.LBL"
+   ],
+   "distance_km": 9204639.1,
+   "observer_lat": 3.402,
+   "observer_east_lon": 159.122,
+   "sun_lat": 0.539,
+   "sun_east_lon": 185.919,
+   "phase": 26.933,
+   "disc_pixels": 66.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1610222",
+   "opus_id": "vg-iss-1-j-c1610222",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1610226",
+   "time": "1979-02-23T22:26:57.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610222_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610222_GEOMED.LBL"
+   ],
+   "distance_km": 9203794.8,
+   "observer_lat": 3.402,
+   "observer_east_lon": 159.093,
+   "sun_lat": 0.539,
+   "sun_east_lon": 185.895,
+   "phase": 26.938,
+   "disc_pixels": 66.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1610226",
+   "opus_id": "vg-iss-1-j-c1610226",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1610226",
+   "time": "1979-02-23T22:30:08.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610226_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610226_GEOMED.LBL"
+   ],
+   "distance_km": 9202117.8,
+   "observer_lat": 3.402,
+   "observer_east_lon": 159.036,
+   "sun_lat": 0.539,
+   "sun_east_lon": 185.847,
+   "phase": 26.947,
+   "disc_pixels": 66.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1610224",
+   "opus_id": "vg-iss-1-j-c1610224",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1610226",
+   "time": "1979-02-23T22:28:32.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610224_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16102XX/C1610224_GEOMED.LBL"
+   ],
+   "distance_km": 9202959.3,
+   "observer_lat": 3.402,
+   "observer_east_lon": 159.065,
+   "sun_lat": 0.539,
+   "sun_east_lon": 185.871,
+   "phase": 26.942,
+   "disc_pixels": 66.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1613832",
+   "opus_id": "vg-iss-1-j-c1613832",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1613838",
+   "time": "1979-02-25T03:22:57.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613832_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613832_GEOMED.LBL"
+   ],
+   "distance_km": 8480532.9,
+   "observer_lat": 3.222,
+   "observer_east_lon": 128.463,
+   "sun_lat": 0.533,
+   "sun_east_lon": 159.924,
+   "phase": 31.559,
+   "disc_pixels": 72.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1613834",
+   "opus_id": "vg-iss-1-j-c1613834",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1613838",
+   "time": "1979-02-25T03:24:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613834_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613834_GEOMED.LBL"
+   ],
+   "distance_km": 8480017.3,
+   "observer_lat": 3.222,
+   "observer_east_lon": 128.435,
+   "sun_lat": 0.533,
+   "sun_east_lon": 159.9,
+   "phase": 31.563,
+   "disc_pixels": 72.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1613838",
+   "opus_id": "vg-iss-1-j-c1613838",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1613838",
+   "time": "1979-02-25T03:27:44.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613838_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613838_GEOMED.LBL"
+   ],
+   "distance_km": 8478993.2,
+   "observer_lat": 3.221,
+   "observer_east_lon": 128.38,
+   "sun_lat": 0.533,
+   "sun_east_lon": 159.853,
+   "phase": 31.571,
+   "disc_pixels": 72.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1613836",
+   "opus_id": "vg-iss-1-j-c1613836",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1613838",
+   "time": "1979-02-25T03:26:08.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613836_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16138XX/C1613836_GEOMED.LBL"
+   ],
+   "distance_km": 8479507.1,
+   "observer_lat": 3.221,
+   "observer_east_lon": 128.407,
+   "sun_lat": 0.533,
+   "sun_east_lon": 159.877,
+   "phase": 31.567,
+   "disc_pixels": 72.5
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1615535",
+   "opus_id": "vg-iss-1-j-c1615535",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1615541",
+   "time": "1979-02-25T17:01:21.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615535_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615535_GEOMED.LBL"
+   ],
+   "distance_km": 8243744.5,
+   "observer_lat": 3.085,
+   "observer_east_lon": 114.461,
+   "sun_lat": 0.531,
+   "sun_east_lon": 147.684,
+   "phase": 33.305,
+   "disc_pixels": 74.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1615537",
+   "opus_id": "vg-iss-1-j-c1615537",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1615541",
+   "time": "1979-02-25T17:02:57.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615537_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615537_GEOMED.LBL"
+   ],
+   "distance_km": 8243324.7,
+   "observer_lat": 3.084,
+   "observer_east_lon": 114.434,
+   "sun_lat": 0.531,
+   "sun_east_lon": 147.66,
+   "phase": 33.308,
+   "disc_pixels": 74.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1615541",
+   "opus_id": "vg-iss-1-j-c1615541",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1615541",
+   "time": "1979-02-25T17:06:08.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615541_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615541_GEOMED.LBL"
+   ],
+   "distance_km": 8242490.7,
+   "observer_lat": 3.084,
+   "observer_east_lon": 114.38,
+   "sun_lat": 0.531,
+   "sun_east_lon": 147.612,
+   "phase": 33.314,
+   "disc_pixels": 74.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1615539",
+   "opus_id": "vg-iss-1-j-c1615539",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1615541",
+   "time": "1979-02-25T17:04:32.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615539_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16155XX/C1615539_GEOMED.LBL"
+   ],
+   "distance_km": 8242909.2,
+   "observer_lat": 3.084,
+   "observer_east_lon": 114.407,
+   "sun_lat": 0.531,
+   "sun_east_lon": 147.636,
+   "phase": 33.311,
+   "disc_pixels": 74.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1617417",
+   "opus_id": "vg-iss-1-j-c1617417",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1617423",
+   "time": "1979-02-26T07:58:57.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617417_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617417_GEOMED.LBL"
+   ],
+   "distance_km": 8025948.6,
+   "observer_lat": 2.908,
+   "observer_east_lon": 99.65,
+   "sun_lat": 0.528,
+   "sun_east_lon": 134.262,
+   "phase": 34.681,
+   "disc_pixels": 76.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1617419",
+   "opus_id": "vg-iss-1-j-c1617419",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1617423",
+   "time": "1979-02-26T08:00:33.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617419_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617419_GEOMED.LBL"
+   ],
+   "distance_km": 8025580.8,
+   "observer_lat": 2.908,
+   "observer_east_lon": 99.624,
+   "sun_lat": 0.528,
+   "sun_east_lon": 134.238,
+   "phase": 34.682,
+   "disc_pixels": 76.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1617423",
+   "opus_id": "vg-iss-1-j-c1617423",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1617423",
+   "time": "1979-02-26T08:03:44.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617423_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617423_GEOMED.LBL"
+   ],
+   "distance_km": 8024849.8,
+   "observer_lat": 2.907,
+   "observer_east_lon": 99.572,
+   "sun_lat": 0.528,
+   "sun_east_lon": 134.191,
+   "phase": 34.686,
+   "disc_pixels": 76.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1617421",
+   "opus_id": "vg-iss-1-j-c1617421",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1617423",
+   "time": "1979-02-26T08:02:08.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617421_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5112/DATA/C16174XX/C1617421_GEOMED.LBL"
+   ],
+   "distance_km": 8025216.7,
+   "observer_lat": 2.907,
+   "observer_east_lon": 99.598,
+   "sun_lat": 0.528,
+   "sun_east_lon": 134.215,
+   "phase": 34.684,
+   "disc_pixels": 76.6
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1621300",
+   "opus_id": "vg-iss-1-j-c1621300",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1621309",
+   "time": "1979-02-27T14:57:21.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621300_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621300_GEOMED.LBL"
+   ],
+   "distance_km": 7585404.0,
+   "observer_lat": 2.501,
+   "observer_east_lon": 71.204,
+   "sun_lat": 0.522,
+   "sun_east_lon": 106.493,
+   "phase": 35.337,
+   "disc_pixels": 81.1
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1621303",
+   "opus_id": "vg-iss-1-j-c1621303",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1621309",
+   "time": "1979-02-27T14:59:45.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621303_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621303_GEOMED.LBL"
+   ],
+   "distance_km": 7584763.4,
+   "observer_lat": 2.5,
+   "observer_east_lon": 71.17,
+   "sun_lat": 0.522,
+   "sun_east_lon": 106.457,
+   "phase": 35.336,
+   "disc_pixels": 81.1
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1621309",
+   "opus_id": "vg-iss-1-j-c1621309",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1621309",
+   "time": "1979-02-27T15:04:32.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621309_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621309_GEOMED.LBL"
+   ],
+   "distance_km": 7583486.7,
+   "observer_lat": 2.499,
+   "observer_east_lon": 71.1,
+   "sun_lat": 0.522,
+   "sun_east_lon": 106.386,
+   "phase": 35.333,
+   "disc_pixels": 81.1
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1621306",
+   "opus_id": "vg-iss-1-j-c1621306",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1621309",
+   "time": "1979-02-27T15:02:08.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621306_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5113/DATA/C16213XX/C1621306_GEOMED.LBL"
+   ],
+   "distance_km": 7584126.8,
+   "observer_lat": 2.499,
+   "observer_east_lon": 71.135,
+   "sun_lat": 0.522,
+   "sun_east_lon": 106.422,
+   "phase": 35.334,
+   "disc_pixels": 81.1
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1628925",
+   "opus_id": "vg-iss-1-j-c1628925",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1628919",
+   "time": "1979-03-02T04:05:21.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628925_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628925_GEOMED.LBL"
+   ],
+   "distance_km": 6068733.6,
+   "observer_lat": 1.657,
+   "observer_east_lon": 24.808,
+   "sun_lat": 0.51,
+   "sun_east_lon": 51.775,
+   "phase": 26.995,
+   "disc_pixels": 101.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1628927",
+   "opus_id": "vg-iss-1-j-c1628927",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1628919",
+   "time": "1979-03-02T04:06:58.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628927_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628927_GEOMED.LBL"
+   ],
+   "distance_km": 6067781.6,
+   "observer_lat": 1.657,
+   "observer_east_lon": 24.791,
+   "sun_lat": 0.51,
+   "sun_east_lon": 51.751,
+   "phase": 26.989,
+   "disc_pixels": 101.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1628919",
+   "opus_id": "vg-iss-1-j-c1628919",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1628919",
+   "time": "1979-03-02T04:00:33.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628919_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628919_GEOMED.LBL"
+   ],
+   "distance_km": 6071583.1,
+   "observer_lat": 1.658,
+   "observer_east_lon": 24.86,
+   "sun_lat": 0.51,
+   "sun_east_lon": 51.846,
+   "phase": 27.016,
+   "disc_pixels": 101.3
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1628929",
+   "opus_id": "vg-iss-1-j-c1628929",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1628919",
+   "time": "1979-03-02T04:08:33.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628929_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5114/DATA/C16289XX/C1628929_GEOMED.LBL"
+   ],
+   "distance_km": 6066836.4,
+   "observer_lat": 1.656,
+   "observer_east_lon": 24.774,
+   "sun_lat": 0.51,
+   "sun_east_lon": 51.727,
+   "phase": 26.982,
+   "disc_pixels": 101.4
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1639954",
+   "opus_id": "vg-iss-1-j-c1639954",
+   "filter": "Violet",
+   "set": "vg-iss-1-j-c1640004",
+   "time": "1979-03-05T20:28:34.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16399XX/C1639954_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16399XX/C1639954_GEOMED.LBL"
+   ],
+   "distance_km": 1216757.8,
+   "observer_lat": 0.548,
+   "observer_east_lon": 8.781,
+   "sun_lat": 0.495,
+   "sun_east_lon": 332.795,
+   "phase": 35.976,
+   "disc_pixels": 506.2
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1639958",
+   "opus_id": "vg-iss-1-j-c1639958",
+   "filter": "Blue",
+   "set": "vg-iss-1-j-c1640004",
+   "time": "1979-03-05T20:31:46.560",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16399XX/C1639958_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5116/DATA/C16399XX/C1639958_GEOMED.LBL"
+   ],
+   "distance_km": 1213051.3,
+   "observer_lat": 0.565,
+   "observer_east_lon": 8.741,
+   "sun_lat": 0.495,
+   "sun_east_lon": 332.747,
+   "phase": 35.984,
+   "disc_pixels": 507.8
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1640004",
+   "opus_id": "vg-iss-1-j-c1640004",
+   "filter": "Green",
+   "set": "vg-iss-1-j-c1640004",
+   "time": "1979-03-05T20:36:35.040",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5117/DATA/C16400XX/C1640004_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5117/DATA/C16400XX/C1640004_GEOMED.LBL"
+   ],
+   "distance_km": 1207507.7,
+   "observer_lat": 0.591,
+   "observer_east_lon": 8.681,
+   "sun_lat": 0.495,
+   "sun_east_lon": 332.676,
+   "phase": 35.996,
+   "disc_pixels": 510.1
+  },
+  {
+   "moon": "Callisto",
+   "name": "C1640002",
+   "opus_id": "vg-iss-1-j-c1640002",
+   "filter": "Orange",
+   "set": "vg-iss-1-j-c1640004",
+   "time": "1979-03-05T20:34:56.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5117/DATA/C16400XX/C1640002_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_5xxx/VGISS_5117/DATA/C16400XX/C1640002_GEOMED.LBL"
+   ],
+   "distance_km": 1209379.9,
+   "observer_lat": 0.582,
+   "observer_east_lon": 8.702,
+   "sun_lat": 0.495,
+   "sun_east_lon": 332.7,
+   "phase": 35.992,
+   "disc_pixels": 509.3
+  }
+ ]
+}

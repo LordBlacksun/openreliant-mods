@@ -40,10 +40,15 @@ Run each script from its own folder, in this order:
 6. `titan/build.sh` downloads Cassini's frames of Titan, Cassini's map of its surface and
    Karkoschka's spectrum, about 62 MB, into `titan/data`, makes `realistic_planets_titan.png`, and
    prints the limb's exponents for `planets.luau`. It takes about ten seconds.
-7. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
+7. `galilean/build.sh` downloads the USGS's maps of Io, Europa, Ganymede and Callisto and Voyager's
+   colour frames of them, about 970 MB, into `galilean/data`, fits the frames' pointing into
+   `galilean/fits.json`, makes `realistic_planets_io.png`, `realistic_planets_europa.png`,
+   `realistic_planets_ganymede.png` and `realistic_planets_callisto.png`, and prints their limbs'
+   exponents for `planets.luau`. The fit takes about 40 minutes.
+8. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
    from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
    `PATH`.
-8. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+9. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -56,17 +61,17 @@ Run each script from its own folder, in this order:
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, for the bodies' fetch scripts |
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
-| `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, and finds the wavelength each channel stands for |
+| `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, bends a spectrum through filters, and finds the wavelength each channel stands for |
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
-| `globe.py` | Takes the area-weighted mean over a body's global map, for Uranus, Saturn and Titan |
+| `globe.py` | Takes the area-weighted mean over a body's global map, for Uranus, Saturn, Titan and Jupiter's moons |
+| `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune and Jupiter's moons |
 | `neptune/frames.json` | The Voyager frames used, with their geometry from OPUS and their download links |
 | `neptune/fetch.py` | Downloads the frames and the spectrum |
 | `neptune/fit.py` | Fits each frame's pointing; writes `fits.json`, and each frame's twist curve to `twists.json` |
 | `neptune/blemishes.py` | Finds the camera's fixed blemishes; writes `pattern.npy` |
 | `neptune/mosaic.py` | Mosaics the frames into `maps`, with the photometric self-calibration |
 | `neptune/compose.py` | Composes the texture from the mosaics and the spectrum |
-| `neptune/nepgeo.py` | Neptune's geometry, the frames' projection and photometry, shared by the scripts |
-| `neptune/geomed.py` | Reads the Voyager GEOMED images |
+| `neptune/nepgeo.py` | Neptune's shape, the camera's blemishes, Neptune's winds, and the twist found from its bands, shared by the scripts |
 | `jupiter/fetch.py` | Downloads Cassini's map, Hubble's OPAL maps and the spectrum |
 | `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture |
 | `uranus/fetch.py` | Downloads Hubble's OPAL maps of Uranus and the spectrum |
@@ -81,8 +86,14 @@ Run each script from its own folder, in this order:
 | `titan/frames.json` | The Cassini frames used, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, and composes the texture with the map of the surface and the spectrum |
+| `galilean/frames.json` | The Voyager frames used, one colour set for each 20 degrees of each moon's longitude, with their geometry from OPUS and their download links |
+| `galilean/fetch.py` | Downloads the frames and the USGS's maps |
+| `galilean/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
+| `galilean/compose.py` | Composes a moon's texture from its map and the frames' colour |
+| `galilean/moons.py` | The moons' maps, shapes and frames, shared by `fit.py` and `compose.py` |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 
-`fits.json` and `twists.json` are kept in the repository as a record of the fitted pointing. The
-downloads, the mosaics and the note's figures aren't: the scripts make them again.
+`neptune/fits.json`, `neptune/twists.json` and `galilean/fits.json` are kept in the repository as a
+record of the fitted pointing. The downloads, the mosaics and the note's figures aren't: the scripts
+make them again.

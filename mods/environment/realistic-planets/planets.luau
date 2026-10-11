@@ -1,4 +1,4 @@
--- Realistic Planets: draws each planet's limb as its photometry was measured, with Minnaert's law
+-- Realistic Planets: draws each body's limb as its photometry was measured, with Minnaert's law
 -- (minnaert.glsl). This is a player script: it runs for the whole game. The functions need
 -- PER-PIXEL LIGHTING.
 
@@ -62,6 +62,40 @@ shaders.register_surface({
     shader = "minnaert.glsl",
     textures = { "realistic_planets_titan" },
     parameters = { 0.877, 0.892, 0.876, 0.25 },
+})
+
+-- Jupiter's moons: the exponents of Voyager's frames of 1979, at the red, green and blue channels'
+-- wavelengths for each moon's spectrum (about 604, 542 and 455 nm), and the least cosine of the view
+-- they were fitted at. Io: 0.733 at 416 nm, 0.678 at 479, 0.692 at 566 and 0.685 at 591.
+shaders.register_surface({
+    name = "io",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_io" },
+    parameters = { 0.685, 0.688, 0.697, 0.2 },
+})
+
+-- Europa: 0.660 at 416 nm, 0.664 at 479, 0.673 at 566 and 0.669 at 591.
+shaders.register_surface({
+    name = "europa",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_europa" },
+    parameters = { 0.669, 0.670, 0.663, 0.2 },
+})
+
+-- Ganymede: 0.525 at 416 nm, 0.548 at 479, 0.566 at 566 and 0.580 at 591.
+shaders.register_surface({
+    name = "ganymede",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_ganymede" },
+    parameters = { 0.580, 0.561, 0.539, 0.2 },
+})
+
+-- Callisto: 0.517 at 416 nm, 0.542 at 479, 0.571 at 566 and 0.578 at 591.
+shaders.register_surface({
+    name = "callisto",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_callisto" },
+    parameters = { 0.578, 0.563, 0.532, 0.2 },
 })
 
 -- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least
