@@ -1,5 +1,5 @@
-"""Fits every frame's pointing. The camera's pointing isn't archived for Voyager's Jupiter encounters,
-so it comes from the frames themselves, and from each moon's USGS map:
+"""Fits every frame's pointing. The camera's pointing isn't archived for Voyager's frames of these
+moons, so it comes from the frames themselves, and from each moon's map:
 
 1. A first guess of the disk's centre (`centre`). The disk's size is known from the moon's distance,
    so each sharp edge in the frame votes for the point that far inward along its gradient: the lit
@@ -10,14 +10,16 @@ so it comes from the frames themselves, and from each moon's USGS map:
    between the steps with a parabola.
 3. The centre and scale from the sunlit limb, now that it's known which side is lit
    (`voyager.fit_limb`), and the twist again.
-4. A set's four frames were taken within minutes, so they share a twist: a frame whose twist strays
-   more than `STRAY` degrees from the median of its set's is fitted again near that median. A frame
-   that still can't be fitted is left out of `fits.json`, and `compose.py` leaves out its set.
+4. A set's frames were taken within minutes, so they share a twist: a frame whose twist strays more
+   than `STRAY` degrees from the median of its set's is fitted again near that median. A frame that
+   still can't be fitted is left out of `fits.json`, and `compose.py` leaves it out of its set.
 5. Minnaert's exponent, with the frame's sky taken off (`moons.sky`) and its pixels sorted by the
    map's brightness, each group given its own albedo (`minnaert.fit`), so that bright and dark ground
    don't count as limb darkening.
 
-    python3 fit.py data frames.json fits.json
+    python3 fit.py data frames.json fits.json [moon...]
+
+Naming moons fits only those, and keeps the other moons' fits in `fits.json`.
 """
 import json
 import os
@@ -160,10 +162,15 @@ def report(moon, frame, view, points, rms, correlation, k, again=False):
 
 
 data, listing, out = sys.argv[1:4]
+chosen = sys.argv[4:] or list(moons.MOONS)
 with open(listing) as f:
     frames = json.load(f)['frames']
 fits = {}
-for moon in moons.MOONS:
+if sys.argv[4:] and os.path.exists(out):
+    with open(out) as f:
+        fits = {name: fit for name, fit in json.load(f).items()
+                if any(frame['name'] == name and frame['moon'] not in chosen for frame in frames)}
+for moon in chosen:
     reduced = moons.east_at_left(moons.reduce(moons.read_map(data, moon), moons.REDUCED_STEP), moon)
     body = moons.body(moon)
     mine = [f for f in frames if f['moon'] == moon]

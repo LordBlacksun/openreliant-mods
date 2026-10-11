@@ -7,7 +7,7 @@ describes Neptune's map in detail.
 
 ## What you need
 
-- Python 3 with numpy and scipy, and h5py for Venus, for example in a virtual environment:
+- Python 3 with numpy and scipy, and h5py for Venus and Earth, for example in a virtual environment:
 
   ```bash
   python3 -m venv venv && venv/bin/pip install numpy scipy h5py
@@ -40,15 +40,19 @@ Run each script from its own folder, in this order:
 6. `titan/build.sh` downloads Cassini's frames of Titan, Cassini's map of its surface and
    Karkoschka's spectrum, about 62 MB, into `titan/data`, makes `realistic_planets_titan.png`, and
    prints the limb's exponents for `planets.luau`. It takes about ten seconds.
-7. `galilean/build.sh` downloads the USGS's maps of Io, Europa, Ganymede and Callisto and Voyager's
-   colour frames of them, about 970 MB, into `galilean/data`, fits the frames' pointing into
-   `galilean/fits.json`, makes `realistic_planets_io.png`, `realistic_planets_europa.png`,
-   `realistic_planets_ganymede.png` and `realistic_planets_callisto.png`, and prints their limbs'
-   exponents for `planets.luau`. The fit takes about 40 minutes.
-8. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
+7. `moons/build.sh` downloads the USGS's maps of Io, Europa, Ganymede, Callisto and Triton and
+   Voyager's colour frames of them, about 1.4 GB, into `moons/data`, fits the frames' pointing into
+   `moons/fits.json`, makes `realistic_planets_io.png`, `realistic_planets_europa.png`,
+   `realistic_planets_ganymede.png`, `realistic_planets_callisto.png` and
+   `realistic_planets_triton.png`, and prints their limbs' exponents for `planets.luau`. The fit
+   takes about 50 minutes.
+8. `earth/build.sh` downloads NASA's Blue Marble and GOES-18's and GOES-19's pictures, about 730 MB,
+   into `earth/data`, prints the limb's exponents for `planets.luau`, and makes
+   `realistic_planets_earth.png`. It takes about a minute.
+9. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
    from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
    `PATH`.
-9. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+10. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -56,15 +60,15 @@ Run each script from its own folder, in this order:
 
 | File | What it does |
 |---|---|
-| `sphere.py` | Writes a sphere for a planet as an OBJ file, with an equirectangular map, flattened if asked, and a ring if asked |
+| `sphere.py` | Writes a sphere for a planet as an OBJ file, with an equirectangular map, flattened, with a ring or off the model's origin if asked |
 | `render.py` | Draws a planet from its texture, and its ring, for the thumbnail and the note's figures |
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, for the bodies' fetch scripts |
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
 | `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, bends a spectrum through filters, and finds the wavelength each channel stands for |
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
-| `globe.py` | Takes the area-weighted mean over a body's global map, for Uranus, Saturn, Titan and Jupiter's moons |
-| `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune and Jupiter's moons |
+| `globe.py` | Takes the area-weighted mean over a body's global map, for Uranus, Saturn, Titan, the moons and Earth |
+| `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune, Jupiter's moons and Triton |
 | `neptune/frames.json` | The Voyager frames used, with their geometry from OPUS and their download links |
 | `neptune/fetch.py` | Downloads the frames and the spectrum |
 | `neptune/fit.py` | Fits each frame's pointing; writes `fits.json`, and each frame's twist curve to `twists.json` |
@@ -86,14 +90,18 @@ Run each script from its own folder, in this order:
 | `titan/frames.json` | The Cassini frames used, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, and composes the texture with the map of the surface and the spectrum |
-| `galilean/frames.json` | The Voyager frames used, one colour set for each 20 degrees of each moon's longitude, with their geometry from OPUS and their download links |
-| `galilean/fetch.py` | Downloads the frames and the USGS's maps |
-| `galilean/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
-| `galilean/compose.py` | Composes a moon's texture from its map and the frames' colour |
-| `galilean/moons.py` | The moons' maps, shapes and frames, shared by `fit.py` and `compose.py` |
+| `moons/frames.json` | The Voyager frames used: for Jupiter's moons one colour set for each 20 degrees of each moon's longitude, and for Triton every colour set, with their geometry from OPUS and their download links |
+| `moons/fetch.py` | Downloads the frames and the USGS's maps |
+| `moons/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
+| `moons/compose.py` | Composes a moon's texture from its map and the frames' colour |
+| `moons/moons.py` | The moons' maps, shapes and frames, and the guess for Triton's unseen north, shared by `fit.py` and `compose.py` |
+| `earth/fetch.py` | Downloads the Blue Marble and the GOES pictures |
+| `earth/goes.py` | Reads the GOES pictures onto latitude and longitude, with each place's angles of view and light, shared by `limb.py` and `compose.py` |
+| `earth/limb.py` | Measures the limb's exponents from the two satellites' pictures of the same moment |
+| `earth/compose.py` | Composes the texture from the Blue Marble, with the haze GOES-18 sees added back |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 
-`neptune/fits.json`, `neptune/twists.json` and `galilean/fits.json` are kept in the repository as a
+`neptune/fits.json`, `neptune/twists.json` and `moons/fits.json` are kept in the repository as a
 record of the fitted pointing. The downloads, the mosaics and the note's figures aren't: the scripts
 make them again.

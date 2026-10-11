@@ -1,5 +1,5 @@
 {
- "about": "Voyager 1's and 2's narrow-angle frames of the Galilean moons from 1979, in the violet, blue, green and orange filters, calibrated to I/F with the camera's distortion removed (GEOMED), from the PDS Ring-Moon Systems Node (OPUS): one set for each 20 degrees of longitude, the one with the largest disc, leaving out two green frames of Io of 1979-07-09 that show nothing and an orange frame of Ganymede of 1979-07-01 that holds only noise. The geometry is OPUS's: the distance to the moon's centre, km, planetocentric latitudes and east longitudes of the points below the spacecraft and the sun, and the phase angle. The camera's pointing isn't known; it's fitted to each frame.",
+ "about": "Voyager 1's and 2's narrow-angle frames of the Galilean moons from 1979, and Voyager 2's of Triton from 1989, in the violet, blue, green and orange filters, calibrated to I/F with the camera's distortion removed (GEOMED), from the PDS Ring-Moon Systems Node (OPUS). For each of Jupiter's moons, one set for each 20 degrees of longitude, the one with the largest disc, leaving out two green frames of Io of 1979-07-09 that show nothing and an orange frame of Ganymede of 1979-07-01 that holds only noise. For Triton, every set of a green frame and the frames of the other filters taken within 15 minutes of it, with the disc at least 40 pixels across. The geometry is OPUS's: the distance to the moon's centre, km, planetocentric latitudes and east longitudes of the points below the spacecraft and the sun, and the phase angle. The camera's pointing isn't known; it's fitted to each frame.",
  "frames": [
   {
    "moon": "Io",
@@ -4180,6 +4180,956 @@
    "sun_east_lon": 332.7,
    "phase": 35.992,
    "disc_pixels": 509.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1123151",
+   "opus_id": "vg-iss-2-n-c1123151",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1123157",
+   "time": "1989-08-19T21:10:57.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11231XX/C1123151_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11231XX/C1123151_GEOMED.LBL"
+   ],
+   "distance_km": 7944461.2,
+   "observer_lat": -49.322,
+   "observer_east_lon": 34.372,
+   "sun_lat": -45.404,
+   "sun_east_lon": 15.565,
+   "phase": 13.286,
+   "disc_pixels": 43.5
+  },
+  {
+   "moon": "Triton",
+   "name": "C1123157",
+   "opus_id": "vg-iss-2-n-c1123157",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1123157",
+   "time": "1989-08-19T21:15:45.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11231XX/C1123157_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11231XX/C1123157_GEOMED.LBL"
+   ],
+   "distance_km": 7939196.0,
+   "observer_lat": -49.324,
+   "observer_east_lon": 34.563,
+   "sun_lat": -45.404,
+   "sun_east_lon": 15.769,
+   "phase": 13.278,
+   "disc_pixels": 43.5
+  },
+  {
+   "moon": "Triton",
+   "name": "C1124621",
+   "opus_id": "vg-iss-2-n-c1124621",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1124633",
+   "time": "1989-08-20T08:47:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124621_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124621_GEOMED.LBL"
+   ],
+   "distance_km": 7159865.1,
+   "observer_lat": -49.907,
+   "observer_east_lon": 62.207,
+   "sun_lat": -45.406,
+   "sun_east_lon": 45.177,
+   "phase": 12.287,
+   "disc_pixels": 48.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1124633",
+   "opus_id": "vg-iss-2-n-c1124633",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1124633",
+   "time": "1989-08-20T08:56:39.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124633_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124633_GEOMED.LBL"
+   ],
+   "distance_km": 7148796.8,
+   "observer_lat": -49.919,
+   "observer_east_lon": 62.594,
+   "sun_lat": -45.406,
+   "sun_east_lon": 45.585,
+   "phase": 12.276,
+   "disc_pixels": 48.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1124627",
+   "opus_id": "vg-iss-2-n-c1124627",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1124633",
+   "time": "1989-08-20T08:51:49.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124627_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11246XX/C1124627_GEOMED.LBL"
+   ],
+   "distance_km": 7154350.1,
+   "observer_lat": -49.913,
+   "observer_east_lon": 62.4,
+   "sun_lat": -45.406,
+   "sun_east_lon": 45.381,
+   "phase": 12.282,
+   "disc_pixels": 48.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125316",
+   "opus_id": "vg-iss-2-n-c1125316",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1125327",
+   "time": "1989-08-20T14:19:05.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125316_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125316_GEOMED.LBL"
+   ],
+   "distance_km": 6774493.6,
+   "observer_lat": -50.349,
+   "observer_east_lon": 75.671,
+   "sun_lat": -45.407,
+   "sun_east_lon": 59.302,
+   "phase": 12.005,
+   "disc_pixels": 51.0
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125327",
+   "opus_id": "vg-iss-2-n-c1125327",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1125327",
+   "time": "1989-08-20T14:27:53.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125327_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125327_GEOMED.LBL"
+   ],
+   "distance_km": 6764220.8,
+   "observer_lat": -50.362,
+   "observer_east_lon": 76.031,
+   "sun_lat": -45.407,
+   "sun_east_lon": 59.677,
+   "phase": 12.0,
+   "disc_pixels": 51.0
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125339",
+   "opus_id": "vg-iss-2-n-c1125339",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1125327",
+   "time": "1989-08-20T14:37:25.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125339_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11253XX/C1125339_GEOMED.LBL"
+   ],
+   "distance_km": 6753048.8,
+   "observer_lat": -50.377,
+   "observer_east_lon": 76.422,
+   "sun_lat": -45.407,
+   "sun_east_lon": 60.084,
+   "phase": 11.994,
+   "disc_pixels": 51.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125824",
+   "opus_id": "vg-iss-2-n-c1125824",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1125835",
+   "time": "1989-08-20T18:25:29.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125824_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125824_GEOMED.LBL"
+   ],
+   "distance_km": 6486183.2,
+   "observer_lat": -50.739,
+   "observer_east_lon": 85.788,
+   "sun_lat": -45.407,
+   "sun_east_lon": 69.785,
+   "phase": 11.912,
+   "disc_pixels": 53.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125835",
+   "opus_id": "vg-iss-2-n-c1125835",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1125835",
+   "time": "1989-08-20T18:34:15.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125835_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125835_GEOMED.LBL"
+   ],
+   "distance_km": 6475887.4,
+   "observer_lat": -50.754,
+   "observer_east_lon": 86.151,
+   "sun_lat": -45.407,
+   "sun_east_lon": 70.159,
+   "phase": 11.911,
+   "disc_pixels": 53.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125847",
+   "opus_id": "vg-iss-2-n-c1125847",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1125835",
+   "time": "1989-08-20T18:43:41.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125847_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11258XX/C1125847_GEOMED.LBL"
+   ],
+   "distance_km": 6464728.3,
+   "observer_lat": -50.77,
+   "observer_east_lon": 86.544,
+   "sun_lat": -45.408,
+   "sun_east_lon": 70.564,
+   "phase": 11.91,
+   "disc_pixels": 53.4
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125944",
+   "opus_id": "vg-iss-2-n-c1125944",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1125955",
+   "time": "1989-08-20T19:29:29.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11259XX/C1125944_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11259XX/C1125944_GEOMED.LBL"
+   ],
+   "distance_km": 6411156.7,
+   "observer_lat": -50.848,
+   "observer_east_lon": 88.436,
+   "sun_lat": -45.408,
+   "sun_east_lon": 72.508,
+   "phase": 11.906,
+   "disc_pixels": 53.8
+  },
+  {
+   "moon": "Triton",
+   "name": "C1125955",
+   "opus_id": "vg-iss-2-n-c1125955",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1125955",
+   "time": "1989-08-20T19:38:15.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11259XX/C1125955_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11259XX/C1125955_GEOMED.LBL"
+   ],
+   "distance_km": 6400857.8,
+   "observer_lat": -50.863,
+   "observer_east_lon": 88.8,
+   "sun_lat": -45.408,
+   "sun_east_lon": 72.882,
+   "phase": 11.906,
+   "disc_pixels": 53.9
+  },
+  {
+   "moon": "Triton",
+   "name": "C1126007",
+   "opus_id": "vg-iss-2-n-c1126007",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1125955",
+   "time": "1989-08-20T19:47:41.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11260XX/C1126007_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11260XX/C1126007_GEOMED.LBL"
+   ],
+   "distance_km": 6389695.7,
+   "observer_lat": -50.88,
+   "observer_east_lon": 89.195,
+   "sun_lat": -45.408,
+   "sun_east_lon": 73.287,
+   "phase": 11.906,
+   "disc_pixels": 54.0
+  },
+  {
+   "moon": "Triton",
+   "name": "C1126616",
+   "opus_id": "vg-iss-2-n-c1126616",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1126628",
+   "time": "1989-08-21T00:43:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126616_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126616_GEOMED.LBL"
+   ],
+   "distance_km": 6043797.8,
+   "observer_lat": -51.422,
+   "observer_east_lon": 101.554,
+   "sun_lat": -45.409,
+   "sun_east_lon": 85.85,
+   "phase": 11.995,
+   "disc_pixels": 57.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1126628",
+   "opus_id": "vg-iss-2-n-c1126628",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1126628",
+   "time": "1989-08-21T00:52:39.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126628_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126628_GEOMED.LBL"
+   ],
+   "distance_km": 6032576.0,
+   "observer_lat": -51.441,
+   "observer_east_lon": 101.96,
+   "sun_lat": -45.409,
+   "sun_east_lon": 86.258,
+   "phase": 12.001,
+   "disc_pixels": 57.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1126622",
+   "opus_id": "vg-iss-2-n-c1126622",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1126628",
+   "time": "1989-08-21T00:47:49.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126622_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11266XX/C1126622_GEOMED.LBL"
+   ],
+   "distance_km": 6038205.3,
+   "observer_lat": -51.431,
+   "observer_east_lon": 101.756,
+   "sun_lat": -45.409,
+   "sun_east_lon": 86.053,
+   "phase": 11.998,
+   "disc_pixels": 57.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1127801",
+   "opus_id": "vg-iss-2-n-c1127801",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1127807",
+   "time": "1989-08-21T10:07:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127801_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127801_GEOMED.LBL"
+   ],
+   "distance_km": 5391012.9,
+   "observer_lat": -52.564,
+   "observer_east_lon": 125.873,
+   "sun_lat": -45.41,
+   "sun_east_lon": 109.847,
+   "phase": 12.671,
+   "disc_pixels": 64.0
+  },
+  {
+   "moon": "Triton",
+   "name": "C1127749",
+   "opus_id": "vg-iss-2-n-c1127749",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1127807",
+   "time": "1989-08-21T09:57:29.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11277XX/C1127749_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11277XX/C1127749_GEOMED.LBL"
+   ],
+   "distance_km": 5401954.3,
+   "observer_lat": -52.544,
+   "observer_east_lon": 125.451,
+   "sun_lat": -45.41,
+   "sun_east_lon": 109.439,
+   "phase": 12.654,
+   "disc_pixels": 63.9
+  },
+  {
+   "moon": "Triton",
+   "name": "C1127807",
+   "opus_id": "vg-iss-2-n-c1127807",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1127807",
+   "time": "1989-08-21T10:11:51.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127807_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127807_GEOMED.LBL"
+   ],
+   "distance_km": 5385535.6,
+   "observer_lat": -52.573,
+   "observer_east_lon": 126.085,
+   "sun_lat": -45.411,
+   "sun_east_lon": 110.051,
+   "phase": 12.68,
+   "disc_pixels": 64.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1127821",
+   "opus_id": "vg-iss-2-n-c1127821",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1127807",
+   "time": "1989-08-21T10:22:53.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127821_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11278XX/C1127821_GEOMED.LBL"
+   ],
+   "distance_km": 5372852.9,
+   "observer_lat": -52.597,
+   "observer_east_lon": 126.575,
+   "sun_lat": -45.411,
+   "sun_east_lon": 110.524,
+   "phase": 12.7,
+   "disc_pixels": 64.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129153",
+   "opus_id": "vg-iss-2-n-c1129153",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1129205",
+   "time": "1989-08-21T21:12:39.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11291XX/C1129153_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11291XX/C1129153_GEOMED.LBL"
+   ],
+   "distance_km": 4650951.9,
+   "observer_lat": -53.862,
+   "observer_east_lon": 156.069,
+   "sun_lat": -45.413,
+   "sun_east_lon": 138.167,
+   "phase": 14.275,
+   "disc_pixels": 74.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129205",
+   "opus_id": "vg-iss-2-n-c1129205",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1129205",
+   "time": "1989-08-21T21:22:15.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11292XX/C1129205_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11292XX/C1129205_GEOMED.LBL"
+   ],
+   "distance_km": 4640610.7,
+   "observer_lat": -53.879,
+   "observer_east_lon": 156.518,
+   "sun_lat": -45.413,
+   "sun_east_lon": 138.576,
+   "phase": 14.304,
+   "disc_pixels": 74.4
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129159",
+   "opus_id": "vg-iss-2-n-c1129159",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1129205",
+   "time": "1989-08-21T21:17:25.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11291XX/C1129159_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11291XX/C1129159_GEOMED.LBL"
+   ],
+   "distance_km": 4645797.2,
+   "observer_lat": -53.87,
+   "observer_east_lon": 156.293,
+   "sun_lat": -45.413,
+   "sun_east_lon": 138.371,
+   "phase": 14.289,
+   "disc_pixels": 74.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129901",
+   "opus_id": "vg-iss-2-n-c1129901",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1129913",
+   "time": "1989-08-22T02:55:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129901_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129901_GEOMED.LBL"
+   ],
+   "distance_km": 4288916.7,
+   "observer_lat": -54.373,
+   "observer_east_lon": 172.3,
+   "sun_lat": -45.413,
+   "sun_east_lon": 152.737,
+   "phase": 15.374,
+   "disc_pixels": 80.5
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129913",
+   "opus_id": "vg-iss-2-n-c1129913",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1129913",
+   "time": "1989-08-22T03:04:39.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129913_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129913_GEOMED.LBL"
+   ],
+   "distance_km": 4278974.4,
+   "observer_lat": -54.385,
+   "observer_east_lon": 172.762,
+   "sun_lat": -45.413,
+   "sun_east_lon": 153.145,
+   "phase": 15.407,
+   "disc_pixels": 80.7
+  },
+  {
+   "moon": "Triton",
+   "name": "C1129907",
+   "opus_id": "vg-iss-2-n-c1129907",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1129913",
+   "time": "1989-08-22T02:59:49.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129907_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11299XX/C1129907_GEOMED.LBL"
+   ],
+   "distance_km": 4283960.7,
+   "observer_lat": -54.379,
+   "observer_east_lon": 172.53,
+   "sun_lat": -45.413,
+   "sun_east_lon": 152.94,
+   "phase": 15.39,
+   "disc_pixels": 80.6
+  },
+  {
+   "moon": "Triton",
+   "name": "C1130551",
+   "opus_id": "vg-iss-2-n-c1130551",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1130557",
+   "time": "1989-08-22T08:23:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130551_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130551_GEOMED.LBL"
+   ],
+   "distance_km": 3955913.2,
+   "observer_lat": -54.671,
+   "observer_east_lon": 188.265,
+   "sun_lat": -45.414,
+   "sun_east_lon": 166.694,
+   "phase": 16.55,
+   "disc_pixels": 87.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1130539",
+   "opus_id": "vg-iss-2-n-c1130539",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1130557",
+   "time": "1989-08-22T08:13:29.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130539_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130539_GEOMED.LBL"
+   ],
+   "distance_km": 3965446.4,
+   "observer_lat": -54.666,
+   "observer_east_lon": 187.794,
+   "sun_lat": -45.414,
+   "sun_east_lon": 166.286,
+   "phase": 16.514,
+   "disc_pixels": 87.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1130557",
+   "opus_id": "vg-iss-2-n-c1130557",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1130557",
+   "time": "1989-08-22T08:27:51.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130557_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11305XX/C1130557_GEOMED.LBL"
+   ],
+   "distance_km": 3951143.1,
+   "observer_lat": -54.674,
+   "observer_east_lon": 188.502,
+   "sun_lat": -45.414,
+   "sun_east_lon": 166.898,
+   "phase": 16.568,
+   "disc_pixels": 87.4
+  },
+  {
+   "moon": "Triton",
+   "name": "C1131325",
+   "opus_id": "vg-iss-2-n-c1131325",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1131336",
+   "time": "1989-08-22T14:26:17.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131325_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131325_GEOMED.LBL"
+   ],
+   "distance_km": 3603306.6,
+   "observer_lat": -54.7,
+   "observer_east_lon": 206.319,
+   "sun_lat": -45.415,
+   "sun_east_lon": 182.149,
+   "phase": 17.942,
+   "disc_pixels": 95.8
+  },
+  {
+   "moon": "Triton",
+   "name": "C1131336",
+   "opus_id": "vg-iss-2-n-c1131336",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1131336",
+   "time": "1989-08-22T14:35:05.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131336_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131336_GEOMED.LBL"
+   ],
+   "distance_km": 3594969.8,
+   "observer_lat": -54.696,
+   "observer_east_lon": 206.76,
+   "sun_lat": -45.415,
+   "sun_east_lon": 182.524,
+   "phase": 17.977,
+   "disc_pixels": 96.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1131348",
+   "opus_id": "vg-iss-2-n-c1131348",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1131336",
+   "time": "1989-08-22T14:44:37.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131348_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11313XX/C1131348_GEOMED.LBL"
+   ],
+   "distance_km": 3585916.3,
+   "observer_lat": -54.691,
+   "observer_east_lon": 207.239,
+   "sun_lat": -45.415,
+   "sun_east_lon": 182.931,
+   "phase": 18.014,
+   "disc_pixels": 96.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1132128",
+   "opus_id": "vg-iss-2-n-c1132128",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1132134",
+   "time": "1989-08-22T20:52:39.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132128_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132128_GEOMED.LBL"
+   ],
+   "distance_km": 3245855.2,
+   "observer_lat": -54.293,
+   "observer_east_lon": 225.754,
+   "sun_lat": -45.415,
+   "sun_east_lon": 198.591,
+   "phase": 19.462,
+   "disc_pixels": 106.4
+  },
+  {
+   "moon": "Triton",
+   "name": "C1132116",
+   "opus_id": "vg-iss-2-n-c1132116",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1132134",
+   "time": "1989-08-22T20:43:05.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132116_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132116_GEOMED.LBL"
+   ],
+   "distance_km": 3254519.3,
+   "observer_lat": -54.309,
+   "observer_east_lon": 225.271,
+   "sun_lat": -45.415,
+   "sun_east_lon": 198.183,
+   "phase": 19.424,
+   "disc_pixels": 106.1
+  },
+  {
+   "moon": "Triton",
+   "name": "C1132134",
+   "opus_id": "vg-iss-2-n-c1132134",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1132134",
+   "time": "1989-08-22T20:57:27.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132134_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11321XX/C1132134_GEOMED.LBL"
+   ],
+   "distance_km": 3241519.6,
+   "observer_lat": -54.285,
+   "observer_east_lon": 225.996,
+   "sun_lat": -45.415,
+   "sun_east_lon": 198.795,
+   "phase": 19.481,
+   "disc_pixels": 106.5
+  },
+  {
+   "moon": "Triton",
+   "name": "C1133848",
+   "opus_id": "vg-iss-2-n-c1133848",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1133859",
+   "time": "1989-08-23T10:44:41.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11338XX/C1133848_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11338XX/C1133848_GEOMED.LBL"
+   ],
+   "distance_km": 2523383.7,
+   "observer_lat": -51.607,
+   "observer_east_lon": 267.036,
+   "sun_lat": -45.416,
+   "sun_east_lon": 233.994,
+   "phase": 22.529,
+   "disc_pixels": 136.9
+  },
+  {
+   "moon": "Triton",
+   "name": "C1133859",
+   "opus_id": "vg-iss-2-n-c1133859",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1133859",
+   "time": "1989-08-23T10:53:29.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11338XX/C1133859_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11338XX/C1133859_GEOMED.LBL"
+   ],
+   "distance_km": 2515968.3,
+   "observer_lat": -51.564,
+   "observer_east_lon": 267.461,
+   "sun_lat": -45.416,
+   "sun_east_lon": 234.369,
+   "phase": 22.558,
+   "disc_pixels": 137.3
+  },
+  {
+   "moon": "Triton",
+   "name": "C1133911",
+   "opus_id": "vg-iss-2-n-c1133911",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1133859",
+   "time": "1989-08-23T11:03:01.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11339XX/C1133911_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11339XX/C1133911_GEOMED.LBL"
+   ],
+   "distance_km": 2507908.7,
+   "observer_lat": -51.518,
+   "observer_east_lon": 267.922,
+   "sun_lat": -45.416,
+   "sun_east_lon": 234.776,
+   "phase": 22.589,
+   "disc_pixels": 137.7
+  },
+  {
+   "moon": "Triton",
+   "name": "C1134845",
+   "opus_id": "vg-iss-2-n-c1134845",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1134856",
+   "time": "1989-08-23T18:42:17.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11348XX/C1134845_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11348XX/C1134845_GEOMED.LBL"
+   ],
+   "distance_km": 2123155.8,
+   "observer_lat": -48.872,
+   "observer_east_lon": 289.52,
+   "sun_lat": -45.416,
+   "sun_east_lon": 254.316,
+   "phase": 23.97,
+   "disc_pixels": 162.7
+  },
+  {
+   "moon": "Triton",
+   "name": "C1134856",
+   "opus_id": "vg-iss-2-n-c1134856",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1134856",
+   "time": "1989-08-23T18:51:05.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11348XX/C1134856_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11348XX/C1134856_GEOMED.LBL"
+   ],
+   "distance_km": 2115790.6,
+   "observer_lat": -48.813,
+   "observer_east_lon": 289.923,
+   "sun_lat": -45.416,
+   "sun_east_lon": 254.69,
+   "phase": 23.994,
+   "disc_pixels": 163.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1134908",
+   "opus_id": "vg-iss-2-n-c1134908",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1134856",
+   "time": "1989-08-23T19:00:37.320",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11349XX/C1134908_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11349XX/C1134908_GEOMED.LBL"
+   ],
+   "distance_km": 2107781.7,
+   "observer_lat": -48.748,
+   "observer_east_lon": 290.36,
+   "sun_lat": -45.416,
+   "sun_east_lon": 255.097,
+   "phase": 24.02,
+   "disc_pixels": 163.9
+  },
+  {
+   "moon": "Triton",
+   "name": "C1137210",
+   "opus_id": "vg-iss-2-n-c1137210",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1137221",
+   "time": "1989-08-24T13:26:19.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137210_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137210_GEOMED.LBL"
+   ],
+   "distance_km": 1156736.4,
+   "observer_lat": -37.43,
+   "observer_east_lon": 336.538,
+   "sun_lat": -45.415,
+   "sun_east_lon": 302.14,
+   "phase": 26.769,
+   "disc_pixels": 298.7
+  },
+  {
+   "moon": "Triton",
+   "name": "C1137221",
+   "opus_id": "vg-iss-2-n-c1137221",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1137221",
+   "time": "1989-08-24T13:35:07.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137221_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137221_GEOMED.LBL"
+   ],
+   "distance_km": 1148864.8,
+   "observer_lat": -37.286,
+   "observer_east_lon": 336.864,
+   "sun_lat": -45.415,
+   "sun_east_lon": 302.514,
+   "phase": 26.803,
+   "disc_pixels": 300.8
+  },
+  {
+   "moon": "Triton",
+   "name": "C1137232",
+   "opus_id": "vg-iss-2-n-c1137232",
+   "filter": "Orange",
+   "set": "vg-iss-2-n-c1137221",
+   "time": "1989-08-24T13:43:53.160",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137232_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11372XX/C1137232_GEOMED.LBL"
+   ],
+   "distance_km": 1141002.3,
+   "observer_lat": -37.141,
+   "observer_east_lon": 337.188,
+   "sun_lat": -45.415,
+   "sun_east_lon": 302.888,
+   "phase": 26.838,
+   "disc_pixels": 302.9
+  },
+  {
+   "moon": "Triton",
+   "name": "C1137715",
+   "opus_id": "vg-iss-2-n-c1137715",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1137721",
+   "time": "1989-08-24T17:30:19.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11377XX/C1137715_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11377XX/C1137715_GEOMED.LBL"
+   ],
+   "distance_km": 936772.5,
+   "observer_lat": -32.702,
+   "observer_east_lon": 345.204,
+   "sun_lat": -45.415,
+   "sun_east_lon": 312.521,
+   "phase": 28.12,
+   "disc_pixels": 369.0
+  },
+  {
+   "moon": "Triton",
+   "name": "C1137721",
+   "opus_id": "vg-iss-2-n-c1137721",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1137721",
+   "time": "1989-08-24T17:35:07.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11377XX/C1137721_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11377XX/C1137721_GEOMED.LBL"
+   ],
+   "distance_km": 932415.7,
+   "observer_lat": -32.59,
+   "observer_east_lon": 345.366,
+   "sun_lat": -45.415,
+   "sun_east_lon": 312.725,
+   "phase": 28.159,
+   "disc_pixels": 370.7
+  },
+  {
+   "moon": "Triton",
+   "name": "C1138657",
+   "opus_id": "vg-iss-2-n-c1138657",
+   "filter": "Violet",
+   "set": "vg-iss-2-n-c1138703",
+   "time": "1989-08-25T01:15:55.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11386XX/C1138657_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11386XX/C1138657_GEOMED.LBL"
+   ],
+   "distance_km": 517157.5,
+   "observer_lat": -13.427,
+   "observer_east_lon": 358.396,
+   "sun_lat": -45.415,
+   "sun_east_lon": 332.329,
+   "phase": 38.858,
+   "disc_pixels": 669.2
+  },
+  {
+   "moon": "Triton",
+   "name": "C1138651",
+   "opus_id": "vg-iss-2-n-c1138651",
+   "filter": "Blue",
+   "set": "vg-iss-2-n-c1138703",
+   "time": "1989-08-25T01:11:07.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11386XX/C1138651_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11386XX/C1138651_GEOMED.LBL"
+   ],
+   "distance_km": 521348.9,
+   "observer_lat": -13.788,
+   "observer_east_lon": 358.299,
+   "sun_lat": -45.415,
+   "sun_east_lon": 332.125,
+   "phase": 38.595,
+   "disc_pixels": 663.8
+  },
+  {
+   "moon": "Triton",
+   "name": "C1138703",
+   "opus_id": "vg-iss-2-n-c1138703",
+   "filter": "Green",
+   "set": "vg-iss-2-n-c1138703",
+   "time": "1989-08-25T01:20:43.080",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11387XX/C1138703_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11387XX/C1138703_GEOMED.LBL"
+   ],
+   "distance_km": 512970.8,
+   "observer_lat": -13.06,
+   "observer_east_lon": 358.492,
+   "sun_lat": -45.415,
+   "sun_east_lon": 332.533,
+   "phase": 39.127,
+   "disc_pixels": 674.7
   }
  ]
 }

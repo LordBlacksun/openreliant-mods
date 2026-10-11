@@ -13,6 +13,10 @@ north and one facing south, each with a vertex at the inner and the outer radius
 so that the normals the engine works out stay flat. Its texture's width runs from the inner radius
 to the outer, and every row of it is alike.
 
+With `--centre`, the sphere's middle, and its ring's, is at that point rather than at the model's
+origin, as the middle of the game's sphere of Earth is. The point is in the OBJ file's coordinates,
+Y up, as `sltool shp obj` writes them.
+
 Each vertex is written once, the seam's and the poles' included, and the texture coordinates go
 with each corner. The game works out a planet's normals again from its faces, so a shared vertex
 keeps the lighting smooth across the seam, where a split one would show a line.
@@ -27,8 +31,10 @@ import argparse
 import math
 
 
-def write(out, name: str, texture: str, radius: float, polar: float, columns: int, rows: int) -> tuple[int, int]:
-    """Writes the sphere, and returns how many vertices and texture coordinates it has."""
+def write(out, name: str, texture: str, radius: float, polar: float, columns: int, rows: int,
+          centre: tuple[float, float, float]) -> tuple[int, int]:
+    """Writes the sphere around `centre`, and returns how many vertices and texture coordinates it
+    has."""
     parallels = range(1, rows)
     # Vertices: the north pole, each parallel from north to south, then the south pole.
     north = 1
@@ -54,7 +60,7 @@ def write(out, name: str, texture: str, radius: float, polar: float, columns: in
         length = math.sqrt(nx * nx + ny * ny + nz * nz)
         normals.append((nx / length, ny / length, nz / length))
     for x, y, z in points:
-        out.write(f"v {x:.3f} {y:.3f} {z:.3f}\n")
+        out.write(f"v {x + centre[0]:.3f} {y + centre[1]:.3f} {z + centre[2]:.3f}\n")
     for x, y, z in normals:
         out.write(f"vn {x:.6f} {y:.6f} {z:.6f}\n")
 
@@ -93,16 +99,17 @@ def write(out, name: str, texture: str, radius: float, polar: float, columns: in
     return len(points), pole_coordinates - 1 + 2 * columns
 
 
-def write_ring(out, texture: str, inner: float, outer: float, segments: int, vertices: int, coordinates: int) -> None:
-    """Writes a flat ring in the plane of the equator after `vertices` vertices and `coordinates`
-    texture coordinates: the layer facing north, then the one facing south, each counter-clockwise
-    seen from the side it faces."""
+def write_ring(out, texture: str, inner: float, outer: float, segments: int, vertices: int, coordinates: int,
+               centre: tuple[float, float, float]) -> None:
+    """Writes a flat ring around `centre` in the plane of the equator after `vertices` vertices and
+    `coordinates` texture coordinates: the layer facing north, then the one facing south, each
+    counter-clockwise seen from the side it faces."""
     out.write(f"# A ring from radius {inner:g} to {outer:g}, {segments} segments, by sphere.py\n")
     for _ in range(2):
         for segment in range(segments):
             angle = 2 * math.pi * segment / segments - math.pi
             for radius in (inner, outer):
-                out.write(f"v {radius * math.sin(angle):.3f} 0 {radius * math.cos(angle):.3f}\n")
+                out.write(f"v {centre[0] + radius * math.sin(angle):.3f} {centre[1]:.3f} {centre[2] + radius * math.cos(angle):.3f}\n")
     for up in (1, -1):
         out.write(f"vn 0 {up} 0\n" * (2 * segments))
     out.write("vt 0 0.5\nvt 1 0.5\n")
@@ -129,13 +136,16 @@ def main() -> None:
     parser.add_argument("--ring", type=float, nargs=2, metavar=("INNER", "OUTER"), help="a ring's inner and outer radius")
     parser.add_argument("--ring-texture", help="the ring texture's name, without its extension")
     parser.add_argument("--ring-segments", type=int, default=512, help="the ring's segments round the planet")
+    parser.add_argument("--centre", type=float, nargs=3, default=(0.0, 0.0, 0.0), metavar=("X", "Y", "Z"),
+                        help="the sphere's middle, in the game's units, Y up; the model's origin by default")
     args = parser.parse_args()
     if args.ring and not args.ring_texture:
         parser.error("--ring needs --ring-texture")
     with open(args.out, "w") as out:
-        vertices, coordinates = write(out, args.name, args.texture, args.radius, args.polar or args.radius, args.columns, args.rows)
+        vertices, coordinates = write(out, args.name, args.texture, args.radius, args.polar or args.radius, args.columns, args.rows,
+                                      args.centre)
         if args.ring:
-            write_ring(out, args.ring_texture, *args.ring, args.ring_segments, vertices, coordinates)
+            write_ring(out, args.ring_texture, *args.ring, args.ring_segments, vertices, coordinates, args.centre)
 
 
 if __name__ == "__main__":
