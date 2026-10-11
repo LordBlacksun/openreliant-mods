@@ -5,7 +5,10 @@ version: 2
 updates:
   - package-ecosystem: gitsubmodule
     directory: /
+    # Every day at 06:00 UTC, weekends included: Dependabot's daily interval only runs on
+    # weekdays, and artists often publish at the weekend.
     schedule:
-      interval: daily
+      interval: cron
+      cronjob: "0 6 * * *"
     commit-message:
       prefix: chore
