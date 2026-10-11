@@ -1,0 +1,641 @@
+{
+ "about": "The Voyager 2 narrow-angle frames that make Neptune's texture, from the PDS Ring-Moon Systems Node (OPUS). Latitudes are planetocentric and longitudes east, as OPUS gives them; distance is to Neptune's centre, resolution is at the centre of the disk, in km a raw pixel.",
+ "frames": [
+  {
+   "name": "C1124452",
+   "opus_id": "vg-iss-2-n-c1124452",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T07:35:54.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11244XX/C1124452_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11244XX/C1124452_GEOMED.LBL"
+   ],
+   "distance_km": 7123433.077,
+   "observer_lat": -28.485,
+   "observer_east_lon": 13.857,
+   "sun_lat": -23.151,
+   "sun_east_lon": 358.284,
+   "phase": 14.98,
+   "resolution_km": 65.8938
+  },
+  {
+   "name": "C1124807",
+   "opus_id": "vg-iss-2-n-c1124807",
+   "role": "luminance",
+   "filter": "Green",
+   "time": "1989-08-20T10:11:45.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11248XX/C1124807_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11248XX/C1124807_GEOMED.LBL"
+   ],
+   "distance_km": 6966264.758,
+   "observer_lat": -28.476,
+   "observer_east_lon": 315.778,
+   "sun_lat": -23.151,
+   "sun_east_lon": 300.208,
+   "phase": 14.975,
+   "resolution_km": 64.43995
+  },
+  {
+   "name": "C1124950",
+   "opus_id": "vg-iss-2-n-c1124950",
+   "role": "luminance",
+   "filter": "Green",
+   "time": "1989-08-20T11:34:09.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11249XX/C1124950_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11249XX/C1124950_GEOMED.LBL"
+   ],
+   "distance_km": 6883204.537,
+   "observer_lat": -28.472,
+   "observer_east_lon": 285.086,
+   "sun_lat": -23.151,
+   "sun_east_lon": 269.517,
+   "phase": 14.972,
+   "resolution_km": 63.67162
+  },
+  {
+   "name": "C1125011",
+   "opus_id": "vg-iss-2-n-c1125011",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T11:51:06.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11250XX/C1125011_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11250XX/C1125011_GEOMED.LBL"
+   ],
+   "distance_km": 6866196.933,
+   "observer_lat": -28.471,
+   "observer_east_lon": 278.801,
+   "sun_lat": -23.151,
+   "sun_east_lon": 263.233,
+   "phase": 14.972,
+   "resolution_km": 63.51429
+  },
+  {
+   "name": "C1125424",
+   "opus_id": "vg-iss-2-n-c1125424",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T15:13:30.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11254XX/C1125424_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11254XX/C1125424_GEOMED.LBL"
+   ],
+   "distance_km": 6662158.727,
+   "observer_lat": -28.459,
+   "observer_east_lon": 203.412,
+   "sun_lat": -23.151,
+   "sun_east_lon": 187.848,
+   "phase": 14.965,
+   "resolution_km": 61.62688
+  },
+  {
+   "name": "C1123602",
+   "opus_id": "vg-iss-2-n-c1123602",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T00:31:54.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11236XX/C1123602_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11236XX/C1123602_GEOMED.LBL"
+   ],
+   "distance_km": 7550750.061,
+   "observer_lat": -28.506,
+   "observer_east_lon": 171.786,
+   "sun_lat": -23.15,
+   "sun_east_lon": 156.206,
+   "phase": 14.993,
+   "resolution_km": 69.84661
+  },
+  {
+   "name": "C1123656",
+   "opus_id": "vg-iss-2-n-c1123656",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T01:15:06.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11236XX/C1123656_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11236XX/C1123656_GEOMED.LBL"
+   ],
+   "distance_km": 7507215.623,
+   "observer_lat": -28.504,
+   "observer_east_lon": 155.695,
+   "sun_lat": -23.15,
+   "sun_east_lon": 140.115,
+   "phase": 14.992,
+   "resolution_km": 69.4439
+  },
+  {
+   "name": "C1124039",
+   "opus_id": "vg-iss-2-n-c1124039",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T04:13:30.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11240XX/C1124039_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11240XX/C1124039_GEOMED.LBL"
+   ],
+   "distance_km": 7327426.242,
+   "observer_lat": -28.495,
+   "observer_east_lon": 89.246,
+   "sun_lat": -23.151,
+   "sun_east_lon": 73.669,
+   "phase": 14.987,
+   "resolution_km": 67.7808
+  },
+  {
+   "name": "C1124304",
+   "opus_id": "vg-iss-2-n-c1124304",
+   "role": "luminance",
+   "filter": "Clear",
+   "time": "1989-08-20T06:09:30.120",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11243XX/C1124304_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11243XX/C1124304_GEOMED.LBL"
+   ],
+   "distance_km": 7210515.426,
+   "observer_lat": -28.489,
+   "observer_east_lon": 46.039,
+   "sun_lat": -23.151,
+   "sun_east_lon": 30.464,
+   "phase": 14.983,
+   "resolution_km": 66.69934
+  },
+  {
+   "name": "C1124441",
+   "opus_id": "vg-iss-2-n-c1124441",
+   "role": "luminance",
+   "filter": "Green",
+   "time": "1989-08-20T07:26:57.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11244XX/C1124441_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8207/DATA/C11244XX/C1124441_GEOMED.LBL"
+   ],
+   "distance_km": 7132375.303,
+   "observer_lat": -28.485,
+   "observer_east_lon": 17.162,
+   "sun_lat": -23.151,
+   "sun_east_lon": 1.589,
+   "phase": 14.981,
+   "resolution_km": 65.97652
+  },
+  {
+   "name": "C1116553",
+   "opus_id": "vg-iss-2-n-c1116553",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T16:24:29.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11165XX/C1116553_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11165XX/C1116553_GEOMED.LBL"
+   ],
+   "distance_km": 10942339.2,
+   "observer_lat": -28.614,
+   "observer_east_lon": 346.004,
+   "sun_lat": -23.146,
+   "sun_east_lon": 330.378,
+   "phase": 15.065,
+   "resolution_km": 101.21978,
+   "set": 0
+  },
+  {
+   "name": "C1116615",
+   "opus_id": "vg-iss-2-n-c1116615",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T16:42:09.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11166XX/C1116615_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11166XX/C1116615_GEOMED.LBL"
+   ],
+   "distance_km": 10924587.309,
+   "observer_lat": -28.614,
+   "observer_east_lon": 339.437,
+   "sun_lat": -23.146,
+   "sun_east_lon": 323.811,
+   "phase": 15.065,
+   "resolution_km": 101.05557,
+   "set": 0
+  },
+  {
+   "name": "C1116542",
+   "opus_id": "vg-iss-2-n-c1116542",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T16:15:51.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11165XX/C1116542_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11165XX/C1116542_GEOMED.LBL"
+   ],
+   "distance_km": 10951118.469,
+   "observer_lat": -28.614,
+   "observer_east_lon": 349.252,
+   "sun_lat": -23.146,
+   "sun_east_lon": 333.626,
+   "phase": 15.065,
+   "resolution_km": 101.30099,
+   "set": 0
+  },
+  {
+   "name": "C1114843",
+   "opus_id": "vg-iss-2-n-c1114843",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T02:40:30.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114843_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114843_GEOMED.LBL"
+   ],
+   "distance_km": 11771854.653,
+   "observer_lat": -28.631,
+   "observer_east_lon": 292.91,
+   "sun_lat": -23.145,
+   "sun_east_lon": 277.276,
+   "phase": 15.078,
+   "resolution_km": 108.89304,
+   "set": 1
+  },
+  {
+   "name": "C1114855",
+   "opus_id": "vg-iss-2-n-c1114855",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T02:50:10.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114855_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114855_GEOMED.LBL"
+   ],
+   "distance_km": 11762158.766,
+   "observer_lat": -28.631,
+   "observer_east_lon": 289.322,
+   "sun_lat": -23.145,
+   "sun_east_lon": 273.688,
+   "phase": 15.078,
+   "resolution_km": 108.80335,
+   "set": 1
+  },
+  {
+   "name": "C1114837",
+   "opus_id": "vg-iss-2-n-c1114837",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T02:35:52.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114837_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11148XX/C1114837_GEOMED.LBL"
+   ],
+   "distance_km": 11776605.953,
+   "observer_lat": -28.631,
+   "observer_east_lon": 294.668,
+   "sun_lat": -23.145,
+   "sun_east_lon": 279.034,
+   "phase": 15.078,
+   "resolution_km": 108.93699,
+   "set": 1
+  },
+  {
+   "name": "C1116901",
+   "opus_id": "vg-iss-2-n-c1116901",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T18:54:53.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11169XX/C1116901_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11169XX/C1116901_GEOMED.LBL"
+   ],
+   "distance_km": 10790914.441,
+   "observer_lat": -28.611,
+   "observer_east_lon": 289.985,
+   "sun_lat": -23.146,
+   "sun_east_lon": 274.361,
+   "phase": 15.063,
+   "resolution_km": 99.81906,
+   "set": 2
+  },
+  {
+   "name": "C1116923",
+   "opus_id": "vg-iss-2-n-c1116923",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T19:12:33.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11169XX/C1116923_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11169XX/C1116923_GEOMED.LBL"
+   ],
+   "distance_km": 10773161.992,
+   "observer_lat": -28.61,
+   "observer_east_lon": 283.417,
+   "sun_lat": -23.147,
+   "sun_east_lon": 267.794,
+   "phase": 15.062,
+   "resolution_km": 99.65484,
+   "set": 2
+  },
+  {
+   "name": "C1116850",
+   "opus_id": "vg-iss-2-n-c1116850",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T18:46:15.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11168XX/C1116850_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11168XX/C1116850_GEOMED.LBL"
+   ],
+   "distance_km": 10799693.985,
+   "observer_lat": -28.611,
+   "observer_east_lon": 293.233,
+   "sun_lat": -23.146,
+   "sun_east_lon": 277.609,
+   "phase": 15.063,
+   "resolution_km": 99.90027,
+   "set": 2
+  },
+  {
+   "name": "C1117327",
+   "opus_id": "vg-iss-2-n-c1117327",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T22:27:41.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117327_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117327_GEOMED.LBL"
+   ],
+   "distance_km": 10576656.327,
+   "observer_lat": -28.606,
+   "observer_east_lon": 210.724,
+   "sun_lat": -23.147,
+   "sun_east_lon": 195.102,
+   "phase": 15.059,
+   "resolution_km": 97.83711,
+   "set": 3
+  },
+  {
+   "name": "C1117339",
+   "opus_id": "vg-iss-2-n-c1117339",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T22:37:21.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117339_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117339_GEOMED.LBL"
+   ],
+   "distance_km": 10566958.098,
+   "observer_lat": -28.606,
+   "observer_east_lon": 207.136,
+   "sun_lat": -23.147,
+   "sun_east_lon": 191.515,
+   "phase": 15.059,
+   "resolution_km": 97.7474,
+   "set": 3
+  },
+  {
+   "name": "C1117321",
+   "opus_id": "vg-iss-2-n-c1117321",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T22:23:03.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117321_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11173XX/C1117321_GEOMED.LBL"
+   ],
+   "distance_km": 10581408.774,
+   "observer_lat": -28.606,
+   "observer_east_lon": 212.482,
+   "sun_lat": -23.147,
+   "sun_east_lon": 196.86,
+   "phase": 15.059,
+   "resolution_km": 97.88107,
+   "set": 3
+  },
+  {
+   "name": "C1117415",
+   "opus_id": "vg-iss-2-n-c1117415",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T23:06:05.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117415_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117415_GEOMED.LBL"
+   ],
+   "distance_km": 10537992.173,
+   "observer_lat": -28.605,
+   "observer_east_lon": 196.421,
+   "sun_lat": -23.147,
+   "sun_east_lon": 180.8,
+   "phase": 15.058,
+   "resolution_km": 97.47945,
+   "set": 4
+  },
+  {
+   "name": "C1117427",
+   "opus_id": "vg-iss-2-n-c1117427",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T23:15:45.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117427_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117427_GEOMED.LBL"
+   ],
+   "distance_km": 10528293.864,
+   "observer_lat": -28.605,
+   "observer_east_lon": 192.833,
+   "sun_lat": -23.147,
+   "sun_east_lon": 177.212,
+   "phase": 15.058,
+   "resolution_km": 97.38974,
+   "set": 4
+  },
+  {
+   "name": "C1117409",
+   "opus_id": "vg-iss-2-n-c1117409",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T23:01:27.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117409_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11174XX/C1117409_GEOMED.LBL"
+   ],
+   "distance_km": 10542744.659,
+   "observer_lat": -28.605,
+   "observer_east_lon": 198.179,
+   "sun_lat": -23.147,
+   "sun_east_lon": 182.558,
+   "phase": 15.059,
+   "resolution_km": 97.52342,
+   "set": 4
+  },
+  {
+   "name": "C1115735",
+   "opus_id": "vg-iss-2-n-c1115735",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T09:46:06.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115735_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115735_GEOMED.LBL"
+   ],
+   "distance_km": 11343414.307,
+   "observer_lat": -28.623,
+   "observer_east_lon": 134.388,
+   "sun_lat": -23.146,
+   "sun_east_lon": 118.759,
+   "phase": 15.071,
+   "resolution_km": 104.92984,
+   "set": 5
+  },
+  {
+   "name": "C1115757",
+   "opus_id": "vg-iss-2-n-c1115757",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T10:03:46.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115757_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115757_GEOMED.LBL"
+   ],
+   "distance_km": 11325663.856,
+   "observer_lat": -28.622,
+   "observer_east_lon": 127.821,
+   "sun_lat": -23.146,
+   "sun_east_lon": 112.191,
+   "phase": 15.071,
+   "resolution_km": 104.76564,
+   "set": 5
+  },
+  {
+   "name": "C1115724",
+   "opus_id": "vg-iss-2-n-c1115724",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T09:37:28.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115724_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11157XX/C1115724_GEOMED.LBL"
+   ],
+   "distance_km": 11352192.864,
+   "observer_lat": -28.623,
+   "observer_east_lon": 137.636,
+   "sun_lat": -23.146,
+   "sun_east_lon": 122.006,
+   "phase": 15.072,
+   "resolution_km": 105.01104,
+   "set": 5
+  },
+  {
+   "name": "C1116037",
+   "opus_id": "vg-iss-2-n-c1116037",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T12:11:42.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116037_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116037_GEOMED.LBL"
+   ],
+   "distance_km": 11196834.292,
+   "observer_lat": -28.62,
+   "observer_east_lon": 80.157,
+   "sun_lat": -23.146,
+   "sun_east_lon": 64.529,
+   "phase": 15.069,
+   "resolution_km": 103.57393,
+   "set": 6
+  },
+  {
+   "name": "C1116059",
+   "opus_id": "vg-iss-2-n-c1116059",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T12:29:22.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116059_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116059_GEOMED.LBL"
+   ],
+   "distance_km": 11179083.32,
+   "observer_lat": -28.619,
+   "observer_east_lon": 73.59,
+   "sun_lat": -23.146,
+   "sun_east_lon": 57.962,
+   "phase": 15.069,
+   "resolution_km": 103.40973,
+   "set": 6
+  },
+  {
+   "name": "C1116026",
+   "opus_id": "vg-iss-2-n-c1116026",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T12:03:04.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116026_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11160XX/C1116026_GEOMED.LBL"
+   ],
+   "distance_km": 11205613.106,
+   "observer_lat": -28.62,
+   "observer_east_lon": 83.405,
+   "sun_lat": -23.146,
+   "sun_east_lon": 67.777,
+   "phase": 15.069,
+   "resolution_km": 103.65514,
+   "set": 6
+  },
+  {
+   "name": "C1116225",
+   "opus_id": "vg-iss-2-n-c1116225",
+   "role": "colour",
+   "filter": "Orange",
+   "time": "1989-08-17T13:38:06.640",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116225_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116225_GEOMED.LBL"
+   ],
+   "distance_km": 11109850.703,
+   "observer_lat": -28.618,
+   "observer_east_lon": 47.976,
+   "sun_lat": -23.146,
+   "sun_east_lon": 32.349,
+   "phase": 15.068,
+   "resolution_km": 102.76931,
+   "set": 7
+  },
+  {
+   "name": "C1116229",
+   "opus_id": "vg-iss-2-n-c1116229",
+   "role": "colour",
+   "filter": "Green",
+   "time": "1989-08-17T13:41:22.480",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116229_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116229_GEOMED.LBL"
+   ],
+   "distance_km": 11106596.842,
+   "observer_lat": -28.618,
+   "observer_east_lon": 46.772,
+   "sun_lat": -23.146,
+   "sun_east_lon": 31.145,
+   "phase": 15.068,
+   "resolution_km": 102.73921,
+   "set": 7
+  },
+  {
+   "name": "C1116223",
+   "opus_id": "vg-iss-2-n-c1116223",
+   "role": "colour",
+   "filter": "Blue",
+   "time": "1989-08-17T13:36:40.240",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116223_GEOMED.IMG",
+    "https://opus.pds-rings.seti.org/holdings/volumes/VGISS_8xxx/VGISS_8206/DATA/C11162XX/C1116223_GEOMED.LBL"
+   ],
+   "distance_km": 11111380.983,
+   "observer_lat": -28.618,
+   "observer_east_lon": 48.542,
+   "sun_lat": -23.146,
+   "sun_east_lon": 32.915,
+   "phase": 15.068,
+   "resolution_km": 102.78347,
+   "set": 7
+  }
+ ]
+}
