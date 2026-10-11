@@ -6,7 +6,7 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune, Jupiter, Uranus, Saturn and Venus are done. The other bodies follow.
+**Status:** Neptune, Jupiter, Uranus, Saturn, Venus and Titan are done. The other bodies follow.
 
 ## The game's planets
 
@@ -522,6 +522,56 @@ the blue, and hardly at all in green and red.
   Jupiter's 0.3.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
+## Titan
+
+Titan's map shows its haze as Cassini saw it in visible light, with the surface underneath showing
+faintly through. To the eye Titan is an almost featureless orange ball: the haze hides the surface,
+which only shows in the near infrared.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| Cassini's narrow-angle camera, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2060 volume, with their geometry from the volume's index | Public domain (NASA/JPL/Space Science Institute) | Yes, 12 frames in the blue, green and red filters from January and February 2010 |
+| [PIA22770](https://science.nasa.gov/photojournal/titan-mosaic-the-surface-under-the-haze), "Titan Mosaic: The Surface Under the Haze" (2018) | Cassini's map of the surface's normal albedo at 938 nm, from 9,873 frames taken over 13 years, the haze taken out with a model of it, at 16 pixels a degree | Free to use with credit (JPL's image use policy) | Yes, for the surface |
+| [The USGS's global mosaic of Titan](https://astrogeology.usgs.gov/search/map/titan_cassini_iss_global_mosaic_4005m) | The surface at 938 nm from Cassini's frames, at about 4 km a pixel | Public domain | No: PIA22770 is sharper |
+| E. Karkoschka's spectra, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Titan's geometric albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | For the colour |
+
+### The haze
+
+- Cassini's narrow-angle camera took four sets of frames of Titan in its blue, green and red filters,
+  on 30 January and 16 February 2010, months after Titan's equinox, with the sun over its equator
+  and both poles lit. Titan is about 800 pixels across in them, at phase angles of 28 to 50 degrees.
+- Each frame's disk is fitted to its lit limb, where the brightness falls to half of that just inside
+  it. That's the haze's edge in the filter, about 2,710 km from the centre in red, 2,730 km in green
+  and 2,840 km in blue, and the game's sphere stands for it.
+- Each pixel's latitude and the cosines of its angles of light and view come from the disk, the
+  frame's sub-spacecraft and sub-solar points, and the angle of Titan's north pole in the frame, from
+  the volume's index. The sun's cosine follows the frames' brightness closely, which confirms the
+  orientation.
+- Minnaert's law is fitted to each frame where both the sun and the view are more than 15 degrees
+  above the horizon, with each band of 5 degrees of latitude given its own brightness, as for Venus.
+  A band's brightness over the frame's mean within 60 degrees of the equator is the haze's profile in
+  that filter, and the four sets' profiles are averaged. The frames see from 72.5 degrees south to
+  72.5 north, and past that the profile keeps its last value.
+- In 2010 the haze is brighter in the south than in the north, most in blue: in blue, 1.24 times the
+  mean in the far south and 0.75 at 62 degrees north, and in red, 1.13 and 1.03.
+
+### Colour, surface and brightness
+
+- The colour is Karkoschka's spectrum of Titan through the CIE 1931 observer, as for the others,
+  bent at each latitude through the three filters' profiles, as Saturn's is through its maps. At the
+  equator it's sRGB (141, 124, 94), a dull orange.
+- At 938 nm the haze is thin enough for Cassini to see the surface, and PIA22770 maps its normal
+  albedo there: the dark dune fields round the equator, the bright Xanadu, and the lakes and seas
+  near the poles. The map's columns run east from 0 degrees at its left edge. The texture shows the
+  map's contrast at 0.15 of its strength, on the logarithm, over the haze's colour, so that the
+  surface shows faintly through the haze.
+- At its true normal albedo, 1.39 times the spectrum's geometric albedo by Minnaert's law in green,
+  Titan's mean luminance is about 0.31. The texture's is 0.12, the same share of its true brightness
+  as Jupiter's 0.3 is of Jupiter's.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
 ## The limb
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
@@ -548,9 +598,13 @@ each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are 
   1.081 at 513 and 1.023 at 965: 1.070 for red, 1.077 for green and 0.982 for blue. In visible light
   Venus's limb darkens a little more than a plain ball's, least in blue, so its limb turns a little
   darker and a little blue.
+- Titan's come from the same Cassini frames as its haze. Their exponents are 0.876 at 463 nm, 0.897
+  at 568 and 0.855 at 647: 0.877 for red, 0.892 for green and 0.876 for blue. Titan's haze brightens
+  its limb a little, about as much in each colour, so the limb keeps its colour.
 - The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
   for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue, for
-  Saturn 1.89 in blue, and for Venus 0.90 in green. The middle of the disk is unchanged.
+  Saturn 1.89 in blue, for Venus 0.90 in green, and for Titan 1.19 in red and blue. The middle of
+  the disk is unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
   the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
@@ -563,14 +617,18 @@ each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are 
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus, 180 MB for Saturn and 270 MB for Venus, and makes the same textures again.
+Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus and 62 MB for Titan, and makes the same
+textures again.
 
 ## Credits and licences
 
 - Voyager 2 imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node's
   VGISS_8xxx volumes.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
-  (PIA07782 and PIA11142).
+  (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2060
+  volume, calibrated with CISSCAL.
+- Cassini's map of Titan's surface at 938 nm: NASA/JPL-Caltech/University of Arizona, from NASA's
+  Photojournal (PIA22770), free to use with this credit under JPL's image use policy.
 - Cassini's global maps of Saturn: L. Li, R. West, X. Jiang and B. Knowles, "Cassini ISS Global Maps
   of Jupiter and Saturn Bundle", NASA Planetary Data System (2023), from the PDS Atmospheres Node;
   X. Wang, L. Li, X. Jiang and R. A. West, "Multi-wavelength global maps of Jupiter and Saturn using
@@ -583,7 +641,7 @@ Jupiter, 3 MB for Uranus, 180 MB for Saturn and 270 MB for Venus, and makes the 
   [doi:10.17909/T9G593](https://doi.org/10.17909/T9G593);
   A. A. Simon, M. H. Wong and G. S. Orton, "First results from the Hubble OPAL program: Jupiter in
   2015", The Astrophysical Journal 812 (2015).
-- The spectra of Neptune, Jupiter, Uranus and Saturn: E. Karkoschka, "Spectrophotometry of the Jovian planets and
+- The spectra of Neptune, Jupiter, Uranus, Saturn and Titan: E. Karkoschka, "Spectrophotometry of the Jovian planets and
   Titan at 300- to 1000-nm wavelength: the methane spectrum", Icarus 111 (1994), from the PDS
   Atmospheres Node.
 - Neptune's wind profile: L. A. Sromovsky, S. S. Limaye and P. M. Fry, "Dynamics of Neptune's major
@@ -606,6 +664,8 @@ Jupiter, 3 MB for Uranus, 180 MB for Saturn and 270 MB for Venus, and makes the 
   NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
   and NASA/ESA Hubble OPAL for its calibration, for Uranus NASA/ESA Hubble OPAL, for Saturn
   NASA/JPL/Space Science Institute for the Cassini data, NASA/ESA Hubble OPAL, and NASA/JPL for the
-  Voyager data, and for Venus JAXA/ISAS for the Akatsuki data.
+  Voyager data, for Venus JAXA/ISAS for the Akatsuki data, and for Titan NASA/JPL/Space Science
+  Institute for the Cassini data and NASA/JPL-Caltech/University of Arizona for the map of its
+  surface.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.

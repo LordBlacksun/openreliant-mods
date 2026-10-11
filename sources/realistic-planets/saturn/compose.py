@@ -73,6 +73,7 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import fits  # noqa: E402
+import globe  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -209,12 +210,6 @@ def roughness(m):
     steps = np.diff(m, axis=1)
     spread_ = np.sqrt(np.maximum(row_means(steps * steps) - row_means(steps) ** 2, 0))
     return (spread_ / row_means(m))[:, 0]
-
-
-def area_mean(m, rows, latitudes):
-    """The mean of `m` over `rows`, weighted by the area at their planetocentric `latitudes`."""
-    weights = np.broadcast_to(np.cos(np.radians(latitudes[rows]))[:, None], m[rows].shape)
-    return np.sum(m[rows] * weights) / np.sum(weights)
 
 
 def spread(values, weights):
@@ -426,7 +421,7 @@ print(f"moons and shadows filled in 2018's maps: {clear_spots(cap)} spots")
 match = (opal_lats >= MATCH[0]) & (opal_lats <= MATCH[1])
 blend = smoothstep((opal_lats - BLEND[0]) / (BLEND[1] - BLEND[0]))[:, None]
 for w in sorted(hubble):
-    gain = area_mean(hubble[w], match, opal_centric) / area_mean(cap[w], match, opal_centric)
+    gain = globe.area_mean(hubble[w], match, opal_centric) / globe.area_mean(cap[w], match, opal_centric)
     hubble[w] = np.where(blend > 0, np.where(blend < 1, hubble[w], 0) * (1 - blend) + cap[w] * gain * blend, hubble[w])
     print(f"{w:.0f} nm: 2018's cap scaled by {gain:.3f}")
 
@@ -441,7 +436,7 @@ for w, m in hubble.items():
 print(f"the south trusted to {last:.1f} degrees, faded into its cap over {FADE:.0f}")
 assert all(np.isfinite(m).all() for m in hubble.values())
 # Saturn's true normal albedo at 502 nm, for reference.
-true_green = area_mean(hubble[502.0], (opal_lats >= MEAN_LATITUDES[0]) & (opal_lats <= MEAN_LATITUDES[1]), opal_centric)
+true_green = globe.area_mean(hubble[502.0], (opal_lats >= MEAN_LATITUDES[0]) & (opal_lats <= MEAN_LATITUDES[1]), opal_centric)
 
 # Cassini's maps: rows from the north pole south at planetocentric latitudes, and columns from 360
 # degrees west down to 0, so east increases to the right. The first column holds no data and the last
@@ -501,8 +496,8 @@ band = (lats >= MEAN_LATITUDES[0]) & (lats <= MEAN_LATITUDES[1])
 everywhere = np.ones_like(lats, dtype=bool)
 ratio = {}
 for w, m in maps.items():
-    r = m / area_mean(m, band, lats)
-    ratio[w] = r / area_mean(r, everywhere, lats)
+    r = m / globe.area_mean(m, band, lats)
+    ratio[w] = r / globe.area_mean(r, everywhere, lats)
     print(f"{w:.0f} nm: contrast from the 10th to the 90th percentile {np.percentile(m[band], 90) / np.percentile(m[band], 10):.3f}")
 
 # The spectrum bent through each filter by hat functions that sum to one, flat beyond them.
@@ -519,23 +514,23 @@ geometric = sum(K.values())
 texture = sum(ratio[w][..., None] * K[w] for w in wavelengths)
 # The luminance's contrast stretched on its logarithm, each place keeping its colour.
 luminance = tc.luminance(texture)
-mean = area_mean(luminance, everywhere, lats)
+mean = globe.area_mean(luminance, everywhere, lats)
 texture *= ((luminance / mean) ** (stretch - 1))[..., None]
-texture *= mean / area_mean(tc.luminance(texture), everywhere, lats)
+texture *= mean / globe.area_mean(tc.luminance(texture), everywhere, lats)
 
 # Each channel's wavelength for Saturn's spectrum, the mean of the wavelengths it takes in, for the
 # limb's exponents.
-channel = [np.sum(lam * np.clip(M[:, c], 0, None) * albedo) / np.sum(np.clip(M[:, c], 0, None) * albedo) for c in range(3)]
+channel = tc.channels(lam, albedo, M)
 print(f"the channels' wavelengths for Saturn's spectrum: {np.round(channel).astype(int)} nm")
 
 # At the brightness asked for; the true normal albedo, measured on Hubble's 502 nm maps, for reference.
 normal_over_geometric = true_green / np.interp(502.0, lam, albedo)
-texture *= brightness / area_mean(tc.luminance(texture), everywhere, lats)
+texture *= brightness / globe.area_mean(tc.luminance(texture), everywhere, lats)
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
 print(f"the equatorial zone's mean luminance in the texture, within 15 degrees: "
-      f"{area_mean(tc.luminance(texture), np.abs(lats) <= 15, lats):.3f}")
+      f"{globe.area_mean(tc.luminance(texture), np.abs(lats) <= 15, lats):.3f}")
 texture[..., 2] /= key_blue
 fit = max(1.0, np.quantile(texture, 1 - CLIPPED))
 texture /= fit

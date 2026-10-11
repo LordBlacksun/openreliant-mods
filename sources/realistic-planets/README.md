@@ -37,10 +37,13 @@ Run each script from its own folder, in this order:
 5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
    into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
    `planets.luau`. It takes about a minute.
-6. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
+6. `titan/build.sh` downloads Cassini's frames of Titan, Cassini's map of its surface and
+   Karkoschka's spectrum, about 62 MB, into `titan/data`, makes `realistic_planets_titan.png`, and
+   prints the limb's exponents for `planets.luau`. It takes about ten seconds.
+7. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
    from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
    `PATH`.
-7. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+8. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -53,7 +56,9 @@ Run each script from its own folder, in this order:
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, for the bodies' fetch scripts |
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
-| `truecolour.py` | Reads Karkoschka's spectra, and turns a reflectance spectrum into sRGB |
+| `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, and finds the wavelength each channel stands for |
+| `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
+| `globe.py` | Takes the area-weighted mean over a body's global map, for Uranus, Saturn and Titan |
 | `neptune/frames.json` | The Voyager frames used, with their geometry from OPUS and their download links |
 | `neptune/fetch.py` | Downloads the frames and the spectrum |
 | `neptune/fit.py` | Fits each frame's pointing; writes `fits.json`, and each frame's twist curve to `twists.json` |
@@ -72,7 +77,10 @@ Run each script from its own folder, in this order:
 | `venus/fetch.py` | Downloads Akatsuki's ultraviolet maps and Venus Express's pictures with their geometry |
 | `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
 | `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
-| `venus/photometry.py` | Venus's spectrum and Minnaert's law, shared by `compose.py` and `limb.py` |
+| `venus/photometry.py` | Venus's spectrum, shared by `compose.py` and `limb.py` |
+| `titan/frames.json` | The Cassini frames used, with their geometry from OPUS and the volume's index, and their download links |
+| `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
+| `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, and composes the texture with the map of the surface and the spectrum |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 

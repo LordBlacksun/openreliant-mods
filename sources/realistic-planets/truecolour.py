@@ -63,3 +63,10 @@ def luminance(rgb):
 def encode(linear):
     linear = np.clip(linear, 0, 1)
     return np.where(linear <= 0.0031308, 12.92 * linear, 1.055 * linear ** (1 / 2.4) - 0.055)
+
+
+def channels(lam, albedo, matrix):
+    """Each sRGB channel's wavelength for a spectrum, nm: the mean of the wavelengths it takes in,
+    weighted by how much of each it takes in. `matrix` is `matrix(lam)`."""
+    weights = np.clip(matrix, 0, None) * albedo[:, None]
+    return (lam[:, None] * weights).sum(axis=0) / weights.sum(axis=0)

@@ -14,7 +14,7 @@ The cloud tops in ultraviolet:
   camera.
 - Each map's limb darkening is taken out with Minnaert's law, I/F = B mu0^k mu^(k - 1), where the
   sun is more than `LEAST_HEIGHT` degrees up and the view more than that above the limb. Its exponent
-  k is fitted to each map with each latitude's own brightness (`photometry.minnaert`), so that the
+  k is fitted to each map with each latitude's own brightness (`minnaert.py`), so that the
   bands' brightness, darker near the equator where the sun stands highest, doesn't count as limb
   darkening, and the maps' mean, about 0.86, is taken out of all of them alike. Each map is split
   into its mean over a few degrees and its detail. Over the last `INSIDE` degrees before the edge of
@@ -70,6 +70,7 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import minnaert  # noqa: E402
 import photometry  # noqa: E402
 import truecolour as tc  # noqa: E402
 
@@ -189,7 +190,7 @@ paths = sorted(glob.glob(f"{data}/uvi_*_365_l3b_v21.nc"))
 exponents = []
 for path in paths:
     radiance, mu0, mu, phase, _, good = load(path)
-    exponents.append(photometry.minnaert(radiance, mu0, mu, good, np.indices(good.shape)[0]))
+    exponents.append(minnaert.fit(radiance, mu0, mu, good, np.indices(good.shape)[0])[0])
     print(f"{os.path.basename(path)}: phase angle {np.median(phase[good]):.0f} degrees, Minnaert's exponent {exponents[-1]:.3f}, "
           f"the sun and the view high enough over {good.mean():.1%} of the map")
 k = np.mean(exponents)
