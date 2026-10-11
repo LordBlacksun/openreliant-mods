@@ -31,6 +31,7 @@ import numpy as np
 from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import fits  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -97,7 +98,7 @@ opal_area = np.cos(np.radians(centric(opal_lats)))[:, None]
 measured = {}
 for name, (wavelength, factor) in OPAL.items():
     path = f"{data}/hlsp_opal_hst_wfc3-uvis_jupiter-2015a_{name}_v1_globalmap.fits"
-    reflectance = np.fromfile(path, dtype='>f4', offset=2880).reshape(1800, 3600).astype(np.float64) * factor
+    reflectance = fits.image(path) * factor
     seen = reflectance > 0
     band = seen & (np.abs(opal_lats) <= CONTRAST_LATITUDE)[:, None]
     cells = np.broadcast_to(opal_area, reflectance.shape)

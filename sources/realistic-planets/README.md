@@ -28,9 +28,11 @@ Run each script from its own folder, in this order:
    folder. It takes a few minutes.
 2. `jupiter/build.sh` downloads Cassini's map, Hubble's OPAL maps and Karkoschka's spectrum, about
    93 MB, into `jupiter/data`, and makes `realistic_planets_jupiter.png`. It takes a few seconds.
-3. `build.sh` builds the spheres with `sphere.py` and `sltool shp from-obj`, and the thumbnail,
+3. `uranus/build.sh` downloads Hubble's OPAL maps of Uranus and Karkoschka's spectrum, about 3 MB,
+   into `uranus/data`, and makes `realistic_planets_uranus.png`.
+4. `build.sh` builds the spheres with `sphere.py` and `sltool shp from-obj`, and the thumbnail,
    `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your `PATH`.
-4. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+5. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -42,6 +44,7 @@ Run each script from its own folder, in this order:
 | `render.py` | Draws a planet from its texture, for the thumbnail and the note's figures |
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, for the bodies' fetch scripts |
+| `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
 | `truecolour.py` | Reads Karkoschka's spectra, and turns a reflectance spectrum into sRGB |
 | `neptune/frames.json` | The Voyager frames used, with their geometry from OPUS and their download links |
 | `neptune/fetch.py` | Downloads the frames and the spectrum |
@@ -53,6 +56,8 @@ Run each script from its own folder, in this order:
 | `neptune/geomed.py` | Reads the Voyager GEOMED images |
 | `jupiter/fetch.py` | Downloads Cassini's map, Hubble's OPAL maps and the spectrum |
 | `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture |
+| `uranus/fetch.py` | Downloads Hubble's OPAL maps of Uranus and the spectrum |
+| `uranus/compose.py` | Composes the texture from OPAL's maps and the spectrum |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 

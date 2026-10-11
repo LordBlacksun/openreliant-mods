@@ -6,7 +6,7 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune and Jupiter are done. The other bodies follow.
+**Status:** Neptune, Jupiter and Uranus are done. The other bodies follow.
 
 ## The game's planets
 
@@ -43,8 +43,8 @@ What OpenReliant's source and `sltool` show about them:
   1.005.
 - The same four planets turn about their own Y by 0.0007 of a radian each tick. With 100 ticks a
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
-  about it carries this mod's maps westward, while Neptune and Jupiter really turn eastward. A mod
-  can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+  about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus
+  westward. A mod can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
@@ -76,9 +76,9 @@ What OpenReliant's source and `sltool` show about them:
 - The seam's and the poles' vertices are shared, and the texture coordinates go with each corner, so
   the normals the engine works out stay smooth across the seam, where split vertices would show a
   line.
-- Jupiter is flattened, as the real planet is: its spheres' polar radius is 0.935 of their
-  equator's, 66,854 km to 71,492 (IAU). Their rings stand at planetocentric latitudes, as Cassini's
-  map has them; on a sphere both kinds of latitude agree.
+- Jupiter and Uranus are flattened, as the real planets are: their spheres' polar radius is 0.935 of
+  their equator's for Jupiter, 66,854 km to 71,492, and 0.977 for Uranus, 24,973 km to 25,559
+  (IAU). The rings stand at planetocentric latitudes; on a sphere both kinds of latitude agree.
 - The textures are named `realistic_planets_<body>`, so the game's own stay for any other model that
   uses them.
 
@@ -283,6 +283,55 @@ Neptune's: close to Cassini's look, with each channel in Jupiter's own proportio
 Jupiter turns the wrong way in the game too, until a mod can set a planet's spin
 ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 
+## Uranus
+
+Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from Karkoschka's spectrum.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [Hubble OPAL](https://archive.stsci.edu/hlsp/opal), November 2022 | Calibrated maps at 467, 547 and 657 nm, in I/F, the limb darkening taken out by Minnaert's law, at 0.5 degrees a pixel in planetographic latitude | CC BY 4.0 | Yes |
+| Hubble OPAL, the other years from 2014 to 2025 | The same, once a year | CC BY 4.0 | No: 2022 shows the bright north polar cap that formed in the 2010s, and still reaches the southern low latitudes |
+| Voyager 2, 1986 | Images of the south, which faced the sun then | Public domain | No: in visible light Uranus looked almost featureless to it |
+| E. Karkoschka's spectra, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Uranus's geometric albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | For the colour |
+
+### The map
+
+- Uranus is small seen from Earth, so Hubble's map holds about half a degree a pixel. The texture is
+  soft, but Uranus has few sharp features.
+- OPAL's files hold the north first and put 0 degrees east at the right edge, east increasing to the
+  left, as their readme says, so the texture reverses their columns to put east to the right, as
+  seen from outside. The drift of the clouds between the two rotations Hubble mapped couldn't
+  confirm this, as Uranus shows too few; its bands and polar cap look the same either way round.
+- Hubble sees the north, which faces the sun. Past about 9 degrees south the maps grow noisy, seen
+  near the limb, so the data is trusted only where the brightness varies by less than 1% from one
+  pixel to the next along a latitude. Past that, the northern hemisphere's bands at the same
+  latitude fill the south, averaged along each latitude over 45 degrees and blended in over 10. It's
+  a plausible guess, not data: Voyager 2 saw a bright south polar cap in 1986, as Hubble sees a
+  northern one now.
+- OPAL's latitudes are planetographic. The texture's are planetocentric, as the flattened spheres
+  take them.
+
+### Colour, contrast and brightness
+
+- The colour is Karkoschka's spectrum of Uranus through the CIE 1931 observer, as for Neptune: sRGB
+  (159, 196, 202), a pale cyan. At each place it's varied by the three maps' ratios to their means,
+  as Neptune's is by Voyager's filters.
+- Nearly all of Uranus's contrast is in the red map: from the 10th to the 90th percentile it varies
+  by 1.58 at 657 nm, against 1.03 at 467 nm and 1.09 at 547. For the game, the luminance's contrast
+  is stretched threefold on its logarithm, as Neptune's and Jupiter's are, keeping each place's
+  colour; stretching each map instead turns the polar cap pink.
+- At its true normal albedo, 1.19 times the spectrum's geometric albedo at 547 nm, Uranus's mean
+  luminance is about 0.61, a fifth more than Neptune's (0.50). The game's tone curve compresses the
+  top of the range, so past Neptune's level a brighter texture mostly pales Uranus towards white. The
+  texture's mean luminance is 0.55: a little brighter than Neptune, as the real planet is, with fewer
+  near-white pixels on its lit disk than Neptune shows, but less colour, as the real planet is paler.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
+Uranus really turns westward, so it's the one planet the game turns the right way, if too fast
+([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+
 ## The limb
 
 A planet's haze makes its sunlit limb brighter than a plain ball's would be. The mod's player
@@ -297,8 +346,11 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 - Jupiter's come from OPAL's maps, whose exponents are 0.850 at 395 nm, 0.950 at 502 and 0.999 at
   631: 0.988 for red, 0.965 for green and 0.905 for blue. Jupiter's limb darkens almost as a plain
   ball's, so its function changes little, and most in blue, a faint bluish haze.
+- Uranus's come from OPAL's maps of 2022, whose exponents are 0.85 at 467 nm, 0.80 at 547 and 0.57
+  at 657: 0.702 for red, 0.805 for green and 0.85 for blue. Its methane brightens the limb most in
+  red, as Neptune's does, so its limb is paler too.
 - The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
-  for Neptune at most about 1.5 times brighter in red and 1.4 in blue, for Jupiter 1.14 in blue.
+  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue.
   The middle of the disk is unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
@@ -311,8 +363,8 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
-folder. A build downloads what each texture is made from, about 70 MB for Neptune and 93 MB for
-Jupiter, and makes the same textures again.
+folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
+Jupiter and 3 MB for Uranus, and makes the same textures again.
 
 ## Credits and licences
 
@@ -320,11 +372,12 @@ Jupiter, and makes the same textures again.
   VGISS_8xxx volumes.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
   (PIA07782).
-- Hubble OPAL: this work used data acquired from the NASA/ESA HST Space Telescope, associated with
-  OPAL program (PI: Simon, GO13937), CC BY 4.0, [doi:10.17909/T9G593](https://doi.org/10.17909/T9G593);
+- Hubble OPAL, for Jupiter's calibration and Uranus's map: this work used data acquired from the
+  NASA/ESA HST Space Telescope, associated with OPAL program (PI: Simon, GO13937), CC BY 4.0,
+  [doi:10.17909/T9G593](https://doi.org/10.17909/T9G593);
   A. A. Simon, M. H. Wong and G. S. Orton, "First results from the Hubble OPAL program: Jupiter in
   2015", The Astrophysical Journal 812 (2015).
-- The spectra of Neptune and Jupiter: E. Karkoschka, "Spectrophotometry of the Jovian planets and
+- The spectra of Neptune, Jupiter and Uranus: E. Karkoschka, "Spectrophotometry of the Jovian planets and
   Titan at 300- to 1000-nm wavelength: the methane spectrum", Icarus 111 (1994), from the PDS
   Atmospheres Node.
 - Neptune's wind profile: L. A. Sromovsky, S. S. Limaye and P. M. Fry, "Dynamics of Neptune's major
@@ -332,6 +385,6 @@ Jupiter, and makes the same textures again.
 - The textures made from the data, the thumbnail and the note are OpenReliant's, shared under
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): credit OpenReliant, and for Neptune
   NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
-  and NASA/ESA Hubble OPAL for its calibration.
+  and NASA/ESA Hubble OPAL for its calibration, and for Uranus NASA/ESA Hubble OPAL.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.
