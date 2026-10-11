@@ -6,7 +6,7 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune, Jupiter, Uranus and Saturn are done. The other bodies follow.
+**Status:** Neptune, Jupiter, Uranus, Saturn and Venus are done. The other bodies follow.
 
 ## The game's planets
 
@@ -43,8 +43,8 @@ What OpenReliant's source and `sltool` show about them:
   1.005.
 - The same four planets turn about their own Y by 0.0007 of a radian each tick. With 100 ticks a
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
-  about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus
-  westward. A mod can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+  about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus and
+  Venus's clouds westward. A mod can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
@@ -347,7 +347,7 @@ Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from K
   near-white pixels on its lit disk than Neptune shows, but less colour, as the real planet is paler.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
-Uranus really turns westward, so it's the one planet the game turns the right way, if too fast
+Uranus really turns westward, so the game turns it the right way, as it does Venus, if too fast
 ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 
 ## Saturn
@@ -459,11 +459,74 @@ the middle of the disk shows about 116 km a pixel at 1080p, against the map's 16
 map would take a mosaic of Cassini's own frames, taken on many days
 ([#34](https://github.com/OpenReliant/openreliant-mods/issues/34)).
 
+## Venus
+
+Venus's map shows the markings of its cloud tops in ultraviolet, from Akatsuki's maps of June 2022,
+made faintly visible on Venus's own colour. To the eye Venus is nearly blank: the markings come from
+an absorber in the clouds that dims them by up to a quarter at 365 nm, but only by a few per cent in
+the blue, and hardly at all in green and red.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [Akatsuki's UVI maps](https://doi.org/10.17597/isas.darts/vco-00016), by S. Murakami and others | Maps of the radiance at 283 and 365 nm, at 0.125 degrees a pixel, every two hours from 2015 to 2024, with each cell's angles of the light and the view | CC BY 4.0 | Yes, 13 maps at 365 nm from 25 to 29 June 2022 |
+| [Akatsuki's IR1 maps](https://doi.org/10.17597/isas.darts/vco-00017) | The same at 0.90 µm, in 2016 | CC BY 4.0 | No: Venus Express measured the visible itself |
+| Venus Express's camera, VMC, through [ESA's Planetary Science Archive](https://archives.esac.esa.int/psa/ftp/VENUS-EXPRESS/VMC/) | Pictures at 365, 513, 965 and 1010 nm from 2006 to 2014, with each pixel's latitude and angles | CC BY-NC 3.0 IGO | For the limb |
+| A. Mallama, B. Krobusek and H. Pavlov (2017) | Venus's geometric albedos in the Johnson and Sloan bands, and its phase curves | Published values | For the colour |
+| A. Payne and others (2025) | Venus's spectrum, from MESSENGER's spectra of one region, scaled to Mallama's albedo in V | Published values | No: yellower than Venus seen whole, B-V 0.92 |
+
+### The map
+
+- The texture is made from 13 of Akatsuki's maps, about 8 hours apart, over about one turn of the
+  cloud tops. Akatsuki saw Venus then at phase angles of 17 to 44 degrees. Two weeks before, it saw
+  Venus from near the sun's direction, and those maps show the glory: bright rings that the cloud
+  droplets throw back toward the sun, which move with the camera.
+- Each map's limb darkening is taken out with Minnaert's law, I/F = B mu0^k mu^(k-1). The exponent k
+  is fitted to each map with each latitude's own brightness, so that the bands' brightness, darker
+  near the equator where the sun stands highest, doesn't count as limb darkening. The maps' mean,
+  0.86, is taken out of all of them alike. Fitted as one law over the whole map, k comes out near
+  0.72, as the dark equator reads as part of the law.
+- The clouds turn about 3 degrees an hour westward near the equator, about 90 m/s, measured by
+  matching the clouds' detail between every two maps less than a day apart. More than 35 degrees
+  from the equator the views are too slanted for the clouds to be followed, and the rate is held at
+  its last value. Venus's clouds really turn westward, once in about five days, so the game turns
+  Venus the right way, if much too fast.
+- The maps are moved back by the winds to the middle of the four days and averaged. The clouds
+  change over those days, so where two views meet, they differ. The maps' broad brightness is
+  blended over wide margins, so that no seam shows, and their detail comes from the view that sees
+  each place best, so that it stays sharp.
+- A few maps hold ghosts of the camera: bright patches a few degrees across that the maps before and
+  after don't show. Where one view is much brighter than all the others, it's left out.
+- Where the clouds weren't seen, the mean of what was seen nearby fills in, and farther away the
+  latitude's mean. Past 60 degrees, where the views are slanted and few, the map fades into each
+  latitude's mean, and the poles hold the mean of the last latitudes seen most of the way round.
+
+### Colour, markings and brightness
+
+- Venus's colour comes from its geometric albedos in the Sloan bands and the Johnson B and V bands,
+  joined into a spectrum and taken through the CIE 1931 observer, as for the others. Those albedos
+  are for full phase, where Venus can't be seen from Earth, and the paper's own phase curves make it
+  yellower at the phase angles where it is seen: its B-V is 0.70 at full phase and 0.81 at 45
+  degrees, close to the 0.82 usually quoted. The texture takes the colour at 45 degrees: sRGB (219,
+  215, 201), a pale cream.
+- The ultraviolet absorber's effect fades toward red. Its share at each wavelength, of its effect at
+  365 nm, is taken as the spectrum's shortfall below its highest albedo, on the logarithm, over the
+  shortfall at 365 nm: about half at 400 nm, a quarter at 436 and a twentieth at 549. Each place's
+  spectrum is darkened by its ratio to the mean at 365 nm, raised to that share, so the dark
+  markings are a little yellower as well as darker.
+- For the game, the markings are four times as strong as the eye would see them: the blue varies by
+  about a quarter either way, the green by a few per cent.
+- Venus's geometric albedo has 1.36 times the luminance of Jupiter's, and both darken toward the
+  limb about as a plain ball does (see below), so the texture's mean luminance is 0.41, 1.36 times
+  Jupiter's 0.3.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
 ## The limb
 
-A planet's haze makes its sunlit limb brighter than a plain ball's would be. The mod's player
-script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on each planet's
-texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
+A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
+The mod's player script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on
+each planet's texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
 
 - The function applies the part of Minnaert's law that depends on the view, mu^(k-1), in linear
   light, with an exponent k for each channel, measured for each planet.
@@ -479,10 +542,15 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 - Saturn's come from OPAL's maps of 2025, whose exponents are 0.40 at 395 nm, 0.65 at 502 and 0.80 at
   631: 0.770 for red, 0.697 for green and 0.540 for blue. Its haze brightens the limb most in blue, so
   its limb turns paler and a little blue.
+- Venus's come from six sets of Venus Express's pictures, taken at 365, 513 and 965 nm within a
+  minute of each other in July and August 2007, at phase angles of 44 to 55 degrees, and fitted as
+  Akatsuki's maps are, with each latitude's own brightness. Their exponents are 0.835 at 365 nm,
+  1.081 at 513 and 1.023 at 965: 1.070 for red, 1.077 for green and 0.982 for blue. In visible light
+  Venus's limb darkens a little more than a plain ball's, least in blue, so its limb turns a little
+  darker and a little blue.
 - The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
-  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue and for
-  Saturn 1.89 in blue.
-  The middle of the disk is unchanged.
+  for Neptune and Uranus at most about 1.5 times brighter in red, for Jupiter 1.14 in blue, for
+  Saturn 1.89 in blue, and for Venus 0.90 in green. The middle of the disk is unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
   the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
@@ -495,7 +563,7 @@ texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as befor
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus and 180 MB for Saturn, and makes the same textures again.
+Jupiter, 3 MB for Uranus, 180 MB for Saturn and 270 MB for Venus, and makes the same textures again.
 
 ## Credits and licences
 
@@ -520,11 +588,24 @@ Jupiter, 3 MB for Uranus and 180 MB for Saturn, and makes the same textures agai
   Atmospheres Node.
 - Neptune's wind profile: L. A. Sromovsky, S. S. Limaye and P. M. Fry, "Dynamics of Neptune's major
   cloud features", Icarus 105 (1993).
+- Akatsuki's ultraviolet maps of Venus: S. Murakami, K. Ogohara, M. Takagi, H. Kashimura, M. Yamada,
+  T. Kouyama, T. Horinouchi and T. Imamura, "Venus Climate Orbiter Akatsuki UVI Longitude-Latitude
+  Map Data v1.1", JAXA Data Archives and Transmission System (DARTS),
+  [doi:10.17597/isas.darts/vco-00016](https://doi.org/10.17597/isas.darts/vco-00016), CC BY 4.0.
+- Venus Express's camera, VMC: credit ESA, W. Markiewicz, from ESA's Planetary Science Archive
+  (VEX-V-VMC-3-RDR-V3.0), CC BY-NC 3.0 IGO. Only the limb's exponents measured from its pictures
+  are in the mod.
+- Venus's albedos and phase curves: A. Mallama, B. Krobusek and H. Pavlov, "Comprehensive wide-band
+  magnitudes and albedos for the planets, with applications to exo-planets and Planet Nine", Icarus
+  282 (2017).
+- Venus's spectrum considered: A. Payne, G. L. Villanueva and others, "A comprehensive spectroscopic
+  reference of the solar system and its application to exoplanet direct imaging", The Planetary
+  Science Journal (2025).
 - The textures made from the data, the thumbnail and the note are OpenReliant's, shared under
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): credit OpenReliant, and for Neptune
   NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
-  and NASA/ESA Hubble OPAL for its calibration, for Uranus NASA/ESA Hubble OPAL, and for Saturn
+  and NASA/ESA Hubble OPAL for its calibration, for Uranus NASA/ESA Hubble OPAL, for Saturn
   NASA/JPL/Space Science Institute for the Cassini data, NASA/ESA Hubble OPAL, and NASA/JPL for the
-  Voyager data.
+  Voyager data, and for Venus JAXA/ISAS for the Akatsuki data.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.

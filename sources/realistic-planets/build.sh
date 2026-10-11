@@ -8,20 +8,23 @@ mod=../../mods/environment/realistic-planets
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-# A body's two spheres, with the radii of the game's own models: the detailed model's near level,
-# and the far model. A flattened body's polar radii follow them.
+# A body's two spheres, given its name, the name of the game's models of it, and the radii of the
+# game's models: the detailed model's near level, and the far model. A flattened body's polar radii
+# follow them.
 spheres() {
-    python3 sphere.py "$work/$1_hi.obj" --radius "$2" --polar "${4:-$2}" --texture "realistic_planets_$1" --name "$1"
-    python3 sphere.py "$work/$1_lo.obj" --radius "$3" --polar "${5:-$3}" --texture "realistic_planets_$1" --name "$1" \
+    python3 sphere.py "$work/$1_hi.obj" --radius "$3" --polar "${5:-$3}" --texture "realistic_planets_$1" --name "$1"
+    python3 sphere.py "$work/$1_lo.obj" --radius "$4" --polar "${6:-$4}" --texture "realistic_planets_$1" --name "$1" \
         --columns 64 --rows 32
-    "$sltool" shp from-obj "$work/$1_hi.obj" "$mod/$1_hi_1.shp"
-    "$sltool" shp from-obj "$work/$1_lo.obj" "$mod/$1_lo_1.shp"
+    "$sltool" shp from-obj "$work/$1_hi.obj" "$mod/$2_hi_1.shp"
+    "$sltool" shp from-obj "$work/$1_lo.obj" "$mod/$2_lo_1.shp"
 }
-spheres neptune 1280625 1024500
+spheres neptune neptune 1280625 1024500
 # Jupiter's polar radius is 66,854 km to its equator's 71,492 (IAU).
-spheres jupiter 1280625 1024500 1197545 958036
+spheres jupiter jupiter 1280625 1024500 1197545 958036
 # Uranus's is 24,973 km to its equator's 25,559 (IAU); its far model is as large as its near one.
-spheres uranus 1280625 1280625 1251264 1251264
+spheres uranus uranus 1280625 1280625 1251264 1251264
+# Venus's far model is a little larger than its near one.
+spheres venus venus1 1280625 1296633
 
 # Saturn and its ring, at their real proportions: radii of 60,268 and 54,364 km (IAU), and the ring
 # from 74,000 to 141,000 km, as its texture is. They're scaled so that the A ring's outer edge,
@@ -36,21 +39,24 @@ python3 sphere.py "$work/saturn_lo.obj" --radius 2020365 --polar 1822445 --textu
 "$sltool" shp from-obj "$work/saturn_lo.obj" "$mod/saturn_lo_ring_1.shp"
 
 # The thumbnail, the planets in their order out from the sun's far side: Neptune facing its Great Dark
-# Spot, Uranus from the north it shows now, Saturn and its ring from 25 degrees north, and Jupiter
-# facing its Great Red Spot, lit as the game lights them, flattened as their spheres are, each 124
-# pixels across. Each is drawn at four times its size and scaled down, so that the texture doesn't
-# alias.
-python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 496 --lat -25 --lon 37 \
+# Spot, Uranus from the north it shows now, Saturn and its ring from 25 degrees north, Jupiter facing
+# its Great Red Spot, and Venus from 10 degrees north, facing the bright clouds north of its equator,
+# lit as the game lights them, flattened as their spheres are, each 104 pixels across. Each is drawn
+# at four times its size and scaled down, so that the texture doesn't alias.
+python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 416 --lat -25 --lon 37 \
     --sun-lat -26 --sun-lon 52 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 496 --lat 35 --lon 0 \
+python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 416 --lat 35 --lon 0 \
     --sun-lat 34 --sun-lon 15 --k 0.8 --light 1 1 0.8 --polar 0.9771
-python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 1120 --aspect 1.075 --extent 2.258 \
+python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 940 --aspect 1.075 --extent 2.258 \
     --lat 25 --lon 30 --sun-lat 26 --sun-lon 50 --k 0.7 --light 1 1 0.8 --polar 0.9020 \
     --ring "$mod/realistic_planets_saturn_rings.png" 1.2279 2.3396
-python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 496 --lat -15 --lon -46 \
+python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 416 --lat -15 --lon -46 \
     --sun-lat -16 --sun-lon -31 --k 0.97 --light 1 1 0.8 --polar 0.9351
-magick \( "$work/neptune.png" "$work/uranus.png" -colorspace RGB -resize 124x124 -colorspace sRGB \
-    -background black -gravity center -extent 133x280 \) \
-    \( "$work/saturn.png" -colorspace RGB -resize 301x280 -colorspace sRGB \) \
-    \( "$work/jupiter.png" -colorspace RGB -resize 124x124 -colorspace sRGB -background black -gravity center -extent 133x280 \) \
+python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 416 --lat 10 --lon 45 \
+    --sun-lat 9 --sun-lon 60 --k 1.08 --light 1 1 0.8
+magick \( "$work/neptune.png" "$work/uranus.png" -colorspace RGB -resize 104x104 -colorspace sRGB \
+    -background black -gravity center -extent 112x280 \) \
+    \( "$work/saturn.png" -colorspace RGB -resize 252x235 -colorspace sRGB -background black -gravity center -extent 252x280 \) \
+    \( "$work/jupiter.png" "$work/venus.png" -colorspace RGB -resize 104x104 -colorspace sRGB \
+    -background black -gravity center -extent 112x280 \) \
     +append -background black -gravity center -extent 700x280 +repage -define png:exclude-chunks=date,time "$mod/mod.png"

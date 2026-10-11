@@ -44,6 +44,16 @@ shaders.register_surface({
     parameters = { 0.770, 0.697, 0.540, 0.25 },
 })
 
+-- Venus: the exponents of Venus Express's pictures (0.835 at 365 nm, 1.081 at 513 and 1.023 at 965),
+-- at the red, green and blue channels' wavelengths for Venus's spectrum (602, 541 and 453 nm), and the
+-- same least cosine.
+shaders.register_surface({
+    name = "venus",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_venus" },
+    parameters = { 1.070, 1.077, 0.982, 0.25 },
+})
+
 -- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least
 -- 1.1 degrees from edge on, and blended to suit the planet's lit side behind it, about 0.5 encoded.
 shaders.register_surface({

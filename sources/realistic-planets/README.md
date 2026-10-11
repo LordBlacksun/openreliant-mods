@@ -7,10 +7,10 @@ describes Neptune's map in detail.
 
 ## What you need
 
-- Python 3 with numpy and scipy, for example in a virtual environment:
+- Python 3 with numpy and scipy, and h5py for Venus, for example in a virtual environment:
 
   ```bash
-  python3 -m venv venv && venv/bin/pip install numpy scipy
+  python3 -m venv venv && venv/bin/pip install numpy scipy h5py
   ```
 
   Then put `venv/bin` first on your `PATH`, or run the scripts with `venv/bin/python3`.
@@ -34,10 +34,13 @@ Run each script from its own folder, in this order:
    spectrum, Voyager 2's profiles of the rings and Cassini's mosaic across them, about 180 MB, into
    `saturn/data`, and makes `realistic_planets_saturn.png` and the ring's,
    `realistic_planets_saturn_rings.png`. It takes about 15 seconds.
-5. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
+5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
+   into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
+   `planets.luau`. It takes about a minute.
+6. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
    from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
    `PATH`.
-6. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
+7. `paper/build.sh` makes the note's figures with `paper/figures.py` and typesets
    `paper/neptune.tex` into `neptune-voyager-map.pdf` in the mod's folder. `figures.py` also prints
    every number the note quotes, so that a new build can be checked against the text.
 
@@ -66,6 +69,10 @@ Run each script from its own folder, in this order:
 | `saturn/fetch.py` | Downloads Cassini's and Hubble's maps, the spectrum, Voyager's ring profiles and Cassini's mosaic of the rings |
 | `saturn/compose.py` | Composes the planet's texture from Cassini's maps, calibrated with Hubble's, and the spectrum |
 | `saturn/rings.py` | Composes the ring's texture from Voyager's profiles and Cassini's mosaic |
+| `venus/fetch.py` | Downloads Akatsuki's ultraviolet maps and Venus Express's pictures with their geometry |
+| `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
+| `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
+| `venus/photometry.py` | Venus's spectrum and Minnaert's law, shared by `compose.py` and `limb.py` |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 
