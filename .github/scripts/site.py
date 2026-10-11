@@ -1,8 +1,9 @@
 """Writes the mods' site into site/: the index page, which browses the mods by category, with each
 mod's thumbnail, name, version, author, what it needs, its description and the download of its
-latest release; a page for each mod, mods/<mod>/, with its pictures, what it is, its download and
-its releases; updates/, every mod's releases, newest first; and mods.json, the released mods as
-data, which OpenReliant's GET MODS screen reads to list and install them from the game.
+latest release; a page for each mod, mods/<mod>/, with its pictures, what it is, its download, how
+many times it has been downloaded and its releases; updates/, every mod's releases, newest first;
+and mods.json, the released mods as data, which OpenReliant's GET MODS screen reads to list and
+install them from the game.
 
     python3 .github/scripts/site.py
 """
@@ -377,13 +378,13 @@ def latest_openreliant() -> dict | None:
 
 def mod_releases() -> list[dict]:
     """The mods' releases, newest first, each with its tag, its date, its notes and its assets, each
-    with its name, size and sha256 digest: from GitHub, or from the git tags, without notes or
-    assets, where GitHub can't be read."""
+    with its name, size, sha256 digest and download count: from GitHub, or from the git tags,
+    without notes or assets, where GitHub can't be read."""
     try:
         found = subprocess.run(
             ["gh", "api", f"repos/{REPOSITORY}/releases", "--paginate",
              "--jq", ".[] | select(.draft | not) | {tag: .tag_name, date: .published_at, notes: .body, "
-                     "assets: [.assets[] | {name, size, digest}]}"],
+                     "assets: [.assets[] | {name, size, digest, download_count}]}"],
             check=True, capture_output=True, text=True,
         ).stdout
         releases = [json.loads(line) for line in found.splitlines() if line.strip()]
@@ -488,14 +489,33 @@ def size_of(megabytes: float) -> str:
     return f"{megabytes:.1f} MB" if megabytes < 1000 else f"{megabytes / 1000:.2f} GB"
 
 
+def tag_parts(tag: str) -> tuple[str, str]:
+    """The mod a release's tag names, and its version: coyote-worn-v1.0 is coyote-worn's 1.0. A tag
+    without a version gives an empty one."""
+    mod_id, _, version = tag.rpartition("-v")
+    return mod_id, version
+
+
+def releases_of(mod, releases: list[dict]):
+    """Its releases, in the order of `releases`, each with its version."""
+    for release in releases:
+        mod_id, version = tag_parts(release["tag"])
+        if mod_id == mod.id and version:
+            yield release, version
+
+
+def downloads_of(mod, releases: list[dict]) -> int:
+    """How many times its archive has been downloaded, over all its releases, as GitHub counts
+    them. Its checksum file isn't counted: it comes with the archive, and the game writes its own."""
+    return sum(asset.get("download_count", 0) for release, _ in releases_of(mod, releases)
+               for asset in release["assets"] if asset["name"] == mod.archive)
+
+
 def history(mod, releases: list[dict]) -> str:
     """Its releases, newest first, each with what changed."""
     text = html.escape
     entries = []
-    for release in releases:
-        mod_id, _, version = release["tag"].rpartition("-v")
-        if mod_id != mod.id or not version:
-            continue
+    for release, version in releases_of(mod, releases):
         items = "".join(f"<li>{text(change)}</li>" for change in changes(release["notes"]))
         download = f"https://github.com/{REPOSITORY}/releases/download/{release['tag']}/{mod.archive}"
         page_url = f"https://github.com/{REPOSITORY}/releases/tag/{release['tag']}"
@@ -509,8 +529,8 @@ def history(mod, releases: list[dict]) -> str:
 
 
 def mod_page(mod, by_path: dict[str, Category], release: dict | None, releases: list[dict], updated: str, built: str) -> str:
-    """A mod's own page: its pictures; what it is and what it needs; its download; its artist's
-    notes; how to install it; and its releases."""
+    """A mod's own page: its pictures; what it is and what it needs; its download and how many times
+    it has been downloaded; its artist's notes; how to install it; and its releases."""
     text = html.escape
     base = "../../"
     listing = mod.artist.listing(mod.files) if mod.artist else None
@@ -544,6 +564,9 @@ def mod_page(mod, by_path: dict[str, Category], release: dict | None, releases: 
         if size:
             facts.append(("Download", f"{size_of(size / 1_000_000)}, <code>{text(mod.archive)}</code>"))
         facts.append(("Released", text(latest["date"][:10])))
+    # Left out until someone has downloaded it, and where GitHub couldn't be read.
+    if downloads := downloads_of(mod, releases):
+        facts.append(("Downloaded", "once" if downloads == 1 else f"{downloads:,} times"))
     facts_list = "".join(f"<dt>{name}</dt><dd>{value}</dd>" for name, value in facts)
 
     if mod.released():
@@ -631,7 +654,7 @@ def updates_page(root: Category, releases: list[dict], updated: str) -> str:
     by_id = {mod.id: mod for mod in root.all_mods()}
     entries = []
     for release in releases:
-        mod_id, _, version = release["tag"].rpartition("-v")
+        mod_id, version = tag_parts(release["tag"])
         mod = by_id.get(mod_id)
         # A mod that has left the collection keeps its releases on GitHub, not here.
         if mod is None or not version:
@@ -721,7 +744,7 @@ def main() -> int:
     # Each mod's latest release's date, from the newest first.
     updated_at: dict[str, str] = {}
     for found_release in releases:
-        updated_at.setdefault(found_release["tag"].rpartition("-v")[0], found_release["date"])
+        updated_at.setdefault(tag_parts(found_release["tag"])[0], found_release["date"])
     updated = git("log", "-1", "--format=%cs")
     (SITE / "index.html").write_text(index_page(root, release, updated_at, updated), encoding="utf-8")
     (SITE / "updates" / "index.html").write_text(updates_page(root, releases, updated), encoding="utf-8")
