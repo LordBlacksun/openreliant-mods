@@ -11,7 +11,8 @@ KARKOSCHKA_COLUMNS = {'jupiter': 3, 'saturn': 4, 'uranus': 5, 'neptune': 6, 'tit
 def karkoschka(path, body):
     """A body's geometric albedo from Karkoschka's table, over the visible range: the wavelengths in
     nm and the albedo at each."""
-    rows = [r.split() for r in open(path) if r.strip()]
+    with open(path) as table:
+        rows = [r.split() for r in table if r.strip()]
     lam = np.array([float(r[0]) for r in rows])
     albedo = np.array([float(r[KARKOSCHKA_COLUMNS[body]]) for r in rows])
     visible = (lam >= 380) & (lam <= 780)
