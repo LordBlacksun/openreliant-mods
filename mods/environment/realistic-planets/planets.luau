@@ -54,6 +54,16 @@ shaders.register_surface({
     parameters = { 1.070, 1.077, 0.982, 0.25 },
 })
 
+-- Earth: the exponents of GOES-18's and GOES-19's pictures of the same moment, from 137 and 75 degrees
+-- west (0.750 at 470 nm and 0.907 at 640), at the red, green and blue channels' wavelengths for a grey
+-- spectrum (601, 540 and 452 nm, the blue taking 470's), and the same least cosine.
+shaders.register_surface({
+    name = "earth",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_earth" },
+    parameters = { 0.871, 0.815, 0.750, 0.25 },
+})
+
 -- Titan: the exponents of Cassini's frames of 2010 (0.876 at 463 nm, 0.897 at 568 and 0.855 at 647),
 -- at the red, green and blue channels' wavelengths for Titan's spectrum (606, 544 and 455 nm), and the
 -- same least cosine.
@@ -96,6 +106,16 @@ shaders.register_surface({
     shader = "minnaert.glsl",
     textures = { "realistic_planets_callisto" },
     parameters = { 0.578, 0.563, 0.532, 0.2 },
+})
+
+-- Triton: the exponents of Voyager 2's frames of 1989, 0.747 at 416 nm, 0.752 at 479, 0.741 at 566 and
+-- 0.741 at 591, at the channels' wavelengths for its spectrum (601, 541 and 453 nm), and the same
+-- least cosine as Jupiter's moons.
+shaders.register_surface({
+    name = "triton",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_triton" },
+    parameters = { 0.741, 0.744, 0.750, 0.2 },
 })
 
 -- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least

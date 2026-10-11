@@ -33,6 +33,14 @@ spheres europa europa 288141 331938
 # Ganymede's far model is 50 times smaller than its detailed one, as the game's is.
 spheres ganymede grany 288141 5763
 spheres callisto calist 1280625 1280625
+spheres triton triton 288141 288141
+
+# Earth's model has one level, and its sphere stands 1.25 million units from the model's origin, as
+# the game's does, centred where `sltool shp obj` puts the middle of the game's sphere. The game
+# doesn't make Earth a planet, so unlike the planets it isn't moved to stand on its origin.
+python3 sphere.py "$work/earth.obj" --radius 1048542 --centre -752661.5 5579.5 -993744.7 --texture realistic_planets_earth \
+    --name earth
+"$sltool" shp from-obj "$work/earth.obj" "$mod/earth.shp"
 
 # Saturn and its ring, at their real proportions: radii of 60,268 and 54,364 km (IAU), and the ring
 # from 74,000 to 141,000 km, as its texture is. They're scaled so that the A ring's outer edge,
@@ -46,43 +54,49 @@ python3 sphere.py "$work/saturn_lo.obj" --radius 2020365 --polar 1822445 --textu
 "$sltool" shp from-obj "$work/saturn_hi.obj" "$mod/saturn_hi_ring_2.shp"
 "$sltool" shp from-obj "$work/saturn_lo.obj" "$mod/saturn_lo_ring_1.shp"
 
-# The thumbnail: Saturn and its ring from 25 degrees north on the left, the other planets in their
-# order out from the sun's far side to its right, Neptune facing its Great Dark Spot, Uranus from the
-# north it shows now, Jupiter facing its Great Red Spot and Venus from 10 degrees north, facing the
-# bright clouds north of its equator, and the moons below them in the same order: Titan facing
-# Xanadu, then Jupiter's moons from the outside in, Callisto facing Valhalla, Ganymede facing
-# Galileo Regio, Europa its trailing side and Io facing Pele and Loki. Each is lit from the upper
-# left, by the game's light, as if the sun stood 10 degrees above the viewer and 15 to the left, so
-# that its night side just begins at its lower right edge, and its limb shows as the mod draws it:
-# each channel with the exponent `planets.luau` gives it, held at its least cosine. Saturn's sun
-# stands 27 degrees north, the most it does, and 20 degrees to the left, so that its night side
-# begins at its right edge, where its ring doesn't hide it. They're flattened as their spheres
-# are, Saturn 124 pixels across, the other planets 92 and the moons 72. Each is drawn at four times
-# its size and scaled down, so that the texture doesn't alias.
-python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 1120 --aspect 1.075 --extent 2.258 \
+# The thumbnail: the planets in a row, in their order out from the sun, and their moons below them in
+# the same order. Venus from 10 degrees north, facing the bright clouds north of its equator, Earth
+# facing Africa and Europe, Jupiter facing its Great Red Spot, Saturn and its ring from 25 degrees
+# north, Uranus from the north it shows now and Neptune facing its Great Dark Spot; then Jupiter's
+# moons from the inside out, Io facing Pele and Loki, Europa its trailing side, Ganymede facing
+# Galileo Regio and Callisto facing Valhalla, Titan facing Xanadu and Triton from 30 degrees south,
+# facing the ground Voyager 2 saw best. Each is lit from the upper left, by the game's light, as if
+# the sun stood 10 degrees above the viewer and 15 to the left, so that its night side just begins at
+# its lower right edge, and its limb shows as the mod draws it: each channel with the exponent
+# `planets.luau` gives it, held at its least cosine. Saturn's sun stands 27 degrees north, the most it
+# does, and 20 degrees to the left, so that its night side begins at its right edge, where its ring
+# doesn't hide it. They're flattened as their spheres are, the planets 90 pixels across and the moons
+# 72. Each is drawn at four times its size and scaled down, so that the texture doesn't alias.
+python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 360 --lat 10 --lon 45 \
+    --sun-lat 20 --sun-lon 30 --k 1.070 1.077 0.982 --least 0.25 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_earth.png" "$work/earth.png" --size 360 --lat 10 --lon 15 \
+    --sun-lat 20 --sun-lon 0 --k 0.871 0.815 0.750 --least 0.25 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 360 --lat -15 --lon -46 \
+    --sun-lat -5 --sun-lon -61 --k 0.988 0.965 0.905 --least 0.25 --light 1 1 0.8 --polar 0.9351
+python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 560 --aspect 1.536 --extent 1.556 \
     --lat 25 --lon 30 --sun-lat 27 --sun-lon 10 --k 0.770 0.697 0.540 --least 0.25 --light 1 1 0.8 --polar 0.9020 \
     --ring "$mod/realistic_planets_saturn_rings.png" 1.2279 2.3396
-python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 368 --lat -25 --lon 37 \
-    --sun-lat -15 --sun-lon 22 --k 0.680 0.712 0.768 --least 0.25 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 368 --lat 35 --lon 0 \
+python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 360 --lat 35 --lon 0 \
     --sun-lat 45 --sun-lon -15 --k 0.702 0.805 0.850 --least 0.25 --light 1 1 0.8 --polar 0.9771
-python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 368 --lat -15 --lon -46 \
-    --sun-lat -5 --sun-lon -61 --k 0.988 0.965 0.905 --least 0.25 --light 1 1 0.8 --polar 0.9351
-python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 368 --lat 10 --lon 45 \
-    --sun-lat 20 --sun-lon 30 --k 1.070 1.077 0.982 --least 0.25 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_titan.png" "$work/titan.png" --size 288 --lat 15 --lon -100 \
-    --sun-lat 25 --sun-lon -115 --k 0.877 0.892 0.876 --least 0.25 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_callisto.png" "$work/callisto.png" --size 288 --lat 15 --lon -56 \
-    --sun-lat 25 --sun-lon -71 --k 0.578 0.563 0.532 --least 0.2 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_ganymede.png" "$work/ganymede.png" --size 288 --lat 10 --lon -160 \
-    --sun-lat 20 --sun-lon -175 --k 0.580 0.561 0.539 --least 0.2 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_europa.png" "$work/europa.png" --size 288 --lat 5 --lon 90 \
-    --sun-lat 15 --sun-lon 75 --k 0.669 0.670 0.663 --least 0.2 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 360 --lat -25 --lon 37 \
+    --sun-lat -15 --sun-lon 22 --k 0.680 0.712 0.768 --least 0.25 --light 1 1 0.8
 python3 render.py "$mod/realistic_planets_io.png" "$work/io.png" --size 288 --lat 5 --lon 100 \
     --sun-lat 15 --sun-lon 85 --k 0.685 0.688 0.697 --least 0.2 --light 1 1 0.8
-magick \( "$work/saturn.png" -colorspace RGB -resize 301x280 -colorspace sRGB -background black -gravity center -extent 301x280 \) \
-    \( \( "$work/neptune.png" "$work/uranus.png" "$work/jupiter.png" "$work/venus.png" -colorspace RGB -resize 92x92 \
-    -colorspace sRGB -background black -gravity center -extent 99x140 +append \) \
-    \( "$work/titan.png" "$work/callisto.png" "$work/ganymede.png" "$work/europa.png" "$work/io.png" -colorspace RGB \
-    -resize 72x72 -colorspace sRGB -background black -gravity center -extent 79x140 +append -extent 396x140 \) -append \) \
-    +append -background black -gravity center -extent 700x280 +repage -define png:exclude-chunks=date,time "$mod/mod.png"
+python3 render.py "$mod/realistic_planets_europa.png" "$work/europa.png" --size 288 --lat 5 --lon 90 \
+    --sun-lat 15 --sun-lon 75 --k 0.669 0.670 0.663 --least 0.2 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_ganymede.png" "$work/ganymede.png" --size 288 --lat 10 --lon -160 \
+    --sun-lat 20 --sun-lon -175 --k 0.580 0.561 0.539 --least 0.2 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_callisto.png" "$work/callisto.png" --size 288 --lat 15 --lon -56 \
+    --sun-lat 25 --sun-lon -71 --k 0.578 0.563 0.532 --least 0.2 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_titan.png" "$work/titan.png" --size 288 --lat 15 --lon -100 \
+    --sun-lat 25 --sun-lon -115 --k 0.877 0.892 0.876 --least 0.25 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_triton.png" "$work/triton.png" --size 288 --lat -30 --lon 0 \
+    --sun-lat -20 --sun-lon -15 --k 0.741 0.744 0.750 --least 0.2 --light 1 1 0.8
+magick \( "$work/venus.png" "$work/earth.png" "$work/jupiter.png" -colorspace RGB -resize 90x90 -colorspace sRGB \
+    -background black -gravity center -extent 97x140 \) \
+    \( "$work/saturn.png" -colorspace RGB -resize 215x140 -colorspace sRGB -background black -gravity center -extent 215x140 \) \
+    \( "$work/uranus.png" "$work/neptune.png" -colorspace RGB -resize 90x90 -colorspace sRGB -background black \
+    -gravity center -extent 97x140 \) +append \
+    \( "$work/io.png" "$work/europa.png" "$work/ganymede.png" "$work/callisto.png" "$work/titan.png" "$work/triton.png" \
+    -colorspace RGB -resize 72x72 -colorspace sRGB -background black -gravity center -extent 116x140 +append \
+    -extent 700x140 \) -append +repage -define png:exclude-chunks=date,time "$mod/mod.png"

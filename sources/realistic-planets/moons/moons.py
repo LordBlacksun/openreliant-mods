@@ -1,4 +1,4 @@
-"""The Galilean moons as the USGS's maps and Voyager's frames show them, shared by `fit.py` and
+"""Jupiter's moons and Triton as their maps and Voyager's frames show them, shared by `fit.py` and
 `compose.py`: each moon's map and shape, the camera's filters, and each frame's view of its moon."""
 import os
 import subprocess
@@ -8,23 +8,35 @@ from scipy import ndimage
 
 import voyager
 
-# Each moon's USGS map; from its GeoTIFF tags, the radius of the sphere it's mapped on, km, and the
-# east longitude of its left edge; and its visual geometric albedo (NASA's Jovian Satellite Fact
-# Sheet).
+# The value the USGS's maps of Jupiter's moons rise from in proportion to the ground's brightness: the
+# GeoTIFF tags' offset over their scale, for Io's, Europa's and Ganymede's maps. Callisto's map
+# carries no such tags, and is taken to rise from the same.
+USGS_ZERO = 0.5
+# Each moon's map; from its GeoTIFF tags, the radius of the sphere it's mapped on, km, and the east
+# longitude of its left edge; the value its brightness rises from; and its visual geometric albedo
+# (NASA's Jovian and Neptunian Satellite Fact Sheets). Triton's map is in colour, its bands made from
+# Voyager 2's orange, violet and ultraviolet frames; its middle band, the violet one, is read
+# (`band`), as of the three it matches Voyager's green frames best. Its contrast was stretched for
+# display, and its zero isn't known, so `compose.py` fits it to the green frames. Voyager 2 saw only
+# Triton's south and a little of its north, so the rest of the north is filled with a guess
+# (`mirror`, `mirrored`).
 MOONS = {
-    'Io': dict(map='Io_Galileo_SSI_Global_Mosaic_1km.tif', radius=1821.46, left=-180.0, albedo=0.62),
-    'Europa': dict(map='Europa_Voyager_GalileoSSI_global_mosaic_500m.tif', radius=1562.09, left=0.0, albedo=0.68),
-    'Ganymede': dict(map='Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif', radius=2632.34, left=0.0, albedo=0.44),
-    'Callisto': dict(map='Callisto_Voyager_GalileoSSI_global_mosaic_1km.tif', radius=2409.30, left=0.0, albedo=0.19),
+    'Io': dict(map='Io_Galileo_SSI_Global_Mosaic_1km.tif', radius=1821.46, left=-180.0, zero=USGS_ZERO, albedo=0.62),
+    'Europa': dict(map='Europa_Voyager_GalileoSSI_global_mosaic_500m.tif', radius=1562.09, left=0.0, zero=USGS_ZERO,
+                   albedo=0.68),
+    'Ganymede': dict(map='Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif', radius=2632.34, left=0.0, zero=USGS_ZERO,
+                     albedo=0.44),
+    'Callisto': dict(map='Callisto_Voyager_GalileoSSI_global_mosaic_1km.tif', radius=2409.30, left=0.0, zero=USGS_ZERO,
+                     albedo=0.19),
+    'Triton': dict(map='Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif', radius=1350.0, left=-180.0, zero=None, albedo=0.72,
+                   band='G', mirror=True),
 }
-# The value the maps' brightness rises from: the GeoTIFF tags' offset over their scale, for Io's,
-# Europa's and Ganymede's maps. Callisto's map carries no such tags, and is taken to rise from the
-# same.
-ZERO = 0.5
 # The narrow-angle camera's filters and their effective wavelengths, nm.
 FILTERS = {'Violet': 416.0, 'Blue': 479.0, 'Green': 566.0, 'Orange': 591.0}
 # The step of the reduced map that frames are matched against, degrees.
 REDUCED_STEP = 0.25
+# How far the guess for ground no picture saw blends in from what was seen nearest, degrees.
+MIRROR_BLEND = 10.0
 # A difference from its neighbours' median, I/F, past which a frame's pixel is taken as bad.
 BAD_PIXEL = 0.02
 # Where a frame's sky is measured, beyond this many of the disk's radii from its centre, and the
@@ -56,12 +68,13 @@ def body(moon):
 
 
 def read_map(data, moon):
-    """The moon's USGS map as 8-bit values, 0 where it holds nothing: north at the top, east longitude
-    rising to the right from `left` at the left edge."""
+    """The moon's map, or its `band`, as 8-bit values, 0 where it holds nothing: north at the top,
+    east longitude rising to the right from `left` at the left edge."""
     path = os.path.join(data, MOONS[moon]['map'])
     size = subprocess.run(['magick', 'identify', '-format', '%w %h', path], capture_output=True, check=True, text=True).stdout
     w, h = (int(v) for v in size.split())
-    raw = subprocess.run(['magick', path, '-depth', '8', 'gray:-'], capture_output=True, check=True).stdout
+    band = ['-channel', MOONS[moon]['band'], '-separate'] if 'band' in MOONS[moon] else []
+    raw = subprocess.run(['magick', path, *band, '-depth', '8', 'gray:-'], capture_output=True, check=True).stdout
     return np.frombuffer(raw, np.uint8).reshape(h, w)
 
 
@@ -104,6 +117,21 @@ def lookup(reduced, lat, lon):
     value = ndimage.map_coordinates(wrapped, [y, x], order=1, mode='nearest')
     weight = ndimage.map_coordinates(held_wrapped, [y, x], order=1, mode='nearest')
     return np.where(weight > 0.99, value / np.maximum(weight, 1e-9), np.nan)
+
+
+def mirrored(grid, step):
+    """A latitude-longitude map, its rows `step` degrees apart, filled where it holds nothing with the
+    map at the opposite latitude, 180 degrees round: a guess for ground that no picture saw, from
+    ground of the same kind and latitude. Within `MIRROR_BLEND` degrees of what the map holds, the
+    guess blends in from that, smoothed."""
+    held = np.isfinite(grid)
+    opposite = np.roll(grid[::-1], grid.shape[1] // 2, axis=1)
+    sigma = MIRROR_BLEND / 2 / step
+    total = ndimage.gaussian_filter(np.where(held, grid, 0.0), sigma, mode=('nearest', 'wrap'))
+    count = ndimage.gaussian_filter(held.astype(float), sigma, mode=('nearest', 'wrap'))
+    nearby = np.where(count > 1e-9, total / np.maximum(count, 1e-9), opposite)
+    share = np.clip(ndimage.distance_transform_edt(~held) * step / MIRROR_BLEND, 0, 1)
+    return np.where(held, grid, (1 - share) * nearby + share * opposite)
 
 
 def lat_lon(p):

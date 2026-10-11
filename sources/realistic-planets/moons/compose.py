@@ -1,7 +1,7 @@
-"""Composes a Galilean moon's texture, `width` wide and half as high: north at the top and east to the
-right, as `sphere.py`'s spheres map it, with 0 degrees east in the middle column. Its detail comes
-from the USGS's global map of the moon, and its colour from Voyager's frames. It also prints the
-limb's exponents for the mod's `planets.luau`.
+"""Composes a moon's texture, one of Jupiter's or Triton, `width` wide and half as high: north at the
+top and east to the right, as `sphere.py`'s spheres map it, with 0 degrees east in the middle column.
+Its detail comes from a global map of the moon, and its colour from Voyager's frames. It also prints
+the limb's exponents for the mod's `planets.luau`.
 
     python3 compose.py data frames.json fits.json <moon> out.png <width> <brightness> <key light blue>
 
@@ -10,15 +10,17 @@ limb's exponents for the mod's `planets.luau`.
   exponents far above the others', as Io's ground in violet differs most from its map.
 - Each colour set's frames are mapped onto latitude and longitude, `STEP` degrees a cell, with their
   limb darkening taken out, and the violet, blue and orange maps are divided by the green one. The
-  four frames of a set were taken within minutes at the same phase angle, so the ratios hold the
-  colour alone. The sets' ratios are averaged on the logarithm, each cell weighted by how squarely
-  it was seen and lit and by the frame's resolution, raised to `POWER`, so that the best view of
-  each place outweighs the others.
-- The USGS map's values rise from `moons.ZERO` in proportion to the ground's brightness, so the map
-  less that value holds the ground's real contrast. Io's, Europa's and Ganymede's maps say so in
-  their GeoTIFF tags, and with the tags' scale, Io's and Ganymede's means come to their geometric
-  albedos.
-- On the moons, darker ground is redder, so on the cells the frames saw, each ratio's logarithm is
+  frames of a set were taken within minutes at the same phase angle, so the ratios hold the colour
+  alone. The sets' ratios are averaged on the logarithm, each cell weighted by how squarely it was
+  seen and lit and by the frame's resolution, raised to `POWER`, so that the best view of each place
+  outweighs the others. Triton's sets hold two to four filters; a frame whose pointing couldn't be
+  fitted is left out of its set, and a set without its green frame is left out.
+- The map's values rise from the moon's `zero` in proportion to the ground's brightness, so the map
+  less that value holds the ground's real contrast. The USGS's maps of Io, Europa and Ganymede say
+  so in their GeoTIFF tags, and with the tags' scale, Io's and Ganymede's means come to their
+  geometric albedos. Triton's map was stretched for display, so its zero is fitted to the green
+  frames at least `ZERO_DISC` pixels across (`fitted_zero`).
+- On these moons, darker ground is redder, so on the cells the frames saw, each ratio's logarithm is
   fitted to that of the map's brightness. What the fit leaves is smoothed over `RESIDUAL_PIXELS` of
   the green frames' pixels, at their median resolution, from about 2.5 degrees for Io to 9 for
   Callisto, whose frames are the smallest, and filled in where the frames saw nothing with the mean
@@ -28,7 +30,9 @@ limb's exponents for the mod's `planets.luau`.
   measured.
 - Each texel's spectrum runs through the four filters' wavelengths, straight between them and flat
   beyond them, and is taken through the CIE 1931 observer to sRGB (`truecolour.py`). Where the map
-  holds nothing, the texel takes the mean of its latitude.
+  holds nothing, the texel takes the mean of its latitude. Triton's north, which no picture saw,
+  takes its brightness and the remainder of its colour from the opposite latitude, 180 degrees round
+  (`moons.mirrored`).
 - `brightness` is the texture's mean luminance in linear light, for the game. `key light blue` is
   the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8): the texture's blue is
   divided by it. If that takes the brightest texels past 1, the whole map is scaled down until all
@@ -54,7 +58,7 @@ size, brightness, key_blue = int(sys.argv[6]), float(sys.argv[7]), float(sys.arg
 
 # The colour maps' cells, degrees: finer for Io, whose frames are the sharpest and whose colours
 # vary the most.
-STEP = {'Io': 0.25, 'Europa': 0.5, 'Ganymede': 0.5, 'Callisto': 0.5}[moon]
+STEP = {'Io': 0.25, 'Europa': 0.5, 'Ganymede': 0.5, 'Callisto': 0.5, 'Triton': 0.5}[moon]
 # The least cosines of the light and the view where a frame's cell counts, and the power its weight
 # is raised to.
 LEAST = 0.3
@@ -65,6 +69,10 @@ RESIDUAL_PIXELS = 6
 FLOOR = 0.01
 # The share of texels allowed past 1, and so clipped, if the map has to be scaled down to fit.
 CLIPPED = 0.001
+# For a map whose zero isn't known: the least disk of the green frames it's fitted to, pixels, and
+# the least cosines of the light and the view where their cells count.
+ZERO_DISC = 90
+ZERO_LEAST = 0.5
 
 with open(listing) as f:
     frames = [frame for frame in json.load(f)['frames'] if frame['moon'] == moon]
@@ -91,19 +99,19 @@ for name in moons.FILTERS:
                                        if f['filter'] == name and f['name'] in fits and np.isfinite(fits[f['name']]['k'])]))
 print(f"{moon}: Minnaert's exponent " + ", ".join(f"{exponents[n]:.3f} at {w:.0f} nm" for n, w in moons.FILTERS.items()))
 
-# The USGS map, reduced to the colour maps' cells, with 0 degrees east at the left edge, south first.
+# The moon's map, reduced to the colour maps' cells, with 0 degrees east at the left edge, south first.
 full = moons.read_map(data, moon)
 reduced = moons.east_at_left(moons.reduce(full, STEP), moon)[::-1]
 
-# Each set's colour ratios, and its green frame's resolution, degrees a pixel.
+# Each set's colour ratios, each with the set's weights, and its green frame's resolution, degrees a
+# pixel.
 ratios = {name: [] for name in moons.FILTERS if name != 'Green'}
 weights, resolutions = [], []
 sets = sorted({f['set'] for f in frames})
 for set_id in sets:
-    members = {f['filter']: f for f in frames if f['set'] == set_id}
-    # A set with a frame whose pointing couldn't be fitted is left out.
-    if any(f['name'] not in fits for f in members.values()):
-        print(f"  the set of {members['Green']['name']} is left out", flush=True)
+    members = {f['filter']: f for f in frames if f['set'] == set_id and f['name'] in fits}
+    if 'Green' not in members:
+        print(f"  the set {set_id} is left out, its green frame not fitted", flush=True)
         continue
     grids = {}
     for name, frame in members.items():
@@ -115,7 +123,8 @@ for set_id in sets:
             seen = np.isfinite(grids[name])
             weights.append(np.where(seen, ((np.clip(mu, 0, 1) * np.clip(mu0, 0, 1)) ** 2 / resolution ** 2) ** POWER, 0.0))
     for name in ratios:
-        ratios[name].append(np.log(grids[name] / grids['Green']))
+        if name in grids:
+            ratios[name].append((np.log(grids[name] / grids['Green']), weights[-1]))
 
 # The sets' ratios, averaged with their weights.
 weight = np.sum(weights, axis=0)
@@ -123,7 +132,7 @@ mean_ratio = {}
 for name, maps in ratios.items():
     total = np.zeros_like(weight)
     used = np.zeros_like(weight)
-    for log_ratio, w in zip(maps, weights):
+    for log_ratio, w in maps:
         ok = np.isfinite(log_ratio) & (w > 0)
         total += np.where(ok, log_ratio * w, 0.0)
         used += np.where(ok, w, 0.0)
@@ -131,10 +140,35 @@ for name, maps in ratios.items():
 covered = np.all([np.isfinite(r) for r in mean_ratio.values()], axis=0)
 print(f"the colour maps cover {np.sum(covered * area) / np.sum(np.ones_like(weight) * area) * 100:.1f}% of the moon")
 
+
+def fitted_zero():
+    """The value the map rises from, fitted to each green frame at least `ZERO_DISC` pixels across:
+    the frame's albedo, where the light and the view are at least `ZERO_LEAST`, against the map
+    blurred to the frame's pixel, by the reduced major axis. The median of the frames'."""
+    zeros = []
+    for frame in frames:
+        if frame['filter'] != 'Green' or frame['name'] not in fits or frame['disc_pixels'] < ZERO_DISC:
+            continue
+        img, view = frame_view(frame)
+        grid, _, _ = voyager.albedo_grid(img, view, fits[frame['name']]['k'], lats, lons, least=ZERO_LEAST)
+        pixel = np.rad2deg(frame['distance_km'] * view.pixel / view.scale / body.a)
+        blurred = voyager.smooth(reduced, pixel, STEP)
+        ok = np.isfinite(grid) & np.isfinite(blurred) & np.isfinite(reduced)
+        slope = np.std(grid[ok]) / np.std(blurred[ok])
+        zeros.append(np.mean(blurred[ok]) - np.mean(grid[ok]) / slope)
+    return float(np.median(zeros))
+
+
+zero = moons.MOONS[moon]['zero']
+if zero is None:
+    zero = fitted_zero()
+    print(f"the map's zero, fitted to the green frames: {zero:.1f}")
+mirror = moons.MOONS[moon].get('mirror', False)
+
 # Each ratio fitted to the map's brightness, and the smooth remainder.
 blur = RESIDUAL_PIXELS * float(np.median(resolutions))
 print(f"the remainder is smoothed over {blur:.1f} degrees")
-relative = reduced - moons.ZERO
+relative = reduced - zero
 relative /= np.nansum(relative * area) / np.sum(np.isfinite(relative) * area)
 fit_cells = covered & np.isfinite(relative) & (relative > 0)
 colour_fit, remainder = {}, {}
@@ -146,6 +180,8 @@ for name, log_ratio in mean_ratio.items():
     colour_fit[name] = (slope, intercept)
     left = np.where(cells, log_ratio - (intercept + slope * np.log(np.where(cells, relative, 1))), np.nan)
     smooth = voyager.smooth(left, blur, STEP)
+    if mirror:
+        smooth = moons.mirrored(smooth, STEP)
     row_means = np.nanmean(smooth, axis=1)
     row_means = np.where(np.isfinite(row_means), row_means, 0.0)
     remainder[name] = np.where(np.isfinite(smooth), smooth, row_means[:, None])
@@ -153,14 +189,16 @@ for name, log_ratio in mean_ratio.items():
           f"the remainder spans {np.nanpercentile(left, 5):+.3f} to {np.nanpercentile(left, 95):+.3f}")
 
 # The texture's grid, north first, 0 degrees east at the left edge for now: the map's brightness
-# over its mean, where the map holds nothing the mean of its latitude.
+# over its mean, where the map holds nothing Triton's guess, or the mean of its latitude.
 w, h = size, size // 2
 tex_lats = 90 - (np.arange(h) + 0.5) * 180 / h
 tex_lons = (np.arange(w) + 0.5) * 360 / w
 tex_area = np.cos(np.radians(tex_lats))[:, None]
-fine = moons.east_at_left(moons.reduce(full, 360 / w), moon) - moons.ZERO
+fine = moons.east_at_left(moons.reduce(full, 360 / w), moon) - zero
 del full
 fine /= np.nansum(fine * tex_area) / np.sum(np.isfinite(fine) * tex_area)
+if mirror:
+    fine = moons.mirrored(fine, 360 / w)
 row_means = np.nanmean(fine, axis=1)
 fine = np.where(np.isfinite(fine), fine, np.where(np.isfinite(row_means), row_means, np.nanmean(row_means))[:, None])
 fine = np.maximum(fine, FLOOR)

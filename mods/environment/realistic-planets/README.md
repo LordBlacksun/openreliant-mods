@@ -6,13 +6,16 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune, Jupiter, Uranus, Saturn, Venus, Titan and Jupiter's moons Io, Europa, Ganymede
-and Callisto are done. Triton and Earth follow.
+**Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
+and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. Lighting that follows the sun's
+direction, with Saturn's ring and its shadows lit by the sun and Earth's city lights on its night
+side, waits for OpenReliant 0.11 ([#33](https://github.com/OpenReliant/openreliant-mods/issues/33),
+[#40](https://github.com/OpenReliant/openreliant-mods/issues/40)).
 
 ## The game's planets
 
-Each body comes as a detailed model and a far one, as separate object types (`0x5F` to `0x6A` and
-`0xC9` to `0xD3`), with 256x256 textures:
+Each body but Earth comes as a detailed model and a far one, as separate object types (`0x5F` to
+`0x69` and `0xC9` to `0xD3`), with 256x256 textures. Earth has one model, of type `0x6A`:
 
 | Body | Detailed | Far | Texture |
 |---|---|---|---|
@@ -27,7 +30,7 @@ Each body comes as a detailed model and a far one, as separate object types (`0x
 | Io | `io_hi_1.shp` | `io_lo_1.shp` | `io_1`, `io_bot` |
 | Callisto | `calist_hi_1.shp` | `calist_lo_1.shp` | |
 | Venus | `venus1_hi_1.shp` | `venus1_lo_1.shp` | `venus_1`, `venus_top`, `venus_bot` |
-| Earth | `earth.shp` | | |
+| Earth | `earth.shp` | | `earth`, which the game's texture cache doesn't hold |
 
 What OpenReliant's source and `sltool` show about them:
 
@@ -46,6 +49,9 @@ What OpenReliant's source and `sltool` show about them:
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
   about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus and
   Venus's clouds westward. A mod can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+- The game doesn't make Earth a planet: its sphere, with a radius of 1,048,542 units, isn't moved to
+  stand on its middle, and stands 1.25 million units from the model's origin. None of the game's
+  missions place Earth.
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
@@ -98,7 +104,10 @@ What OpenReliant's source and `sltool` show about them:
   of the original's. Around the original's planet, the real ring would reach 6 million units, and
   in mission 24 the player, who starts in the ring's plane 4.97 million units out, would start over
   the B ring. The far model's planet is 0.988 of the detailed one's size, as the original's is.
-- Jupiter's moons keep the sizes of the game's models, which aren't in proportion to each other.
+- Earth's sphere keeps the game's radius and stands where the game's does, 1.25 million units from
+  its origin, so that it shows in the same place. It's a single model, as the game's is.
+- Jupiter's moons and Triton keep the sizes of the game's models, which aren't in proportion to each
+  other. Triton's detailed and far models both have a radius of 288,141 units.
   Europa's and Ganymede's detailed models have a radius of 288,141 units. Io's near level is uneven,
   270,744 to 273,753 units from its middle, so its sphere takes their median, 270,949. Callisto's
   are 1,280,625 units, as large as Neptune's. Europa's far model is a little larger than its
@@ -661,6 +670,117 @@ browner trailing side, and Ganymede and Callisto a faintly warm grey.
   4096 by 2048.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
+## Triton
+
+Triton's map takes its detail from the USGS's global colour mosaic, which Paul Schenk made from
+Voyager 2's pictures, and its colour from Voyager 2's colour frames of 1989, as Jupiter's moons do.
+Published pictures of Triton turn its colours up, into pinks and greens. In true colour it's a pale
+cream-white, brightest on its south polar cap, which dark streaks cross, and greyer nearer the
+equator.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [The USGS's global colour mosaic of Triton](https://astrogeology.usgs.gov/search/map/triton_voyager_2_global_color_mosaic_600m) (PIA18668, 2014) | Paul Schenk's map from Voyager 2's pictures, at 600 m a pixel, its orange, violet and ultraviolet frames shown as red, green and blue | Public domain (NASA/JPL/Lunar and Planetary Institute) | Yes, its violet band for the detail |
+| Voyager 2's narrow-angle camera, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Frames of 1989 in violet, blue, green and orange, calibrated to I/F with the camera's distortion removed | Public domain (NASA/JPL) | Yes, 14 colour sets, for the colour and the limb |
+| [NASA's Neptunian Satellite Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptuniansatfact.html) | Triton's visual geometric albedo | Public domain | For the brightness |
+
+### The map
+
+- The map holds 14,138 by 7,069 pixels, its columns running east from 180 degrees west, as its
+  GeoTIFF tags give. Its bands come from Voyager 2's orange, violet and ultraviolet frames, as the
+  USGS's record says. Its middle band, the violet one, gives the detail, as of the three it matches
+  Voyager's green frames best.
+- Its contrast was stretched for display. Matched against the green frames, each with the map
+  blurred to the frame's sharpness, the map's values rise in proportion to the ground's brightness
+  from -171 on its scale of 0 to 255, the median of the frames at least 90 pixels across. So the map
+  shows about twice the real contrast. With that zero, the frames' brightness follows the map's to
+  within about 4% across their disks.
+- Voyager 2 flew past in Triton's southern summer, with its north in the dark. The map holds the
+  south, and the north up to 45 degrees at the longitudes Voyager saw best and 3 degrees at the
+  worst: two thirds of the globe. The rest of the north takes the ground at the opposite latitude, 180
+  degrees round, blended in over 10 degrees from what was seen nearest. It's a plausible guess, not
+  data, as Uranus's south is: the north may have a polar cap like the south's, or none.
+
+### The Voyager frames
+
+- `frames.json` lists every colour set Voyager 2 took of Triton with its disk at least 40 pixels
+  across, from 19 to 25 August 1989: 17 sets, each a green frame with one to three of the violet,
+  blue and orange frames taken within 15 minutes of it. Triton is 44 to 675 pixels across in them, at
+  phase angles of 12 to 39 degrees, and they see it all round, from 13 to 55 degrees south of its
+  equator.
+- `fit.py` fits their pointing as for Jupiter's moons. 41 of the 50 frames fit: those at least 90
+  pixels across match the map by a correlation of 0.86, the median, with their limbs to a quarter of
+  a pixel. The other nine, mostly from the smallest disks, give a twist that strays from their set's
+  and are left out. Three sets lose their green frame with them, so 14 sets give the colour.
+
+### Colour, detail and brightness
+
+- The colour comes from the sets' ratios to green, fitted to the map's brightness, as for Jupiter's
+  moons, with each set's ratios for the filters it has. At the mean brightness, violet is 0.81 of
+  green, blue 0.89 and orange 0.95: the spectrum rises from violet to green and dips a little in
+  orange. Brighter ground is a little bluer. Each set's whole-disk colour, straight from its frames,
+  agrees to within a few per cent.
+- At its true brightness, Triton's mean colour is sRGB (243, 244, 229), a pale cream-white.
+- The texture's mean luminance is 0.35, the same share of Triton's true brightness as Jupiter's 0.3
+  is of Jupiter's, from NASA's visual geometric albedo of 0.72 and Minnaert's law in green.
+- The texture is 4096 by 2048, and its blue is divided by 0.8 for the game's light, as for the
+  others.
+
+## Earth
+
+Earth's map is NASA's Blue Marble of 2002, clouds and all, with the haze of the air added back as
+GOES-18 sees it from space. The Blue Marble shows the ground with the air taken out, the sea almost
+black. Seen from space, the air's haze lights the sea up blue and softens the land, as DSCOVR's
+pictures of the whole Earth show.
+
+None of the game's missions place Earth, so only new missions show it. Its night side stays dark:
+city lights there need the light's direction, which surface functions can't read yet
+([#40](https://github.com/OpenReliant/openreliant-mods/issues/40)).
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [NASA's Blue Marble](https://science.nasa.gov/resource/blue-marble/) (2002), `land_ocean_ice_cloud_8192.tif` | Months of MODIS's pictures from Terra of the land, the sea, the sea ice and the clouds, joined into one true-colour map of 8192 by 4096 | Public domain (NASA Goddard Space Flight Center) | Yes |
+| NASA's Blue Marble: Next Generation (2004) | A map of each month at 500 m a pixel, without clouds | Public domain | No: its clouds would have to come from elsewhere |
+| NASA's Black Marble | Earth's city lights at night | Public domain | Not yet ([#40](https://github.com/OpenReliant/openreliant-mods/issues/40)) |
+| [GOES-18's and GOES-19's full-disk pictures](https://registry.opendata.aws/noaa-goes/), ABI L2 MCMIP | The whole disk every 10 minutes from 137 and 75 degrees west, as I/F in 16 bands at 2 km a pixel | Public domain (NOAA) | Yes, the pair of 21 June 2025 at 21:00 UTC, for the haze and the limb |
+| DSCOVR's camera, EPIC | Earth's whole sunlit disk from the L1 point | Public domain (NASA) | No: its calibrated data needs a login |
+| [NASA's Earth Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html) | Earth's visual geometric albedo | Public domain | For the brightness |
+
+### The map
+
+- The Blue Marble shows MODIS's red, green and blue bands, at 645, 555 and 469 nm, as sRGB's red,
+  green and blue, as NASA's true-colour pictures do. Its columns run east from 180 degrees west, so
+  Africa is in the middle. The texture is 4096 by 2048.
+- Unlike the other bodies' spectra, its three bands aren't taken through the CIE 1931 observer: three
+  points hold too little of a spectrum, and drawn straight between them, the forests' narrow green
+  peak turns olive. So NASA's colours stand.
+
+### The haze
+
+- Over the South Pacific, 12 to 40 degrees south and 115 to 165 west, away from the sun's glint,
+  GOES-18 saw the clear sea at 23% of thick clouds' brightness in blue and 7% in red, with the sun 37
+  degrees high, the satellite 54 degrees high and a phase angle of 19 degrees. The Blue Marble shows
+  the same sea at 3% of its clouds in blue and nothing in red.
+- So each band is the Blue Marble's, times what the air lets through, plus the haze, set so that the
+  sea and the clouds match GOES-18's: GOES's blue band at 470 nm stands for the Blue Marble's blue,
+  and its red at 640 for its red. Where the Blue Marble's thick clouds stand at 0.9, the haze comes
+  to 0.216 in blue, 0.118 in green and 0.069 in red, falling as the wavelength to the power of -3.6,
+  close to the -4 of the air's Rayleigh scattering. The air lets through 0.93 of the blue and 0.98 of
+  the green, which leaves the clouds a little blue, as GOES sees them.
+- The game draws every texel with the same limb law, so the texture keeps the sea's brightness
+  against the clouds' as GOES-18 saw it, at those angles.
+
+### Brightness
+
+- The texture's mean luminance is 0.22, the same share of Earth's true brightness as Jupiter's 0.3 is
+  of Jupiter's, from NASA's visual geometric albedo of 0.434 and Minnaert's law in green. Its mean
+  colour is a bluish grey, sRGB (124, 129, 141) at that luminance.
+- As for the others, the texture's blue is divided by 0.8 for the game's light.
+
 ## The limb
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
@@ -690,6 +810,15 @@ each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are dr
 - Titan's come from the same Cassini frames as its haze. Their exponents are 0.876 at 463 nm, 0.897
   at 568 and 0.855 at 647: 0.877 for red, 0.892 for green and 0.876 for blue. Titan's haze brightens
   its limb a little, about as much in each colour, so the limb keeps its colour.
+- Earth's come from GOES-18's and GOES-19's pictures of the same moment, from 137 and 75 degrees
+  west. Where both saw a place, with the sun and both satellites more than 15 degrees above its
+  horizon, they saw the same ground and clouds under the same sun from two angles, so the ratio of
+  their brightness follows the two views' angles, once the phase angle is held fixed. One picture
+  alone mistakes the scene for the limb: GOES-18's disk is mostly sea in the middle, with land and
+  clouds round its edge. Each place counts by its brightness, so the law follows the clouds and the
+  land more than the dark sea, whose haze brightens toward the limb. The exponents are 0.750 at 470
+  nm and 0.907 at 640: 0.871 for red, 0.815 for green and 0.750 for blue, so the limb turns a little
+  blue, as the air's glow does.
 - Jupiter's moons' come from the frames that give their colour, each frame's pixels sorted by its
   map's brightness and each group given its own albedo, and each filter's exponent is the median of
   its frames'. Io's are 0.733 at 416 nm, 0.678 at 479, 0.692 at 566 and 0.685 at 591: 0.685 for red,
@@ -697,11 +826,15 @@ each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are dr
   and 0.539, and Callisto's 0.578, 0.563 and 0.532. The moons have no air, but their ground scatters
   light as the Moon's dust does, which makes the full Moon look almost evenly bright to its edge, so
   their limbs brighten, Ganymede's and Callisto's the most and a little more in blue.
+- Triton's come from its frames in the same way: 0.747 at 416 nm, 0.752 at 479, 0.741 at 566 and
+  0.741 at 591, so 0.741 for red, 0.744 for green and 0.750 for blue. Its frost brightens the limb
+  about as much in each colour.
 - The planets' and Titan's laws were fitted where mu is at least 0.25, and the moons' where it's at
   least 0.2. Nearer the limb, the factor stays as it is there: for Neptune and Uranus at most about
   1.5 times brighter in red, for Jupiter 1.14 in blue, for Saturn 1.89 in blue, for Venus 0.90 in
-  green, for Titan 1.19 in red and blue, and for the moons from 1.63 for Io in blue to 2.12 for
-  Callisto in blue. The middle of the disk is unchanged.
+  green, for Earth 1.41 in blue, for Titan 1.19 in red and blue, for Jupiter's moons from 1.63 for Io
+  in blue to 2.12 for Callisto in blue, and for Triton 1.52 in red. The middle of the disk is
+  unchanged.
 - A surface function can't read where the light comes from, so the engine's own lighting stands in
   for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
   the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
@@ -714,16 +847,23 @@ each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are dr
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus, 62 MB for Titan and 970 MB for
-Jupiter's moons, and makes the same textures again.
+Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus, 62 MB for Titan, 1.4 GB for Jupiter's
+moons and Triton, and 730 MB for Earth, and makes the same textures again.
 
 ## Credits and licences
 
 - Voyager imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node:
-  Voyager 2's frames of Neptune from its VGISS_8xxx volumes, and Voyager 1's and 2's frames of
-  Jupiter's moons from its VGISS_5xxx volumes.
+  Voyager 2's frames of Neptune and Triton from its VGISS_8xxx volumes, and Voyager 1's and 2's
+  frames of Jupiter's moons from its VGISS_5xxx volumes.
 - The global maps of Io, Europa, Ganymede and Callisto: USGS Astrogeology Science Center, from
   NASA's Voyager and Galileo pictures, in the public domain.
+- The global colour mosaic of Triton: NASA/JPL and Paul Schenk, Lunar and Planetary Institute, from
+  the USGS Astrogeology Science Center, in the public domain.
+- NASA's Blue Marble: NASA Goddard Space Flight Center, image by Reto Stöckli (land surface, shallow
+  water, clouds), enhancements by Robert Simmon (ocean colour, compositing), from MODIS's data, in
+  the public domain.
+- GOES-18's and GOES-19's pictures: NOAA, in the public domain, from NOAA's open data on Amazon Web
+  Services.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
   (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2060
   volume, calibrated with CISSCAL.
@@ -756,7 +896,8 @@ Jupiter's moons, and makes the same textures again.
 - Venus's albedos and phase curves: A. Mallama, B. Krobusek and H. Pavlov, "Comprehensive wide-band
   magnitudes and albedos for the planets, with applications to exo-planets and Planet Nine", Icarus
   282 (2017).
-- The Galilean moons' geometric albedos: NASA's Jovian Satellite Fact Sheet.
+- The geometric albedos of the Galilean moons, of Triton and of Earth: NASA's Jovian Satellite,
+  Neptunian Satellite and Earth Fact Sheets.
 - Venus's spectrum considered: A. Payne, G. L. Villanueva and others, "A comprehensive spectroscopic
   reference of the solar system and its application to exoplanet direct imaging", The Planetary
   Science Journal (2025).
@@ -767,7 +908,9 @@ Jupiter's moons, and makes the same textures again.
   NASA/JPL/Space Science Institute for the Cassini data, NASA/ESA Hubble OPAL, and NASA/JPL for the
   Voyager data, for Venus JAXA/ISAS for the Akatsuki data, for Titan NASA/JPL/Space Science
   Institute for the Cassini data and NASA/JPL-Caltech/University of Arizona for the map of its
-  surface, and for Jupiter's moons NASA/JPL for the Voyager data and the USGS Astrogeology Science
-  Center for its maps.
+  surface, for Jupiter's moons NASA/JPL for the Voyager data and the USGS Astrogeology Science
+  Center for its maps, for Triton NASA/JPL for the Voyager data and NASA/JPL and the Lunar and
+  Planetary Institute for its map, and for Earth NASA Goddard Space Flight Center for the Blue Marble
+  and NOAA for the GOES data.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.
