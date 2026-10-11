@@ -1,0 +1,18 @@
+"""Downloads files into a folder, each once, for the bodies' fetch scripts."""
+import os
+import urllib.request
+
+# Karkoschka's 1993 albedo spectra of the giant planets and Titan, and their label, from the PDS
+# Atmospheres Node.
+KARKOSCHKA = ['https://atmos.nmsu.edu/pdsd/archive/data/eso-jsnu-spectrophotometer-4-v20/gbat_0001/data/' + name
+              for name in ('1993.tab', '1993.lbl')]
+
+
+def fetch(urls, out):
+    """Downloads each of `urls` into the folder `out`, unless a file of its name is there already."""
+    os.makedirs(out, exist_ok=True)
+    for n, url in enumerate(urls, 1):
+        path = os.path.join(out, os.path.basename(url))
+        if not os.path.exists(path):
+            urllib.request.urlretrieve(url, path)
+        print(f"{n}/{len(urls)} {os.path.basename(url)}", flush=True)

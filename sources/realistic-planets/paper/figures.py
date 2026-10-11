@@ -20,6 +20,7 @@ sys.path[:0] = [os.path.abspath(neptune), os.path.join(os.path.dirname(os.path.a
 import geomed  # noqa: E402
 import nepgeo  # noqa: E402
 import render  # noqa: E402
+import truecolour as tc  # noqa: E402
 
 frames = {f['name']: f for f in json.load(open(f"{neptune}/frames.json"))['frames']}
 fits = json.load(open(f"{neptune}/fits.json"))
@@ -244,8 +245,7 @@ def facts(spots):
         print(f"{flt}: {len(fs)} frames, Minnaert k {np.mean(ks):.3f} +- {np.std(ks):.3f}, B {np.mean([f['albedo'] for f in fs]):.3f}")
     albedo = {flt: float(np.mean([f['albedo'] for name, f in fits.items() if frames[name]['role'] == 'colour' and frames[name]['filter'] == flt]))
               for flt in ('Blue', 'Green', 'Orange')}
-    rows = [r.split() for r in open(f"{neptune}/data/1993.tab") if r.strip()]
-    lam, ref = np.array([float(r[0]) for r in rows]), np.array([float(r[6]) for r in rows])
+    lam, ref = tc.karkoschka(f"{neptune}/data/1993.tab", 'neptune')
 
     def passband(centre):
         weight = np.exp(-0.5 * ((lam - centre) / 17.0) ** 2)

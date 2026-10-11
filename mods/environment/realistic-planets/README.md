@@ -6,7 +6,7 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder.
 
-**Status:** Neptune is done. The other bodies follow.
+**Status:** Neptune and Jupiter are done. The other bodies follow.
 
 ## The game's planets
 
@@ -43,8 +43,8 @@ What OpenReliant's source and `sltool` show about them:
   1.005.
 - The same four planets turn about their own Y by 0.0007 of a radian each tick. With 100 ticks a
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
-  about it carries this mod's maps westward, while Neptune really turns eastward. A mod can't change
-  the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+  about it carries this mod's maps westward, while Neptune and Jupiter really turn eastward. A mod
+  can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
@@ -76,6 +76,9 @@ What OpenReliant's source and `sltool` show about them:
 - The seam's and the poles' vertices are shared, and the texture coordinates go with each corner, so
   the normals the engine works out stay smooth across the seam, where split vertices would show a
   line.
+- Jupiter is flattened, as the real planet is: its spheres' polar radius is 0.935 of their
+  equator's, 66,854 km to 71,492 (IAU). Their rings stand at planetocentric latitudes, as Cassini's
+  map has them; on a sphere both kinds of latitude agree.
 - The textures are named `realistic_planets_<body>`, so the game's own stay for any other model that
   uses them.
 
@@ -219,25 +222,6 @@ Two changes are made to the texture for the game alone:
 - The game lights a planet with a single light of colour (1, 1, 0.8), which its tone curve turns
   into a strong yellow cast, so the texture's blue is divided by 0.8.
 
-### The limb
-
-Neptune's haze makes its sunlit limb brighter and paler than a plain ball's would be. The mod's
-player script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on Neptune's
-texture. It needs PER-PIXEL LIGHTING; without it, the planet is drawn as before.
-
-- The function applies the part of Minnaert's law that depends on the view, mu^(k-1), in linear
-  light, with the exponents measured from Voyager for each channel: 0.680 for red, from the orange
-  frames, as Voyager had no red filter, 0.712 for green and 0.768 for blue. As k is lower in red,
-  the limb brightens most in red, which makes it paler.
-- The law was fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
-  at most about 1.5 times brighter in red and 1.4 in blue. The middle of the disk is unchanged.
-- A surface function can't read where the light comes from, so the engine's own lighting stands in
-  for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
-  the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
-  13% too bright at 14 degrees, and carries light about 14 degrees past the terminator
-  ([OpenReliant/openreliant#1084](https://github.com/OpenReliant/openreliant/issues/1084)).
-- There's no glow outside the disk: a surface function only draws on the planet itself.
-
 ### Sharper frames
 
 Frames from 21 and 22 August, at 30 to 53 km a pixel, could give about twice the detail. They were
@@ -246,22 +230,108 @@ appears to drift by several degrees after 20 August, and the clouds had changed 
 or two, so the mosaic showed curved seams and features that didn't line up. Using them would take
 the scan platform's pointing, or mosaics of frames taken close together in time, combined later.
 
+## Jupiter
+
+Jupiter's map is Cassini's global map from its flyby in December 2000, with its contrast measured
+against Hubble's calibrated maps of January 2015 and its colour taken from Karkoschka's spectrum.
+
+### Sources considered
+
+| Source | What it is | Licence | Used |
+|---|---|---|---|
+| [Cassini's cylindrical map](https://science.nasa.gov/photojournal/cassinis-best-maps-of-jupiter-cylindrical-map) (PIA07782) | 36 narrow-angle frames of 11 and 12 December 2000, in filters at 451 and 750 nm, as one map of 0.1 degrees a pixel in planetocentric latitude | Public domain (NASA/JPL/Space Science Institute) | Yes |
+| Cassini's polar maps (PIA07783 and PIA07784) | The same frames, as polar stereographic maps | Public domain | No: the same views, and no more of the poles |
+| [Hubble OPAL](https://archive.stsci.edu/hlsp/opal), January 2015 | Calibrated maps at 395, 502 and 631 nm, in I/F, the limb darkening taken out by Minnaert's law | CC BY 4.0 | To measure Jupiter's contrast and limb darkening |
+| E. Karkoschka's spectra, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Jupiter's geometric albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | For the colour |
+
+### The map
+
+- Cassini's map covers every longitude from 88 degrees north to 82 south. Past that, Cassini saw
+  nothing, and the map holds one flat colour. The last 3 degrees of data fade into their own mean
+  colour, which fills the two small caps.
+- The polar maps line up with the cylindrical one to a correlation of 0.99 where they overlap, so
+  they hold the same views, and they stop at the same latitudes. They add nothing, and aren't used.
+- The texture keeps the cylindrical map's own longitudes.
+
+### Contrast
+
+Cassini's published map has its contrast stretched, as pictures of Jupiter usually do. OPAL's maps
+are calibrated, so they show Jupiter's own. Measured as the ratio between the 10th and the 90th
+percentiles of the brightness, from 60 degrees south to 60 north, Jupiter's contrast is 1.70 at
+395 nm, 1.45 at 502 nm and 1.25 at 631 nm. At each channel's wavelength for Jupiter's spectrum:
+
+| Channel | Wavelength | Jupiter | Cassini's published map |
+|---|---|---|---|
+| Red | 602 nm | 1.29 | 2.24 |
+| Green | 541 nm | 1.38 | 3.08 |
+| Blue | 454 nm | 1.56 | 4.39 |
+
+On the logarithm of the brightness, Cassini's map has about 3.3 times Jupiter's contrast. The
+texture brings each channel to Jupiter's own contrast, then stretches it threefold for the game, as
+Neptune's: close to Cassini's look, with each channel in Jupiter's own proportions.
+
+### Colour and brightness
+
+- Cassini made its colours from two filters, so the map keeps its own variations, but its mean
+  colour is set to Karkoschka's spectrum of Jupiter, through the CIE 1931 observer as for Neptune:
+  sRGB (189, 189, 172), a pale cream.
+- OPAL's mean normal albedo is 1.53 times the spectrum's geometric albedo, which puts Jupiter's
+  mean luminance at about 0.77. In the game's lighting that's near white, and the bloom makes it
+  glow. So the texture's mean luminance is set to 0.3, a choice for the game, as the stretch is.
+- As for Neptune, the texture's blue is divided by 0.8 for the game's light.
+
+Jupiter turns the wrong way in the game too, until a mod can set a planet's spin
+([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+
+## The limb
+
+A planet's haze makes its sunlit limb brighter than a plain ball's would be. The mod's player
+script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on each planet's
+texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
+
+- The function applies the part of Minnaert's law that depends on the view, mu^(k-1), in linear
+  light, with an exponent k for each channel, measured for each planet.
+- Neptune's come from the Voyager frames: 0.680 for red, from the orange frames, as Voyager had no
+  red filter, 0.712 for green and 0.768 for blue. As k is lowest in red, the limb brightens most in
+  red, which makes it paler.
+- Jupiter's come from OPAL's maps, whose exponents are 0.850 at 395 nm, 0.950 at 502 and 0.999 at
+  631: 0.988 for red, 0.965 for green and 0.905 for blue. Jupiter's limb darkens almost as a plain
+  ball's, so its function changes little, and most in blue, a faint bluish haze.
+- The laws were fitted where mu is at least 0.25. Nearer the limb, the factor stays as it is there:
+  for Neptune at most about 1.5 times brighter in red and 1.4 in blue, for Jupiter 1.14 in blue.
+  The middle of the disk is unchanged.
+- A surface function can't read where the light comes from, so the engine's own lighting stands in
+  for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
+  the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
+  13% too bright at 14 degrees, and carries light about 14 degrees past the terminator
+  ([OpenReliant/openreliant#1084](https://github.com/OpenReliant/openreliant/issues/1084)).
+- There's no glow outside the disk: a surface function only draws on the planet itself.
+
 ## Making it again
 
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
-folder. A build downloads about 70 MB of Voyager frames and makes the same texture again.
+folder. A build downloads what each texture is made from, about 70 MB for Neptune and 93 MB for
+Jupiter, and makes the same textures again.
 
 ## Credits and licences
 
 - Voyager 2 imaging: NASA/JPL-Caltech, in the public domain, from the PDS Ring-Moon Systems Node's
   VGISS_8xxx volumes.
-- Neptune's spectrum: E. Karkoschka, "Spectrophotometry of the Jovian planets and Titan at 300- to
-  1000-nm wavelength: the methane spectrum", Icarus 111 (1994), from the PDS Atmospheres Node.
+- Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
+  (PIA07782).
+- Hubble OPAL: this work used data acquired from the NASA/ESA HST Space Telescope, associated with
+  OPAL program (PI: Simon, GO13937), CC BY 4.0, [doi:10.17909/T9G593](https://doi.org/10.17909/T9G593);
+  A. A. Simon, M. H. Wong and G. S. Orton, "First results from the Hubble OPAL program: Jupiter in
+  2015", The Astrophysical Journal 812 (2015).
+- The spectra of Neptune and Jupiter: E. Karkoschka, "Spectrophotometry of the Jovian planets and
+  Titan at 300- to 1000-nm wavelength: the methane spectrum", Icarus 111 (1994), from the PDS
+  Atmospheres Node.
 - Neptune's wind profile: L. A. Sromovsky, S. S. Limaye and P. M. Fry, "Dynamics of Neptune's major
   cloud features", Icarus 105 (1993).
 - The textures made from the data, the thumbnail and the note are OpenReliant's, shared under
-  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): credit OpenReliant, and NASA/JPL for
-  the Voyager data they come from.
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): credit OpenReliant, and for Neptune
+  NASA/JPL for the Voyager data, for Jupiter NASA/JPL/Space Science Institute for the Cassini data
+  and NASA/ESA Hubble OPAL for its calibration.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.

@@ -1,7 +1,21 @@
 """True colour from a reflectance spectrum: the CIE 1931 2-degree observer (Wyman, Sloan and Shirley's
 2013 analytic fit), sunlight as a 5778 K blackbody, a white reflector adapted to D65 white with the
-Bradford transform, and the sRGB primaries."""
+Bradford transform, and the sRGB primaries. Also reads Karkoschka's spectra of the giant planets."""
 import numpy as np
+
+# The columns of Karkoschka's 1993 table (`1993.tab`, from its label `1993.lbl`), counted from 0:
+# after the two wavelengths and methane's absorption, each body's geometric albedo.
+KARKOSCHKA_COLUMNS = {'jupiter': 3, 'saturn': 4, 'uranus': 5, 'neptune': 6, 'titan': 7}
+
+
+def karkoschka(path, body):
+    """A body's geometric albedo from Karkoschka's table, over the visible range: the wavelengths in
+    nm and the albedo at each."""
+    rows = [r.split() for r in open(path) if r.strip()]
+    lam = np.array([float(r[0]) for r in rows])
+    albedo = np.array([float(r[KARKOSCHKA_COLUMNS[body]]) for r in rows])
+    visible = (lam >= 380) & (lam <= 780)
+    return lam[visible], albedo[visible]
 
 
 def _g(lam, mu, s1, s2):
@@ -38,6 +52,11 @@ def matrix(lam):
     to_rgb = XYZ_TO_SRGB @ adapt
     per_wavelength = (to_rgb @ (w / w[:, 1].sum()).T).T     # each wavelength's share of R, G and B
     return per_wavelength
+
+
+def luminance(rgb):
+    """The luminance of linear sRGB colours."""
+    return rgb[..., 0] * 0.2126 + rgb[..., 1] * 0.7152 + rgb[..., 2] * 0.0722
 
 
 def encode(linear):

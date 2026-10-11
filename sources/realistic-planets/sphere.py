@@ -4,36 +4,49 @@ The sphere has its poles on Y, as the game turns planets about their own Y, and 
 equirectangular map: the picture's top is the north pole, its middle column faces +Z, the model's
 front, and east runs toward +X, so that a map drawn as seen from outside looks right on the planet.
 
+With `--polar`, it is an oblate spheroid, flattened along Y, such as Jupiter. The rings stand at
+planetocentric latitudes, as Cassini's maps of Jupiter have them; on a sphere both latitudes agree.
+
 Each vertex is written once, the seam's and the poles' included, and the texture coordinates go
 with each corner. The game works out a planet's normals again from its faces, so a shared vertex
 keeps the lighting smooth across the seam, where a split one would show a line.
 
     python3 sphere.py neptune.obj --radius 1280625 --texture realistic_planets_neptune
+    python3 sphere.py jupiter.obj --radius 1280625 --polar 1197549 --texture realistic_planets_jupiter
 """
 
 import argparse
 import math
 
 
-def write(out, name: str, texture: str, radius: float, columns: int, rows: int) -> None:
+def write(out, name: str, texture: str, radius: float, polar: float, columns: int, rows: int) -> None:
     rings = range(1, rows)
     # Vertices: the north pole, each ring from north to south, then the south pole.
     north = 1
     def vertex(ring: int, column: int) -> int:
         return 2 + (ring - 1) * columns + column % columns
     south = 2 + (rows - 1) * columns
-    out.write(f"# A sphere of radius {radius:g}, {columns} columns by {rows} rows, by sphere.py\n")
+    out.write(f"# A sphere of radius {radius:g}, polar radius {polar:g}, {columns} columns by {rows} rows, by sphere.py\n")
     out.write(f"o {name}\n")
-    points = [(0.0, 1.0, 0.0)]
+    # Each point's direction from the middle, at planetocentric latitudes.
+    directions = [(0.0, 1.0, 0.0)]
     for ring in rings:
         latitude = math.pi / 2 - math.pi * ring / rows
         for column in range(columns):
             longitude = 2 * math.pi * column / columns - math.pi
-            points.append((math.cos(latitude) * math.sin(longitude), math.sin(latitude), math.cos(latitude) * math.cos(longitude)))
-    points.append((0.0, -1.0, 0.0))
+            directions.append((math.cos(latitude) * math.sin(longitude), math.sin(latitude), math.cos(latitude) * math.cos(longitude)))
+    directions.append((0.0, -1.0, 0.0))
+    points, normals = [], []
+    for x, y, z in directions:
+        # Out along the direction to the spheroid, and its normal there.
+        r = radius * polar / math.hypot(polar * math.hypot(x, z), radius * y)
+        points.append((x * r, y * r, z * r))
+        nx, ny, nz = x * r / radius ** 2, y * r / polar ** 2, z * r / radius ** 2
+        length = math.sqrt(nx * nx + ny * ny + nz * nz)
+        normals.append((nx / length, ny / length, nz / length))
     for x, y, z in points:
-        out.write(f"v {x * radius:.3f} {y * radius:.3f} {z * radius:.3f}\n")
-    for x, y, z in points:
+        out.write(f"v {x:.3f} {y:.3f} {z:.3f}\n")
+    for x, y, z in normals:
         out.write(f"vn {x:.6f} {y:.6f} {z:.6f}\n")
 
     # Texture coordinates: each ring's columns with the seam's twice, at 0 and 1, then a point at
@@ -74,13 +87,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Write a planet's sphere as an OBJ file.")
     parser.add_argument("out", help="the OBJ file to write")
     parser.add_argument("--radius", type=float, required=True, help="the radius, in the game's units")
+    parser.add_argument("--polar", type=float, help="the polar radius, for an oblate planet; the radius by default")
     parser.add_argument("--texture", required=True, help="the texture's name, without its extension")
     parser.add_argument("--name", default="planet", help="the part's name")
     parser.add_argument("--columns", type=int, default=128, help="segments round the equator")
     parser.add_argument("--rows", type=int, default=64, help="segments from pole to pole")
     args = parser.parse_args()
     with open(args.out, "w") as out:
-        write(out, args.name, args.texture, args.radius, args.columns, args.rows)
+        write(out, args.name, args.texture, args.radius, args.polar or args.radius, args.columns, args.rows)
 
 
 if __name__ == "__main__":
