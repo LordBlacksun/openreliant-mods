@@ -17,6 +17,7 @@ east in the middle column and east to the right, as `sphere.py`'s spheres map it
 - `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
   the texture's blue is divided by it, so that the planet shows its own colour in the game.
 """
+import os
 import subprocess
 import sys
 
@@ -24,7 +25,9 @@ import numpy as np
 from scipy import ndimage
 
 import nepgeo
-import truecolour as tc
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import truecolour as tc  # noqa: E402
 
 maps, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
 enhance, key_blue = float(sys.argv[4]), float(sys.argv[5])
@@ -50,11 +53,7 @@ ratio = {f: on_luminance_grid(nepgeo.smooth(m['albedo'] / np.nanmean(m['albedo']
 
 # The spectrum, bent through each filter by hat functions that sum to one: blue at 479 nm, green at
 # 566, orange at 591, flat beyond them.
-rows = [r.split() for r in open(spectrum) if r.strip()]
-lam = np.array([float(r[0]) for r in rows])
-ref = np.array([float(r[6]) for r in rows])       # the seventh column is Neptune's albedo
-visible = (lam >= 380) & (lam <= 780)
-lam, ref = lam[visible], ref[visible]
+lam, ref = tc.karkoschka(spectrum, 'neptune')
 M = tc.matrix(lam)
 hat_b = np.interp(lam, [479, 566], [1, 0])
 hat_o = np.interp(lam, [566, 591], [0, 1])

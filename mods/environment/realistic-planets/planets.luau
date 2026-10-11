@@ -13,3 +13,13 @@ shaders.register_surface({
     textures = { "realistic_planets_neptune" },
     parameters = { 0.680, 0.712, 0.768, 0.25 },
 })
+
+-- Jupiter: the exponents of Hubble's OPAL maps of January 2015 (0.850 at 395 nm, 0.950 at 502 and
+-- 0.999 at 631), at the red, green and blue channels' wavelengths for Jupiter's spectrum (602, 541
+-- and 454 nm), and the same least cosine.
+shaders.register_surface({
+    name = "jupiter",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_jupiter" },
+    parameters = { 0.988, 0.965, 0.905, 0.25 },
+})
