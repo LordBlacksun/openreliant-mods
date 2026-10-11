@@ -1,9 +1,9 @@
 """Writes the mods' site into site/: the index page, which browses the mods by category, with each
 mod's thumbnail, name, version, author, what it needs, its description and the download of its
-latest release; a page for each mod, mods/<mod>/, with its pictures, what it is, its download, how
-many times it has been downloaded and its releases; updates/, every mod's releases, newest first;
-and mods.json, the released mods as data, which OpenReliant's GET MODS screen reads to list and
-install them from the game.
+latest release; a page for each mod, mods/<mod>/, with its pictures, what it is, its download, its
+total downloads and its releases; updates/, every mod's releases, newest first; and mods.json, the
+released mods as data, which OpenReliant's GET MODS screen reads to list and install them from the
+game.
 
     python3 .github/scripts/site.py
 """
@@ -529,8 +529,8 @@ def history(mod, releases: list[dict]) -> str:
 
 
 def mod_page(mod, by_path: dict[str, Category], release: dict | None, releases: list[dict], updated: str, built: str) -> str:
-    """A mod's own page: its pictures; what it is and what it needs; its download and how many times
-    it has been downloaded; its artist's notes; how to install it; and its releases."""
+    """A mod's own page: its pictures; what it is and what it needs; its download and its total
+    downloads; its artist's notes; how to install it; and its releases."""
     text = html.escape
     base = "../../"
     listing = mod.artist.listing(mod.files) if mod.artist else None
@@ -566,7 +566,7 @@ def mod_page(mod, by_path: dict[str, Category], release: dict | None, releases: 
         facts.append(("Released", text(latest["date"][:10])))
     # Left out until someone has downloaded it, and where GitHub couldn't be read.
     if downloads := downloads_of(mod, releases):
-        facts.append(("Downloaded", "once" if downloads == 1 else f"{downloads:,} times"))
+        facts.append(("Total downloads", f"{downloads:,}"))
     facts_list = "".join(f"<dt>{name}</dt><dd>{value}</dd>" for name, value in facts)
 
     if mod.released():
