@@ -9,7 +9,7 @@ on:
   push:
     branches: [main]
   # Once a day, the site alone, so that a mod waiting for a newer OpenReliant shows as ready once
-  # that version is out.
+  # that version is out, and the mods' download counts are never more than a day old.
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
