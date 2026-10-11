@@ -191,7 +191,7 @@ footer { color: var(--muted); font-size: 14px; margin-top: 28px; }
 """
 
 # Browses the mods: the category, the search and the sort are in the address, as
-# ?category=ships/fighters&q=viper&sort=updated, so a link keeps them. Without scripts the page
+# ?category=ships/fighters&q=viper&sort=updated, or sort=downloads, so a link keeps them. Without scripts the page
 # lists every mod.
 BROWSE_SCRIPT = """
 (function () {
@@ -229,7 +229,7 @@ BROWSE_SCRIPT = """
     const category = query.get("category") || "";
     state.category = byPath.has(category) ? category : "";
     state.q = query.get("q") || "";
-    state.sort = query.get("sort") === "updated" ? "updated" : "name";
+    state.sort = ["updated", "downloads"].includes(query.get("sort")) ? query.get("sort") : "name";
     search.value = state.q;
     sort.value = state.sort;
   };
@@ -281,9 +281,13 @@ BROWSE_SCRIPT = """
       card.hidden = !fits;
       return fits;
     });
-    const order = state.sort === "updated"
-      ? (a, b) => (b.dataset.updated || "").localeCompare(a.dataset.updated || "") || a.dataset.name.localeCompare(b.dataset.name)
-      : (a, b) => a.dataset.name.localeCompare(b.dataset.name);
+    const byName = (a, b) => a.dataset.name.localeCompare(b.dataset.name);
+    const orders = {
+      name: byName,
+      updated: (a, b) => (b.dataset.updated || "").localeCompare(a.dataset.updated || "") || byName(a, b),
+      downloads: (a, b) => Number(b.dataset.downloads) - Number(a.dataset.downloads) || byName(a, b),
+    };
+    const order = orders[state.sort];
     shown.sort(order).forEach((card) => list.append(card));
     count.textContent = shown.length ? plural(shown.length) : "";
     empty.hidden = shown.length > 0;
@@ -428,7 +432,7 @@ def where(category: Category, by_path: dict[str, Category], base: str) -> str:
     return f'<p class="where">{" / ".join(category_links(category, by_path, base))}</p>'
 
 
-def card(mod, by_path: dict[str, Category], release: dict | None, updated: str) -> str:
+def card(mod, by_path: dict[str, Category], release: dict | None, updated: str, downloads: int) -> str:
     text = html.escape
     picture = (f'<a href="{text(mod.page)}" aria-label="{text(mod.name)}: its page">'
                + (f'<img src="thumbs/{text(mod.id)}.png" alt="{text(mod.name)}">' if mod.thumbnail else '<img alt="">') + '</a>')
@@ -442,7 +446,7 @@ def card(mod, by_path: dict[str, Category], release: dict | None, updated: str) 
         download = f'<p class="unreleased">Not released yet.</p><div class="links">{details}{links_of(mod)}</div>'
     searched = " ".join([mod.name, mod.author, mod.description]).lower()
     data = (f'data-category="{text(mod.category)}" data-name="{text(mod.name.lower())}" data-updated="{text(updated)}" '
-            f'data-text="{text(searched)}"')
+            f'data-downloads="{downloads}" data-text="{text(searched)}"')
     return (f'<article class="mod" {data}><div class="shot">{picture}</div><div>{where(by_path[mod.category], by_path, "")}'
             f'<h2><a href="{text(mod.page)}">{text(mod.name)}</a></h2><div class="badges">{badges}</div>'
             f'<p class="description">{text(mod.description)}</p>{download}</div></article>')
@@ -608,14 +612,14 @@ def crumbs_of(category: Category, by_path: dict[str, Category], base: str) -> st
     return "".join(f"<li>{link}</li>" for link in category_links(category, by_path, base))
 
 
-def index_page(root: Category, release: dict | None, updated_at: dict[str, str], updated: str) -> str:
+def index_page(root: Category, release: dict | None, releases: list[dict], updated_at: dict[str, str], updated: str) -> str:
     text = html.escape
     by_path = {category.path: category for category in all_categories(root)}
     data = [{"path": category.path, "parent": category.parent_path, "name": "All mods" if not category.path else category.name,
              "text": category.text if category.path else "Every mod in the collection, by category.", "count": len(category.all_mods())}
             for category in all_categories(root)]
     mods = sorted(root.all_mods(), key=lambda mod: mod.name.lower())
-    cards = "\n".join(card(mod, by_path, release, updated_at.get(mod.id, "")) for mod in mods)
+    cards = "\n".join(card(mod, by_path, release, updated_at.get(mod.id, ""), downloads_of(mod, releases)) for mod in mods)
     # The categories for the script; "</" kept out, so that nothing in them can end the tag.
     categories = json.dumps(data).replace("</", "<\\/")
     body = f"""<header>
@@ -628,7 +632,7 @@ def index_page(root: Category, release: dict | None, updated_at: dict[str, str],
 <div class="kinds"></div>
 <div class="tools">
 <input type="search" id="search" placeholder="Search the mods" aria-label="Search the mods">
-<label>Sort <select id="sort"><option value="name">By name</option><option value="updated">Recently updated</option></select></label>
+<label>Sort <select id="sort"><option value="name">By name</option><option value="updated">Recently updated</option><option value="downloads">By downloads</option></select></label>
 </div>
 <p class="count" aria-live="polite"></p>
 </section>
@@ -746,7 +750,7 @@ def main() -> int:
     for found_release in releases:
         updated_at.setdefault(tag_parts(found_release["tag"])[0], found_release["date"])
     updated = git("log", "-1", "--format=%cs")
-    (SITE / "index.html").write_text(index_page(root, release, updated_at, updated), encoding="utf-8")
+    (SITE / "index.html").write_text(index_page(root, release, releases, updated_at, updated), encoding="utf-8")
     (SITE / "updates" / "index.html").write_text(updates_page(root, releases, updated), encoding="utf-8")
     (SITE / "mods.json").write_text(index_json(mods, releases, updated_at, updated), encoding="utf-8")
     by_path = {category.path: category for category in all_categories(root)}
