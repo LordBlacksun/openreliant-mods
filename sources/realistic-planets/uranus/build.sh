@@ -4,5 +4,6 @@
 set -eu
 python3 fetch.py data
 # For the game: Uranus's contrast stretched threefold, as Neptune's and Jupiter's are, a mean
-# luminance of 0.45, and the game's key light's blue of 0.8 divided out.
-python3 compose.py data data/1993.tab ../../../mods/environment/realistic-planets/realistic_planets_uranus.png 3 0.45 0.8
+# luminance of 0.55, a little brighter than Neptune's 0.50 as the real planet is, and the game's key
+# light's blue of 0.8 divided out.
+python3 compose.py data data/1993.tab ../../../mods/environment/realistic-planets/realistic_planets_uranus.png 3 0.55 0.8

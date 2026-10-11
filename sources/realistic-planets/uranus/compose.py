@@ -21,7 +21,7 @@ at the top and east to the right, as `sphere.py`'s spheres map it.
   Uranus's contrast is in the red map.
 - `brightness` is the texture's mean luminance in linear light, for the game: at its true normal
   albedo, the spectrum's geometric albedo times the ratio of OPAL's mean normal albedo to it at 547 nm,
-  about 0.61, Uranus is washed out in the game's lighting.
+  about 0.61, the game's lighting pales Uranus towards white.
 - `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
   the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
   takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.

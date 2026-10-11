@@ -323,9 +323,10 @@ Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from K
   is stretched threefold on its logarithm, as Neptune's and Jupiter's are, keeping each place's
   colour; stretching each map instead turns the polar cap pink.
 - At its true normal albedo, 1.19 times the spectrum's geometric albedo at 547 nm, Uranus's mean
-  luminance is about 0.61, which washes it out in the game's lighting. The texture's is 0.45, chosen
-  by eye in the game, so Uranus comes out a little darker than Neptune's texture (0.50), where the
-  real planet is a little brighter.
+  luminance is about 0.61, a fifth more than Neptune's (0.50). The game's tone curve compresses the
+  top of the range, so past Neptune's level a brighter texture mostly pales Uranus towards white. The
+  texture's mean luminance is 0.55: a little brighter than Neptune, as the real planet is, with fewer
+  near-white pixels on its lit disk than Neptune shows, but less colour, as the real planet is paler.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 Uranus really turns westward, so it's the one planet the game turns the right way, if too fast
