@@ -1,0 +1,676 @@
+% A technical note on how the Realistic Planets mod's map of Neptune is made. build.sh makes its
+% figures and compiles it with Tectonic into the mod's folder, after ../neptune/build.sh.
+\documentclass[11pt,a4paper]{article}
+\usepackage[british]{babel}
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage[round,authoryear]{natbib}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!50!black]{hyperref}
+
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.8}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
+
+\definecolor{dayone}{HTML}{2B6CB0}
+\definecolor{daytwo}{HTML}{C0392B}
+\sisetup{group-separator={,}, group-minimum-digits=4}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\unitv}[1]{\hat{\mathbf{#1}}}
+
+\hypersetup{pdftitle={A reproducible global map of Neptune from Voyager 2 narrow-angle camera images},
+  pdfauthor={Kenny Van de Maele}}
+
+\title{A reproducible global map of Neptune from Voyager~2 narrow-angle camera images}
+\author{Kenny Van de Maele\\[2pt]
+  \small OpenReliant\\[6pt]
+  \small Technical note on the Neptune texture of the Realistic Planets mod for OpenReliant}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+We describe the construction of a global map of the albedo and colour of Neptune from 34
+calibrated images taken by the narrow-angle camera of Voyager~2 on 17 and 20 August 1989. The map
+was made as a texture for the Realistic Planets modification of OpenReliant, an open-source
+reimplementation of the video game StarLancer (1999), but is intended to be of use beyond it. As no
+reconstructed pointing of the cameras was available to us, the pointing of each image was determined
+from the image itself: the position and scale of the disk from a robust fit to the sunlit limb, with
+a median residual of 0.47~pixels, and the roll angle from the requirement that the cloud bands
+follow parallels of latitude, pooled over the images of each day, which gives \ang{-6.85} and
+\ang{-6.31} with bootstrap standard deviations of \ang{0.47} and \ang{0.25}. The images were
+corrected for limb darkening with Minnaert's law and for fixed-pattern blemishes of the camera,
+advected to a common epoch with the zonal wind profile of \citet{sromovsky1993}, cross-calibrated
+photometrically through their overlaps, and mosaicked on a grid of \ang{0.1}. The colour was
+derived from the geometric albedo spectrum of \citet{karkoschka1994}, modulated by mosaics made in
+the orange, green and blue filters, and converted to sRGB with the CIE~1931 colour-matching
+functions; the mean colour of the disk is sRGB (138, 182, 202). The map contains data over
+\SI{85}{\percent} of the surface, from the south pole to about \ang{40}N, at a resolution of 62 to
+70~km per pixel; the remaining northern latitudes are filled with mirrored southern bands. The
+individual methods are well established, and Voyager mosaics of Neptune at higher resolution exist;
+the contribution of this note is a documented, reproducible processing pipeline and a map released
+under an open licence.
+
+\medskip\noindent\textbf{Keywords:} Neptune; Voyager~2; image mosaicking; planetary photometry;
+true colour
+\end{abstract}
+
+\section{Introduction}
+
+StarLancer (1999) represents Neptune by a sphere of 720 triangles, or 320 at large distances, with
+a texture of $256\times256$ pixels. The Realistic Planets modification for OpenReliant replaces it
+with a sphere of \num{16128} triangles and a map derived from spacecraft images. The map has to
+remain sharp at large angular sizes: at one navigation point of the game the viewer is 0.59~million
+game units above the cloud tops, where the planet subtends about \ang{86}.
+
+Neptune has been mapped from Voyager~2 images since the encounter. The first results of the imaging
+team described the planet's bands and discrete features \citep{smith1989}, and the motions of its
+clouds were measured in detail by \citet{limaye1991} and \citet{sromovsky1993}. The mosaics
+produced by B.~Jónsson in 2014 from about 20 green- and clear-filter images taken at ranges of 3 to
+4~million~km are among the most detailed global views of the planet made since
+\citep{lakdawalla2014}; no licence for their reuse is stated. The approach described here follows
+the same general lines: calibrated, geometrically corrected images are projected onto a
+latitude-longitude grid, with the illumination removed by a photometric model.
+\citet{irwin2024} used spectra from the Hubble Space Telescope and the Very Large Telescope to
+rebalance colour images from Voyager~2 and Hubble, and showed that the true colour of Neptune is a
+pale greenish blue, only slightly bluer than that of Uranus. Hubble's Outer Planet Atmospheres
+Legacy (OPAL) programme maps Neptune regularly at two pixels per degree
+\citep{simon2015,opal}.
+
+For use in the game, the map was required to be global, sharp at large angular sizes, close to
+true colour, and available under an open licence. None of the products known to us met all four
+requirements: the Hubble maps resolve about 1000~km on Neptune, no licence is stated for Jónsson's
+mosaics, and the openly licensed maps of Neptune that we found are partly painted. We therefore
+made a new map from the calibrated Voyager~2 images, which are in the public domain.
+
+Section~\ref{sec:data} describes the data, Section~\ref{sec:methods} the methods,
+Section~\ref{sec:results} the results, and Section~\ref{sec:game} the adjustments made for the
+game. Section~\ref{sec:discussion} discusses the limitations of the map, and
+Section~\ref{sec:conclusions} concludes.
+
+\section{Data}\label{sec:data}
+
+\subsection{Voyager 2 images}
+
+The images were obtained from the PDS Ring-Moon Systems Node through its search service, OPUS,
+which also provides the range, sub-spacecraft point and sub-solar point of each image. OPUS lists
+716 narrow-angle camera images of Neptune taken between 14 and 25 August 1989. We used the GEOMED
+products of the data set VG2-N-ISS-2/3/4/6-PROCESSED-V1.0, which are radiometrically calibrated to
+$I/F$ \citep[the calibration of the cameras is described by][]{danielson1981} and geometrically
+corrected by resampling onto $1000\times1000$ pixels of \SI{7.842}{\micro\radian}.
+
+Two sets of images were selected (Table~\ref{tab:frames}). The luminance set consists of 10 clear-
+and green-filter images taken on 20 August, which cover all longitudes at 62 to 70~km per pixel
+at the centre of the disk. The colour set consists of eight triplets of orange-, green- and
+blue-filter images taken on 17 August at 97 to 109~km per pixel. In all 34 images the phase angle
+is \ang{15.0}, the planetocentric latitude of the sub-spacecraft point is \ang{-28.5} and that of
+the sub-solar point is \ang{-23.2}, so that the southern hemisphere is well observed, while high
+northern latitudes are seen obliquely or not at all. The whole disk fits within the frame at ranges
+beyond about 6.3~million~km; the images of 20 August are among the last in which it does, which
+matters for the determination of the pointing (Section~\ref{sec:pointing}).
+
+\begin{table}[htbp]
+\centering
+\caption{The images used. Times are UTC; the resolution is that of a raw pixel at the centre of
+the disk. The individual images and their geometry are listed in \texttt{frames.json} in the
+sources of the map.}
+\label{tab:frames}
+\begin{tabular}{llll}
+\toprule
+Set & Date (1989) and time & km per pixel & Images \\
+\midrule
+Luminance & 20 August, 00:31 to 15:13 & 62 to 70 & 7 clear, 3 green \\
+Colour & 17 August, 02:35 to 23:15 & 97 to 109 & 8 orange, 8 green, 8 blue \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Reference spectrum}
+
+The colour of the map is based on the geometric albedo spectrum of Neptune measured by
+\citet{karkoschka1994} at the European Southern Observatory from 23 to 26 July 1993, which covers
+300 to 1000~nm sampled at intervals of 0.4~nm. It is archived in the data set
+ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0 at the PDS Atmospheres Node \citep{karkoschka1998}.
+
+\subsection{Zonal winds}
+
+The clouds of Neptune move rapidly relative to the planet's rotation (System~III), at about
+\SI{400}{\metre\per\second} westward at the equator. We used the symmetric polynomial fitted by
+\citet{sromovsky1993} to the cloud motions measured in Voyager images,
+\begin{equation}
+U(\varphi) = -398 + 0.188\,\varphi^{2} - 1.2\times10^{-5}\,\varphi^{4}\quad\si{\metre\per\second},
+\label{eq:wind}
+\end{equation}
+where $\varphi$ is the planetographic latitude in degrees and $U$ is positive eastward.
+
+\section{Methods}\label{sec:methods}
+
+\subsection{Geometric model}
+
+Neptune is modelled as an oblate spheroid,
+\begin{equation}
+\frac{x^{2}+y^{2}}{a^{2}} + \frac{z^{2}}{c^{2}} = 1,
+\qquad a = \SI{24764}{\kilo\metre},\quad c = \SI{24341}{\kilo\metre},
+\label{eq:spheroid}
+\end{equation}
+in body-fixed coordinates with $z$ along the spin axis \citep{archinal2018}. Let $\vect{O}$ be the
+position of the spacecraft, $\unitv{f}$ the unit vector from the spacecraft towards the centre of
+Neptune, $\unitv{n}$ the unit vector along the projection of the spin axis onto the plane normal
+to $\unitv{f}$, and $\unitv{r} = \unitv{f}\times\unitv{n}$. A point $\vect{P}$ on the planet, with
+$\vect{d} = \vect{P} - \vect{O}$, is imaged at sample $u$ and line $v$ (increasing downwards):
+\begin{gather}
+\xi = \frac{\vect{d}\cdot\unitv{r}}{\vect{d}\cdot\unitv{f}}, \qquad
+\eta = \frac{\vect{d}\cdot\unitv{n}}{\vect{d}\cdot\unitv{f}},
+\label{eq:tangent}\\
+u = u_{0} + \frac{s}{p}\left(\xi\cos\theta - \eta\sin\theta\right), \qquad
+v = v_{0} - \frac{s}{p}\left(\xi\sin\theta + \eta\cos\theta\right).
+\label{eq:camera}
+\end{gather}
+Here $p = \SI{7.842}{\micro\radian}$ is the nominal pixel scale of the GEOMED products, and four
+parameters are fitted to each image: the position $(u_{0}, v_{0})$ of the centre of the planet, a
+scale factor $s$ close to unity, and the roll angle $\theta$, by which the projected spin axis is
+rotated counter-clockwise from the upward direction of the image. The inverse mapping intersects
+the ray through each pixel with the spheroid. The cosines of the emission and incidence angles,
+$\mu$ and $\mu_{0}$, are computed from the normal of the spheroid.
+
+\subsection{Disk centre and scale}\label{sec:pointing}
+
+Reconstructed pointing of the Voyager~2 scan platform during the Neptune encounter was not
+available to us: the C-kernel distributed by NASA's Navigation and Ancillary Information Facility
+(NAIF) describes the attitude of the spacecraft bus, not of the scan platform that carries the
+cameras. The pointing was therefore determined from each image. An initial estimate of
+$(u_{0}, v_{0}, s)$ was obtained by fitting a model disk with Minnaert limb darkening, including the
+terminator, to the image for a coarse set of roll angles. This estimate proved to be biased by up
+to 26~pixels, because the model is least accurate near the limb.
+
+The final estimate uses the sunlit limb alone. Along radial lines at intervals of \ang{1}, where
+the Sun is at least \ang{8.6} above the horizon ($\mu_{0} > 0.15$) at \SI{97}{\percent} of the
+model limb radius, the brightness profile is sampled every 0.25~pixels; the limb point
+$\vect{q}_{i}$ is located, by linear interpolation, where the profile falls to the mean of the
+median brightness just inside the limb (0.90 to 0.96 limb radii) and that of the sky (beyond 1.06
+limb radii). The parameters are then found by minimising
+\begin{equation}
+\sum_{i} \rho\!\left(\lVert\vect{q}_{i} - \vect{c}\rVert - R(\phi_{i};\, \vect{c}, s, \theta)\right),
+\qquad \rho(z) = 2\left(\sqrt{1 + z^{2}} - 1\right),
+\label{eq:limb}
+\end{equation}
+where $\vect{c} = (u_{0}, v_{0})$, $\phi_{i}$ is the direction of $\vect{q}_{i}$ from $\vect{c}$,
+$R$ is the distance of the model limb from $\vect{c}$ in that direction, in pixels, and $\rho$ is a
+robust loss with a scale of one pixel. The limb points are detected again with the updated model,
+three times in all.
+
+\subsection{Roll angle}\label{sec:roll}
+
+The outline of the disk constrains the roll angle only weakly: at a phase angle of \ang{15} it is
+nearly circular, and the quality of the limb fit changes by less than \SI{1}{\percent} over a range
+of \ang{30} in $\theta$. The roll angle was instead determined from the cloud bands, which on
+Neptune follow parallels of latitude. For a trial angle $\theta$, the image is projected onto a
+grid of \ang{0.5} in latitude and longitude between \ang{-72} and \ang{30} latitude, using only
+cells with $\mu, \mu_{0} > 0.45$, and the albedo (Equation~\ref{eq:albedo}) is divided by its
+median $\tilde{A}$ over the image. The cost
+\begin{equation}
+C(\theta) = \frac{\sum_{j} n_{j}\, M_{j}(\theta)^{2}}{\sum_{j} n_{j}}, \qquad
+M_{j} = \operatorname*{median}_{k} \left\lvert \frac{A_{jk}}{\tilde{A}} -
+\operatorname*{median}_{k} \frac{A_{jk}}{\tilde{A}} \right\rvert,
+\label{eq:cost}
+\end{equation}
+is the mean squared median absolute deviation of the albedo along the latitude rows $j$, each
+weighted by its number $n_{j}$ of valid cells $k$; rows with fewer than 60 valid cells are excluded.
+The median absolute deviation was preferred to the variance, which is dominated by discrete
+features such as the Great Dark Spot.
+
+The minima of single images scatter by several degrees. Since the roll of the camera relative to
+Neptune is expected to change little within a day, the curves were evaluated from \ang{-25} to
+\ang{10} in steps of \ang{0.5}, divided by their means, and summed over the images of each day. The
+roll angle of the day is the vertex of the parabola through the lowest sample of the summed curve
+and its two neighbours. Its statistical uncertainty was estimated by a bootstrap over the images of
+each day, with 2000 resamplings. The limb fit (Equation~\ref{eq:limb}) was then repeated with the
+roll angle of the day.
+
+\subsection{Fixed-pattern blemishes}
+
+The first mosaics showed small dark rings that remain at the same pixel positions in every image,
+whereas the clouds do not. To isolate them, the band-pass-filtered brightness of each image (a
+Gaussian of 1.5~pixels minus one of 10~pixels, divided by the latter) was averaged in camera
+coordinates over the disks of all 34 images (Figure~\ref{fig:blemishes}). Five compact rings were
+identified with a Laplacian-of-Gaussian filter and confirmed visually. Within 26~pixels of the
+centre of each, every image is divided by one plus this averaged pattern. Masking the rings instead
+left gaps in the mosaic where only one image observed a region well. Isolated deviant pixels,
+differing from the median of their $3\times3$ neighbourhood by more than 0.02 in $I/F$, are
+replaced by that median.
+
+\subsection{Photometric model}
+
+Limb darkening is described by Minnaert's law \citep{minnaert1941},
+\begin{equation}
+\frac{I}{F} = B\,\mu_{0}^{k}\,\mu^{k-1},
+\label{eq:minnaert}
+\end{equation}
+fitted to each image by linear least squares in the form
+$\ln(\mu\,I/F) = \ln B + k\ln(\mu\mu_{0})$, using pixels with $\mu, \mu_{0} > 0.25$. The albedo of
+a point is then
+\begin{equation}
+A = \frac{I/F}{\mu_{0}^{k}\,\mu^{k-1}}.
+\label{eq:albedo}
+\end{equation}
+For the luminance set, $A$ is divided by the fitted $B$ of each image, so that clear- and
+green-filter images can be combined; for the colour sets, $B$ is retained, since the ratios between
+the filters carry the colour.
+
+\subsection{Photometric cross-calibration}
+
+Equation~\eqref{eq:minnaert} is least accurate at large emission and incidence angles, and north of
+the equator all images observe the clouds obliquely. The first mosaics therefore showed steps in
+brightness where one image took over from another. Where images overlap, the same location is
+observed at different angles, which allows a cross-calibration. For each pair of images $(i, j)$
+with at least 2000 common grid cells where $\mu, \mu_{0} > 0.3$ in both, up to \num{20000} cells
+were drawn at random, and the model
+\begin{equation}
+\ln\frac{A_{i}}{A_{j}} = g_{i} - g_{j} +
+\left[\vect{b}(\mu_{i}, \mu_{0,i}) - \vect{b}(\mu_{j}, \mu_{0,j})\right]\cdot\boldsymbol{\beta},
+\qquad
+\vect{b}(\mu, \mu_{0}) = \left(\bar\mu,\ \bar\mu^{2},\ \bar\mu_{0},\ \bar\mu_{0}^{2},\
+\bar\mu\,\bar\mu_{0}\right),
+\label{eq:selfcal}
+\end{equation}
+with $\bar\mu = 1 - \mu$ and $\bar\mu_{0} = 1 - \mu_{0}$, was fitted by least squares, subject to
+$\sum_{i} g_{i} = 0$. Here $g_{i}$ is a gain for each image and $\boldsymbol{\beta}$ the
+coefficients of an empirical correction to Equation~\eqref{eq:minnaert} shared by all images of a
+set. Samples with residuals larger than four times the robust standard deviation
+($1.4826$ times the median absolute deviation) were excluded and the fit repeated, four times in
+all, so that clouds that moved differently from Equation~\eqref{eq:wind} do not bias the solution.
+Each image is then divided by $\exp\left(g_{i} + \vect{b}\cdot\boldsymbol{\beta}\right)$.
+
+\subsection{Temporal registration and mosaicking}
+
+Each image is projected onto a grid of \ang{0.1} (luminance) or \ang{0.25} (colour) in
+planetographic latitude and east longitude, after the clouds at each latitude have been moved to
+the epoch of 20 August 1989, 08:00~UTC, by
+\begin{equation}
+\Delta\lambda = \frac{U(\varphi)\,\Delta t}{N(\varphi)\cos\varphi}, \qquad
+N(\varphi) = \frac{a}{\sqrt{1 - e^{2}\sin^{2}\varphi}}, \qquad e^{2} = 1 - \frac{c^{2}}{a^{2}},
+\label{eq:drift}
+\end{equation}
+where $\Delta t$ is the time from the image to the epoch and $N\cos\varphi$ the distance from the
+spin axis. Cells with $\mu$ or $\mu_{0}$ below 0.25, or within 6~pixels of the edge of the valid
+image area, are discarded. Each remaining cell of image $i$ receives the weight
+\begin{equation}
+w_{i} = \left[\frac{(\mu\,\mu_{0})^{2}\, e_{i}}{r_{i}^{2}}\right]^{3}, \qquad
+e_{i} = \min\!\left(1, \frac{D_{i}}{40}\right),
+\label{eq:weight}
+\end{equation}
+where $r_{i}$ is the resolution of the image in km per pixel and $D_{i}$ the distance of the cell
+from the edge of the valid image area, in pixels. The mosaic is the weighted mean of the calibrated
+albedos,
+\begin{equation}
+\bar{A} = \frac{\sum_{i} w_{i}\,A_{i}\,\exp\left(-g_{i} - \vect{b}_{i}\cdot\boldsymbol{\beta}\right)}
+{\sum_{i} w_{i}}.
+\label{eq:mosaic}
+\end{equation}
+The cube in Equation~\eqref{eq:weight} lets the best observation of each location dominate
+without hard seams, and limits the averaging of observations made at different times, which
+would otherwise double features whose motion departs from Equation~\eqref{eq:wind}.
+
+\subsection{Colour}\label{sec:colour}
+
+The orange, green and blue filters of the narrow-angle camera have effective wavelengths of about
+591, 566 and 479~nm. They do not sample the red part of the spectrum, where absorption by methane
+is strongest and which strongly affects the colour of Neptune, so they cannot provide its true
+colour on their own. The mean colour was therefore taken from the reference spectrum $A(\lambda)$,
+and the filter mosaics were used only to modulate it. The linear sRGB colour of a reflectance
+spectrum is
+\begin{equation}
+\vect{c} = \sum_{\lambda} A(\lambda)\,\vect{m}(\lambda), \qquad
+\vect{m}(\lambda) = \mathsf{T}\,\frac{S(\lambda)\,\bar{\vect{x}}(\lambda)}
+{\sum_{\lambda'} S(\lambda')\,\bar{y}(\lambda')},
+\label{eq:colour}
+\end{equation}
+where $S$ is the spectrum of a black body at 5778~K standing in for sunlight,
+$\bar{\vect{x}} = (\bar{x}, \bar{y}, \bar{z})$ are the CIE~1931 colour-matching functions in the
+analytic form of \citet{wyman2013}, and $\mathsf{T}$ is the product of the matrix from CIE~XYZ to
+linear sRGB \citep{iec1999} and a Bradford chromatic adaptation \citep{lam1985} from the white
+point of $S$ to D65, so that a perfect white reflector gives $(1, 1, 1)$. At each location
+$\vect{x}$ of the map, the colour is
+\begin{equation}
+\vect{c}(\vect{x}) = \sum_{f} q_{f}(\vect{x}) \sum_{\lambda} A(\lambda)\,h_{f}(\lambda)\,
+\vect{m}(\lambda),
+\label{eq:modulated}
+\end{equation}
+where $f$ runs over the blue, green and orange filters, $q_{f}$ is the mosaic of filter $f$
+divided by its mean between \ang{60}S and \ang{20}N and smoothed with a Gaussian of standard
+deviation \ang{2}, and the $h_{f}$ are piecewise-linear functions that sum to one: $h_{\mathrm{B}}$
+falls from 1 at 479~nm to 0 at 566~nm, $h_{\mathrm{O}}$ rises from 0 at 566~nm to 1 at 591~nm, and
+$h_{\mathrm{G}} = 1 - h_{\mathrm{B}} - h_{\mathrm{O}}$. The colour images were taken three days
+before the epoch, and the motions of discrete features depart from Equation~\eqref{eq:wind} over
+that interval, which is why the colour is smoothed and the brightness is taken from the luminance
+mosaic alone. The texture is
+\begin{equation}
+\vect{t}(\vect{x}) = \frac{\vect{c}(\vect{x})}{Y\!\left(\vect{c}(\vect{x})\right)}\,
+Y(\bar{\vect{c}})\,\kappa\,\max\!\left(0.05,\ 1 + E\left[L'(\vect{x}) - 1\right]\right),
+\label{eq:texture}
+\end{equation}
+where $Y(\vect{c}) = 0.2126\,c_{\mathrm{R}} + 0.7152\,c_{\mathrm{G}} + 0.0722\,c_{\mathrm{B}}$ is the
+luminance, $\bar{\vect{c}}$ the colour of the unmodulated spectrum, $L'$ the luminance mosaic
+divided by its mean between \ang{60}S and \ang{20}N and completed at high northern latitudes
+(Section~\ref{sec:north}), and $E$ a contrast factor, equal to one for the true-colour map. The factor $\kappa$ converts the geometric albedo of the spectrum to the Minnaert
+albedo of the mosaics: it is the ratio of the mean of the green mosaic between \ang{60}S and
+\ang{20}N to the spectrum's albedo in a Gaussian passband of standard deviation 17~nm centred on
+566~nm. The result is resampled to $4096\times2048$ pixels with a Lanczos filter in linear light
+and encoded in 8-bit sRGB.
+
+\subsection{High northern latitudes}\label{sec:north}
+
+North of \ang{32}N all images observe the clouds close to the limb, and the data end between
+\ang{37}N and \ang{47}N. Between \ang{32}N and \ang{40}N the relative luminance map $L$ is blended
+into a mirror image of the southern hemisphere,
+\begin{gather}
+L'(\varphi, \lambda) = \left[1 - \sigma(\varphi)\right] L(\varphi, \lambda) + \sigma(\varphi)\,
+\langle L(-\varphi, \cdot)\rangle_{\ang{45}},
+\label{eq:fill}\\
+\sigma = t^{2}(3 - 2t), \qquad t = \min\!\left(1, \max\!\left(0, \frac{\varphi - \ang{32}}{\ang{8}}
+\right)\right),
+\nonumber
+\end{gather}
+where $\langle\cdot\rangle_{\ang{45}}$ denotes a running mean over \ang{45} of longitude, applied
+after a Gaussian smoothing of standard deviation \ang{0.3}, so that no individual feature appears
+twice. Where $L$ is undefined, $L' = \langle L(-\varphi, \cdot)\rangle_{\ang{45}}$. The colour is
+blended likewise with its mirror image. This fill is a plausible extrapolation, not data.
+
+\section{Results}\label{sec:results}
+
+\subsection{Pointing}
+
+The limb fits used 67 to 221 points per image, with root-mean-square residuals between 0.37 and
+0.81~pixels and a median of 0.47~pixels (Figure~\ref{fig:frame}). The scale factor is
+$s = 0.9976 \pm 0.0009$ (mean and standard deviation over the 34 images), with a range of 0.9949 to
+0.9996. This small, consistent departure from unity absorbs any error in the nominal pixel scale as
+well as any systematic offset between the half-intensity limb and the model limb.
+
+The summed roll-angle curves have well-defined minima (Figure~\ref{fig:twist}). The roll angle is
+\ang{-6.85} on 17 August (24 images) and \ang{-6.31} on 20 August (10 images), with bootstrap
+standard deviations of \ang{0.47} and \ang{0.25}. For 23 of the 34 images, the minimum of the
+individual curve lies within \ang{1} of the value of its day. The result is also sensitive to
+details of the processing: computing the Minnaert exponents with the biased initial disk centres
+instead of the limb-fitted ones changed the roll angles by \ang{0.94} and \ang{0.19}. We therefore
+regard the roll angles as uncertain by about \ang{1}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.55\textwidth]{figures/frame.jpg}
+\caption{Clear-filter image C1124452, taken on 20 August 1989 at 66~km per pixel, with lines of
+latitude and longitude every \ang{15} from the fitted pointing; the equator is shown in green and
+the meridian \ang{0} in yellow. The disk centre and scale were fitted to the limb, the roll angle
+to the cloud bands. The Great Dark Spot is to the right of the centre. The brightness is
+displayed with a power of 1.8.}
+\label{fig:frame}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\input{figures/twist.tex}
+\caption{The roll-angle cost (Equation~\ref{eq:cost}) of each image divided by its mean (thin
+lines), the mean over the images of each day (thick lines), and the roll angle adopted for each
+day (dashed lines).}
+\label{fig:twist}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/blemishes.jpg}
+\caption{The band-pass-filtered brightness averaged in camera coordinates over all 34 images.
+The five fixed rings that are corrected are circled; the arcs are the limbs of the individual
+images.}
+\label{fig:blemishes}
+\end{figure}
+
+\subsection{Photometry}
+
+The fitted Minnaert parameters (Table~\ref{tab:minnaert}) are consistent between images of the
+same filter, with standard deviations of 0.003 to 0.005 in $k$, and the exponent increases towards
+shorter wavelengths. The cross-calibration of the luminance set used \num{900000} pairs of samples,
+of which \SI{0.4}{\percent} were rejected, and the robust standard deviation of the residuals is
+\SI{2.2}{\percent}. The fitted gains lie between 0.995 and 1.007, while the shared correction ranges
+from 0.942 to 1.035 between the 1st and 99th percentiles of the cells used; it is this angular
+correction that removes the steps in brightness between images (Figure~\ref{fig:calibration}).
+
+\begin{table}[htbp]
+\centering
+\caption{Minnaert parameters by filter: the mean exponent $k$ with its standard deviation over the
+images, and the mean albedo $B$.}
+\label{tab:minnaert}
+\begin{tabular}{lrcc}
+\toprule
+Filter & Images & $k$ & $B$ \\
+\midrule
+Orange (591~nm) & 8 & $0.680 \pm 0.003$ & 0.397 \\
+Green (566~nm) & 11 & $0.712 \pm 0.003$ & 0.505 \\
+Clear & 7 & $0.752 \pm 0.003$ & 0.592 \\
+Blue (479~nm) & 8 & $0.768 \pm 0.005$ & 0.628 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/calibration.jpg}
+\caption{The luminance mosaic from \ang{80}S to \ang{50}N, with its contrast stretched to show
+errors, before (top) and after (bottom) the photometric cross-calibration. North is up and the
+meridian \ang{0} is in the middle. Dark red marks the absence of data.}
+\label{fig:calibration}
+\end{figure}
+
+\subsection{Colour}
+
+The unmodulated spectrum gives the linear sRGB colour $\bar{\vect{c}} = (0.252, 0.471, 0.589)$, or
+(138, 182, 202) in 8-bit sRGB: a pale, slightly greyish cyan blue, broadly consistent with the
+colour found by \citet{irwin2024}. As a check of consistency, the ratios between the filters were
+compared with those of the spectrum in Gaussian passbands of standard deviation 17~nm. The ratio
+of blue to green is 1.267 in the spectrum and 1.242 in the mean Minnaert albedos of the colour
+images, which agree to within \SI{2}{\percent}; the ratio of orange to green is 0.862 and 0.786. The
+larger difference in orange may arise from the long-wavelength tail of the orange filter, which
+extends into the methane band at 619~nm, from the simplified passbands, and from changes in the
+planet between 1989 and 1993. Since the map takes only the variations of each filter about its
+own mean from the Voyager images (Equation~\ref{eq:modulated}), this difference does not affect
+its colour. The factor $\kappa$ in Equation~\eqref{eq:texture} is 1.155.
+
+\subsection{The map}
+
+The map contains data over \SI{84.8}{\percent} of the surface. It is complete in longitude up to
+\ang{36.8}N and has partial coverage up to \ang{46.8}N. In true colour, the brightness varies little:
+between \ang{70}S and \ang{30}N the standard deviation of $L$ is \SI{3.8}{\percent}, and
+\SI{96}{\percent} of the area lies between \SI{8.2}{\percent} below and \SI{5.9}{\percent} above the
+mean. The bands and the large discrete features observed by Voyager~2, including the Great Dark
+Spot and its bright companion clouds, the bright feature known as the Scooter, and the second dark
+spot with its bright core, are visible in the map (Figures~\ref{fig:maps}
+and~\ref{fig:views}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/maps.jpg}
+\caption{The map in true colour ($E = 1$, top) and as distributed for the game ($E = 3$, with the
+blue channel raised as described in Section~\ref{sec:game}, bottom). Equirectangular projection,
+north up, meridian \ang{0} in the middle, east to the right.}
+\label{fig:maps}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/views.jpg}
+\caption{Orthographic views of the map with Minnaert shading ($k = 0.75$), seen from \ang{25}S and
+illuminated from \ang{15} east of the viewer, rendered by the script \texttt{render.py} of the
+sources and not by the game. Top: true colour under white light. Bottom: the texture as
+distributed, under the colour of the game's light, without the game's tone curve. Left: the Great
+Dark Spot and its companion clouds. Middle: the second dark spot and, above it, the Scooter.
+Right: the hemisphere away from both.}
+\label{fig:views}
+\end{figure}
+
+\section{Adaptation for StarLancer}\label{sec:game}
+
+Three adjustments were made for the game alone; they are not part of the measured map. First, a
+brightness variation of a few per cent appears featureless on a game screen, so the texture uses
+$E = 3$ in Equation~\eqref{eq:texture}, in the same spirit as the contrast stretches applied to
+published Voyager images of Neptune. The mean colour is unchanged by this. Second, the game
+illuminates a planet with a single light of colour $(1, 1, 0.8)$, which its tone curve turns into
+a pronounced yellow cast; the blue channel of the texture is therefore divided by 0.8. The texture
+is equirectangular, with north at the top, the meridian \ang{0} in the middle column, and east to
+the right, as the spheres of the mod are mapped.
+
+Third, the limb is rendered with the part of Minnaert's law that depends on the viewing geometry.
+A surface shader multiplies the texture, in linear light, by $\mu^{k-1}$ in each colour channel,
+with the exponents of Table~\ref{tab:minnaert}: that of the orange filter for the red channel, for
+lack of a red filter, and those of the green and blue filters. Since the law was fitted only for
+$\mu \geq 0.25$, the factor is held constant closer to the limb, where it reaches about 1.5 in red
+and 1.4 in blue; the centre of the disk is unchanged. As $k$ is smallest in red, the sunlit limb
+becomes both brighter and paler. The game's own illumination of the planet, the cosine of the
+incidence angle extended past the terminator, $\max\left(0, (\mu_{0} + 0.25)/1.25\right)$, stands
+in for $\mu_{0}^{k}$. It agrees with $\mu_{0}^{0.75}$ to within \SI{1}{\percent} for
+$\mu_{0} \geq 0.5$, but exceeds it by \SI{13}{\percent} at $\mu_{0} = 0.25$ and illuminates a band
+of about \ang{14} beyond the terminator. Applying the full law would require the direction of
+illumination within the shader, which the engine does not yet provide.
+
+\section{Discussion}\label{sec:discussion}
+
+At 62 to 70~km per pixel, the map is coarser than the mosaics by Jónsson
+\citep{lakdawalla2014}, which were made from images taken at 3 to 4~million~km, but it is available under an open licence, and every step
+of its construction can be repeated from the archived data. Its main limitations are the
+following.
+
+\paragraph{High northern latitudes.} North of \ang{40}N the map contains mirrored southern bands
+(Equation~\ref{eq:fill}) rather than data, and between \ang{32}N and \ang{40}N a blend of the two.
+
+\paragraph{Different epochs.} The luminance images span 15~hours and the colour images were taken
+three days earlier. Equation~\eqref{eq:wind} describes the zonal mean motion; discrete features
+drift at their own rates and change shape within hours, so their positions, and the colour around
+them, are approximate. This applies to any mosaic of Neptune assembled from images taken over
+hours or days.
+
+\paragraph{Images at higher resolution.} Images from 21 and 22 August, at 30 to 53~km per pixel,
+could double the resolution. We attempted to include them, but most do not contain enough of the
+limb to fix their pointing, the roll angle appears to change by several degrees after 20 August,
+and the clouds had changed shape within a day or two; the resulting mosaic showed curved seams and
+mismatched features, and these images were left out. Including them would require the pointing of
+the scan platform, or mosaics of images taken close together in time, which would then be combined.
+
+\paragraph{Roll angle.} A single roll angle is assumed for each day, uncertain by about \ang{1}
+(Section~\ref{sec:results}). An independent check against reconstructed pointing, should it
+become available, would be valuable.
+
+\paragraph{Photometry.} Minnaert's law with a shared empirical correction is a simple description
+of the scattering by Neptune's hazy atmosphere. The residual scatter of \SI{2.2}{\percent} in the
+cross-calibration is comparable to the contrast of many features.
+
+\paragraph{Colour.} The reference spectrum was measured four years after the encounter, and the
+filter passbands are approximated. The colour of the texture as it appears in the game is further
+affected by the game's lighting and tone curve.
+
+\paragraph{Validation.} The positions of features in the map have not been compared quantitatively
+with the positions tracked by \citet{sromovsky1993}; such a comparison would provide an
+independent test of the pointing and of the advection.
+
+\section{Conclusions}\label{sec:conclusions}
+
+We have constructed a global map of Neptune's albedo and colour from 34 Voyager~2 narrow-angle
+camera images, with the pointing of each image determined from its limb and from the zonal
+symmetry of the cloud bands, a photometric cross-calibration through the overlaps of the images,
+and a colour derived from a ground-based spectrum. The map covers \SI{85}{\percent} of the surface
+with data at 62 to 70~km per pixel. Its value lies less in the novelty of any step than in its
+documentation, its reproducibility from public data, and its open licence.
+
+\section*{Data and code availability}
+
+The map, the scripts that produce it from the archived data, and the source of this note are
+available in the \href{https://github.com/OpenReliant/openreliant-mods}{OpenReliant mods
+collection}, under \texttt{sources/realistic-planets}: the list of images with their geometry and
+download addresses, and Python scripts using NumPy, SciPy and ImageMagick for the download, the
+pointing, the fixed-pattern correction, the mosaics and the composition, which \texttt{build.sh}
+runs in order. The map and this note are released under the Creative Commons Attribution 4.0
+licence, crediting OpenReliant and NASA/JPL; the scripts are released under the Mozilla Public
+License 2.0.
+
+\section*{Acknowledgements}
+
+This work used data from the NASA Planetary Data System: the Voyager~2 images provided by the
+Ring-Moon Systems Node and the spectra of E.~Karkoschka provided by the Atmospheres Node. The
+Voyager images are courtesy of NASA/JPL-Caltech. The processing pipeline and this note were
+developed with the assistance of an AI model (Claude, by Anthropic), under the author's
+direction.
+
+{\small
+\begin{thebibliography}{99}
+\bibitem[{Archinal et~al.(2018)}]{archinal2018}
+Archinal, B.~A., Acton, C.~H., A'Hearn, M.~F., et~al. 2018, Report of the IAU Working Group on
+Cartographic Coordinates and Rotational Elements: 2015, \textit{Celestial Mechanics and Dynamical
+Astronomy}, 130, 22
+
+\bibitem[{Danielson et~al.(1981)}]{danielson1981}
+Danielson, G.~E., Kupferman, P.~N., Johnson, T.~V., \& Soderblom, L.~A. 1981, Radiometric
+performance of the Voyager cameras, \textit{Journal of Geophysical Research}, 86, 8683
+
+\bibitem[{IEC(1999)}]{iec1999}
+IEC 1999, IEC 61966-2-1: Multimedia systems and equipment, Colour measurement and management,
+Part 2-1: Default RGB colour space, sRGB (Geneva: International Electrotechnical Commission)
+
+\bibitem[{Irwin et~al.(2024)}]{irwin2024}
+Irwin, P.~G.~J., et~al. 2024, Modelling the seasonal cycle of Uranus's colour and magnitude, and
+comparison with Neptune, \textit{Monthly Notices of the Royal Astronomical Society}, 527, 11521
+
+\bibitem[{Karkoschka(1994)}]{karkoschka1994}
+Karkoschka, E. 1994, Spectrophotometry of the Jovian planets and Titan at 300- to 1000-nm
+wavelength: the methane spectrum, \textit{Icarus}, 111, 174
+
+\bibitem[{Karkoschka(1998)}]{karkoschka1998}
+Karkoschka, E. 1998, Methane spectrophotometry of the Jovian planets and Titan at 300- to 1000-nm,
+ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0, NASA Planetary Data System, doi:10.17189/2bp8-k793
+
+\bibitem[{Lakdawalla(2014)}]{lakdawalla2014}
+Lakdawalla, E. 2014, Best-ever Neptune mosaics for the 25th anniversary of Voyager 2's flyby
+(mosaics by B.~Jónsson), The Planetary Society, 25 August 2014
+
+\bibitem[{Lam(1985)}]{lam1985}
+Lam, K.~M. 1985, Metamerism and colour constancy, PhD thesis, University of Bradford
+
+\bibitem[{Limaye \& Sromovsky(1991)}]{limaye1991}
+Limaye, S.~S., \& Sromovsky, L.~A. 1991, Winds of Neptune: Voyager observations of cloud motions,
+\textit{Journal of Geophysical Research}, 96, 18941
+
+\bibitem[{Minnaert(1941)}]{minnaert1941}
+Minnaert, M. 1941, The reciprocity principle in lunar photometry, \textit{The Astrophysical
+Journal}, 93, 403
+
+\bibitem[{OPAL Team(2015)}]{opal}
+OPAL Team 2015, Outer Planet Atmospheres Legacy (OPAL), Hubble high-level science products,
+Mikulski Archive for Space Telescopes, doi:10.17909/T9G593
+
+\bibitem[{Simon et~al.(2015)}]{simon2015}
+Simon, A.~A., Wong, M.~H., \& Orton, G.~S. 2015, First results from the Hubble OPAL program:
+Jupiter in 2015, \textit{The Astrophysical Journal}, 812, 55
+
+\bibitem[{Smith et~al.(1989)}]{smith1989}
+Smith, B.~A., Soderblom, L.~A., Banfield, D., et~al. 1989, Voyager 2 at Neptune: imaging science
+results, \textit{Science}, 246, 1422
+
+\bibitem[{Sromovsky et~al.(1993)}]{sromovsky1993}
+Sromovsky, L.~A., Limaye, S.~S., \& Fry, P.~M. 1993, Dynamics of Neptune's major cloud features,
+\textit{Icarus}, 105, 110
+
+\bibitem[{Wyman et~al.(2013)}]{wyman2013}
+Wyman, C., Sloan, P.-P., \& Shirley, P. 2013, Simple analytic approximations to the CIE XYZ color
+matching functions, \textit{Journal of Computer Graphics Techniques}, 2, 1
+\end{thebibliography}
+}
+
+\end{document}

@@ -1,0 +1,13 @@
+Realistic Planets, a mod for OpenReliant
+========================================
+
+The textures (realistic_planets_*.png) and the thumbnail (mod.png) are made by OpenReliant from
+NASA/JPL's Voyager 2 images, which are in the public domain. They, and the note on how they are
+made (neptune-voyager-map.pdf), are shared under CC BY 4.0
+(https://creativecommons.org/licenses/by/4.0/): you may share and adapt them for any purpose,
+crediting "OpenReliant, from NASA/JPL Voyager 2 data".
+
+The spheres (*.shp), mod.ini and the scripts that make the mod's files are OpenReliant's, under the
+Mozilla Public License 2.0.
+
+README.md lists every source used and how each texture is made.
