@@ -1,5 +1,5 @@
-"""Venus's photometry, shared by `compose.py` and `limb.py`: its spectrum in the visible, at the phase
-angle the texture takes its colour at, and Minnaert's law fitted to a map or a frame."""
+"""Venus's spectrum in the visible, at the phase angle the texture takes its colour at, shared by
+`compose.py` and `limb.py`."""
 import numpy as np
 
 # Mallama, Krobusek and Pavlov (2017): Venus's geometric albedo in the Sloan bands and the Johnson B
@@ -17,8 +17,6 @@ BANDS = {
 # The phase angle whose colour the texture takes, degrees, and the Sun's B-V (Table 6).
 PHASE = 45.0
 SUN_B_V = 0.65
-# The least cells a band of latitude needs for its brightness to count in fitting Minnaert's law.
-BAND_CELLS = 50
 
 
 def fainter(coefficients):
@@ -39,25 +37,3 @@ def b_minus_v(values):
     """The B-V colour of albedos in the order of `BANDS`."""
     names = list(BANDS)
     return SUN_B_V - 2.5 * np.log10(values[names.index('B')] / values[names.index('V')])
-
-
-def channels(lam, albedo, matrix):
-    """Each sRGB channel's wavelength for a spectrum, nm: the mean of the wavelengths it takes in, weighted
-    by how much of each it takes in. `matrix` is `truecolour.matrix(lam)`."""
-    weights = np.clip(matrix, 0, None) * albedo[:, None]
-    return (lam[:, None] * weights).sum(axis=0) / weights.sum(axis=0)
-
-
-def minnaert(radiance, mu0, mu, good, bands):
-    """Minnaert's exponent k, by which I/F = B mu0^k mu^(k - 1), fitted where `good`. Each band of
-    latitude, numbered in `bands`, with at least `BAND_CELLS` good cells, has a brightness B of its own,
-    so that the bands' own brightness, such as the dark equator where the sun stands highest, doesn't
-    count as limb darkening."""
-    x = np.log(mu0[good] * mu[good])
-    y = np.log(radiance[good] * mu[good])
-    band = bands[good]
-    cells = np.bincount(band)
-    x -= (np.bincount(band, x) / np.maximum(cells, 1))[band]
-    y -= (np.bincount(band, y) / np.maximum(cells, 1))[band]
-    kept = cells[band] >= BAND_CELLS
-    return np.sum(x[kept] * y[kept]) / np.sum(x[kept] ** 2)

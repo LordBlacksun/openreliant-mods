@@ -54,6 +54,16 @@ shaders.register_surface({
     parameters = { 1.070, 1.077, 0.982, 0.25 },
 })
 
+-- Titan: the exponents of Cassini's frames of 2010 (0.876 at 463 nm, 0.897 at 568 and 0.855 at 647),
+-- at the red, green and blue channels' wavelengths for Titan's spectrum (606, 544 and 455 nm), and the
+-- same least cosine.
+shaders.register_surface({
+    name = "titan",
+    shader = "minnaert.glsl",
+    textures = { "realistic_planets_titan" },
+    parameters = { 0.877, 0.892, 0.876, 0.25 },
+})
+
 -- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least
 -- 1.1 degrees from edge on, and blended to suit the planet's lit side behind it, about 0.5 encoded.
 shaders.register_surface({

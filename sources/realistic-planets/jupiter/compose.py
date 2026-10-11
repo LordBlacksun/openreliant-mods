@@ -110,8 +110,7 @@ wavelengths = sorted(measured)
 # Each channel's wavelength, for Jupiter's spectrum: the mean of the wavelengths it takes in.
 lam, albedo = tc.karkoschka(spectrum, 'jupiter')
 weights = tc.matrix(lam)
-channel = np.array([np.sum(lam * np.clip(weights[:, c], 0, None) * albedo) / np.sum(np.clip(weights[:, c], 0, None) * albedo)
-                    for c in range(3)])
+channel = tc.channels(lam, albedo, weights)
 
 # Each channel's contrast brought to Jupiter's own, about its geometric mean.
 band = np.abs(lats) <= centric(CONTRAST_LATITUDE)

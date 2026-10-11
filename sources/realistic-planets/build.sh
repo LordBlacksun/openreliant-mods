@@ -25,6 +25,7 @@ spheres jupiter jupiter 1280625 1024500 1197545 958036
 spheres uranus uranus 1280625 1280625 1251264 1251264
 # Venus's far model is a little larger than its near one.
 spheres venus venus1 1280625 1296633
+spheres titan titan 288141 288141
 
 # Saturn and its ring, at their real proportions: radii of 60,268 and 54,364 km (IAU), and the ring
 # from 74,000 to 141,000 km, as its texture is. They're scaled so that the A ring's outer edge,
@@ -38,25 +39,28 @@ python3 sphere.py "$work/saturn_lo.obj" --radius 2020365 --polar 1822445 --textu
 "$sltool" shp from-obj "$work/saturn_hi.obj" "$mod/saturn_hi_ring_2.shp"
 "$sltool" shp from-obj "$work/saturn_lo.obj" "$mod/saturn_lo_ring_1.shp"
 
-# The thumbnail, the planets in their order out from the sun's far side: Neptune facing its Great Dark
-# Spot, Uranus from the north it shows now, Saturn and its ring from 25 degrees north, Jupiter facing
-# its Great Red Spot, and Venus from 10 degrees north, facing the bright clouds north of its equator,
-# lit as the game lights them, flattened as their spheres are, each 104 pixels across. Each is drawn
-# at four times its size and scaled down, so that the texture doesn't alias.
-python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 416 --lat -25 --lon 37 \
-    --sun-lat -26 --sun-lon 52 --light 1 1 0.8
-python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 416 --lat 35 --lon 0 \
-    --sun-lat 34 --sun-lon 15 --k 0.8 --light 1 1 0.8 --polar 0.9771
-python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 940 --aspect 1.075 --extent 2.258 \
+# The thumbnail: Saturn and its ring from 25 degrees north on the left, the other planets in their
+# order out from the sun's far side to its right, Neptune facing its Great Dark Spot, Uranus from the
+# north it shows now, Jupiter facing its Great Red Spot and Venus from 10 degrees north, facing the
+# bright clouds north of its equator, and the moons below them, Titan facing Xanadu. They're lit as
+# the game lights them and flattened as their spheres are, Saturn 124 pixels across and the others
+# 92. Each is drawn at four times its size and scaled down, so that the texture doesn't alias.
+python3 render.py "$mod/realistic_planets_saturn.png" "$work/saturn.png" --size 1120 --aspect 1.075 --extent 2.258 \
     --lat 25 --lon 30 --sun-lat 26 --sun-lon 50 --k 0.7 --light 1 1 0.8 --polar 0.9020 \
     --ring "$mod/realistic_planets_saturn_rings.png" 1.2279 2.3396
-python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 416 --lat -15 --lon -46 \
+python3 render.py "$mod/realistic_planets_neptune.png" "$work/neptune.png" --size 368 --lat -25 --lon 37 \
+    --sun-lat -26 --sun-lon 52 --light 1 1 0.8
+python3 render.py "$mod/realistic_planets_uranus.png" "$work/uranus.png" --size 368 --lat 35 --lon 0 \
+    --sun-lat 34 --sun-lon 15 --k 0.8 --light 1 1 0.8 --polar 0.9771
+python3 render.py "$mod/realistic_planets_jupiter.png" "$work/jupiter.png" --size 368 --lat -15 --lon -46 \
     --sun-lat -16 --sun-lon -31 --k 0.97 --light 1 1 0.8 --polar 0.9351
-python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 416 --lat 10 --lon 45 \
+python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 368 --lat 10 --lon 45 \
     --sun-lat 9 --sun-lon 60 --k 1.08 --light 1 1 0.8
-magick \( "$work/neptune.png" "$work/uranus.png" -colorspace RGB -resize 104x104 -colorspace sRGB \
-    -background black -gravity center -extent 112x280 \) \
-    \( "$work/saturn.png" -colorspace RGB -resize 252x235 -colorspace sRGB -background black -gravity center -extent 252x280 \) \
-    \( "$work/jupiter.png" "$work/venus.png" -colorspace RGB -resize 104x104 -colorspace sRGB \
-    -background black -gravity center -extent 112x280 \) \
+python3 render.py "$mod/realistic_planets_titan.png" "$work/titan.png" --size 368 --lat 15 --lon -100 \
+    --sun-lat 14 --sun-lon -85 --k 0.89 --light 1 1 0.8
+magick \( "$work/saturn.png" -colorspace RGB -resize 301x280 -colorspace sRGB -background black -gravity center -extent 301x280 \) \
+    \( \( "$work/neptune.png" "$work/uranus.png" "$work/jupiter.png" "$work/venus.png" -colorspace RGB -resize 92x92 \
+    -colorspace sRGB -background black -gravity center -extent 99x140 +append \) \
+    \( "$work/titan.png" -colorspace RGB -resize 92x92 -colorspace sRGB -background black -gravity center -extent 99x140 \
+    -extent 396x140 \) -append \) \
     +append -background black -gravity center -extent 700x280 +repage -define png:exclude-chunks=date,time "$mod/mod.png"

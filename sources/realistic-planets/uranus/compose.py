@@ -35,6 +35,7 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import fits  # noqa: E402
+import globe  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -76,12 +77,6 @@ def row_means(m):
     return np.where(count > 0, total / np.maximum(count, 1), np.nan)
 
 
-def area_mean(m, rows):
-    """The mean of `m` over `rows`, weighted by area."""
-    weights = np.broadcast_to(area[rows], m[rows].shape)
-    return np.sum(m[rows] * weights) / np.sum(weights)
-
-
 # Each map as I/F: rows from 90 north to 90 south, columns east from 0 degrees, the last column, which
 # repeats the first, left out.
 maps = {}
@@ -90,7 +85,7 @@ for name, (wavelength, factor) in OPAL.items():
     maps[wavelength] = np.where(image > 0, image * factor, np.nan)
 wavelengths = sorted(maps)
 lats = 90 - np.arange(next(iter(maps.values())).shape[0]) * STEP
-area = np.cos(np.radians(centric(lats)))[:, None]
+centric_lats = centric(lats)
 
 # Past the data, the northern hemisphere's bands at the same latitude, averaged along each latitude.
 
@@ -119,9 +114,9 @@ band = (lats >= MEAN_LATITUDES[0]) & (lats <= MEAN_LATITUDES[1])
 ratio = {}
 everywhere = np.ones_like(lats, dtype=bool)
 for wavelength, m in maps.items():
-    r = m / area_mean(m, band)
-    ratio[wavelength] = r / area_mean(r, everywhere)
-    print(f"{wavelength:.0f} nm: mean normal albedo {area_mean(m, band):.3f}, contrast from the 10th to the 90th "
+    r = m / globe.area_mean(m, band, centric_lats)
+    ratio[wavelength] = r / globe.area_mean(r, everywhere, centric_lats)
+    print(f"{wavelength:.0f} nm: mean normal albedo {globe.area_mean(m, band, centric_lats):.3f}, contrast from the 10th to the 90th "
           f"percentile {np.percentile(m[band], 90) / np.percentile(m[band], 10):.3f}")
 
 # The spectrum bent through each filter by hat functions that sum to one, flat beyond them.
@@ -136,13 +131,13 @@ geometric = sum(K.values())
 texture = sum(ratio[w][..., None] * K[w] for w in wavelengths)
 # The luminance's contrast stretched on its logarithm, each place keeping its colour.
 luminance = tc.luminance(texture)
-mean = area_mean(luminance, everywhere)
+mean = globe.area_mean(luminance, everywhere, centric_lats)
 texture *= ((luminance / mean) ** (stretch - 1))[..., None]
-texture *= mean / area_mean(tc.luminance(texture), everywhere)
+texture *= mean / globe.area_mean(tc.luminance(texture), everywhere, centric_lats)
 
 # At the brightness asked for; the true normal albedo, measured at the green filter, for reference.
-normal_over_geometric = area_mean(maps[green], band) / np.interp(green, lam, albedo)
-texture *= brightness / area_mean(tc.luminance(texture), everywhere)
+normal_over_geometric = globe.area_mean(maps[green], band, centric_lats) / np.interp(green, lam, albedo)
+texture *= brightness / globe.area_mean(tc.luminance(texture), everywhere, centric_lats)
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")

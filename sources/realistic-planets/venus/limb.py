@@ -7,10 +7,10 @@
   beside each picture holds each pixel's latitude and the angles of the light and the view. The
   frames used here are six such sets from July and August 2007, taken from 22,000 to 34,000 km away
   at phase angles of 44 to 55 degrees.
-- Each frame's Minnaert exponent is fitted as for Akatsuki's maps (`photometry.minnaert`), each degree
+- Each frame's Minnaert exponent is fitted as for Akatsuki's maps (`minnaert.py`), each degree
   of latitude with its own brightness, where the sun is more than `LEAST_HEIGHT` degrees up and the
   view more than that above the limb. Each band's exponent is the mean of its frames'.
-- Each channel's exponent is the one at its wavelength for Venus's spectrum (`photometry.channels`),
+- Each channel's exponent is the one at its wavelength for Venus's spectrum (`truecolour.channels`),
   interpolated along the wavelength between the bands' exponents.
 """
 import glob
@@ -22,6 +22,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import minnaert  # noqa: E402
 import photometry  # noqa: E402
 import truecolour as tc  # noqa: E402
 
@@ -61,7 +62,7 @@ for path in sorted(glob.glob(f"{data}/V*_*.IMG")):
     radiance = counts[0] * float(value('RADIANCE_SCALING_FACTOR')) + float(value('RADIANCE_OFFSET'))
     mu0, mu = np.cos(np.radians(incidence)), np.cos(np.radians(emission))
     good = (radiance > 0) & (mu0 > least) & (mu > least) & (np.abs(latitude) <= 90)
-    k = photometry.minnaert(radiance, mu0, mu, good, np.floor(np.where(good, latitude, 0) + 90).astype(int))
+    k, _ = minnaert.fit(radiance, mu0, mu, good, np.floor(np.where(good, latitude, 0) + 90).astype(int))
     fitted[band].append(k)
     print(f"{os.path.basename(path)} at {value('IMAGE_TIME')}, {WAVELENGTHS[band]:.0f} nm: phase angle "
           f"{np.median(phase[good]):.0f} degrees, Minnaert's exponent {k:.3f}")
@@ -72,7 +73,7 @@ print("each band's exponent: " + ", ".join(f"{e:.3f} at {WAVELENGTHS[b]:.0f} nm"
 # Each channel's exponent, at its wavelength for Venus's spectrum.
 lam = np.arange(380.0, 781.0, 1.0)
 points, values = photometry.spectrum()
-channels = photometry.channels(lam, np.interp(lam, points, values), tc.matrix(lam))
+channels = tc.channels(lam, np.interp(lam, points, values), tc.matrix(lam))
 limb = np.interp(channels, [WAVELENGTHS[b] for b in bands], exponents)
 print(f"the channels' wavelengths for Venus's spectrum: {np.round(channels).astype(int)} nm; their exponents, for planets.luau: "
       f"{np.round(limb, 3)}; the limb's brightness where mu is 0.25, against a plain ball's: {np.round(0.25 ** (limb - 1), 3)}")
