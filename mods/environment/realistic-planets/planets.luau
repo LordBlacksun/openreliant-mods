@@ -1,6 +1,7 @@
--- Realistic Planets: draws each body's limb as its photometry was measured, with Minnaert's law
--- (minnaert.glsl). This is a player script: it runs for the whole game. The functions need
--- PER-PIXEL LIGHTING.
+-- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
+-- (minnaert.glsl), Saturn shaded by its ring (saturn.glsl) and Earth with its city lights at night
+-- (earth.glsl). This is a player script: it runs for the whole game. The functions need PER-PIXEL
+-- LIGHTING. How the bodies turn and lean is in records.luau.
 
 local shaders = require("openreliant.shaders")
 
@@ -39,7 +40,7 @@ shaders.register_surface({
 -- nm), and the same least cosine.
 shaders.register_surface({
     name = "saturn",
-    shader = "minnaert.glsl",
+    shader = "saturn.glsl",
     textures = { "realistic_planets_saturn" },
     parameters = { 0.770, 0.697, 0.540, 0.25 },
 })
@@ -56,10 +57,11 @@ shaders.register_surface({
 
 -- Earth: the exponents of GOES-18's and GOES-19's pictures of the same moment, from 137 and 75 degrees
 -- west (0.750 at 470 nm and 0.907 at 640), at the red, green and blue channels' wavelengths for a grey
--- spectrum (601, 540 and 452 nm, the blue taking 470's), and the same least cosine.
+-- spectrum (601, 540 and 452 nm, the blue taking 470's), and the same least cosine; and its city
+-- lights on its night side.
 shaders.register_surface({
     name = "earth",
-    shader = "minnaert.glsl",
+    shader = "earth.glsl",
     textures = { "realistic_planets_earth" },
     parameters = { 0.871, 0.815, 0.750, 0.25 },
 })
@@ -118,12 +120,13 @@ shaders.register_surface({
     parameters = { 0.741, 0.744, 0.750, 0.2 },
 })
 
--- Saturn's ring, see-through (rings.glsl): lit as if the sun stood 30 degrees above it, seen at least
--- 1.1 degrees from edge on, and blended to suit the planet's lit side behind it, about 0.5 encoded.
+-- Saturn's ring, see-through (rings.glsl): lit by the sun on the side it shines on and through the
+-- ring on the other, shaded where Saturn stands between it and the sun, seen at least 1.1 degrees
+-- from edge on, and blended to suit the planet's lit side behind it, about 0.5 encoded.
 shaders.register_surface({
     name = "saturn_rings",
     shader = "rings.glsl",
     textures = { "realistic_planets_saturn_rings" },
     see_through = true,
-    parameters = { 0.5, 0.02, 0.5 },
+    parameters = { 0, 0.02, 0.5 },
 })

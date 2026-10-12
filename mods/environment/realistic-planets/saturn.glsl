@@ -1,0 +1,53 @@
+// Saturn (Realistic Planets, planets.luau): lit by Minnaert's law, as `minnaert.glsl` lights the
+// other planets, and shaded by its ring. The sun's ray from each pixel, in Saturn's own frame, where
+// the ring lies in the plane of the equator, crosses that plane at some radius; where the ring is
+// there, it lets through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and
+// mu0 the cosine of the sun's angle from the ring's pole.
+//
+// parameters.xyz: k for red, green and blue.
+// parameters.w: the least cosine of the view the law was fitted at.
+
+// The ring's inner and outer radius in the model's units, as `sphere.py` makes it, and its optical
+// depth seen face on in bins evenly spaced between them, each the mean of the light the texture's
+// texels in it let through (`saturn/ringdepth.py`).
+const float saturnRingInner = 2510492.0;
+const float saturnRingOuter = 4783505.0;
+const int saturnRingBins = 128;
+const float saturnRingTau[saturnRingBins] = float[](
+    0.006, 0.036, 0.03, 0.047, 0.076, 0.063, 0.071, 0.066, 0.066, 0.079, 0.088, 0.092, 0.1, 0.097, 0.108, 0.119,
+    0.115, 0.118, 0.091, 0.102, 0.213, 0.084, 0.131, 0.186, 0.075, 0.121, 0.051, 0.15, 0.07, 0.087, 0.191, 0.167,
+    0.102, 0.152, 0.652, 1.438, 1.06, 0.908, 0.913, 0.722, 0.756, 0.897, 0.834, 0.925, 0.775, 0.822, 0.875, 1.21,
+    1.535, 1.658, 2.723, 2.133, 1.457, 1.852, 1.33, 1.47, 1.512, 2.03, 2.303, 2.372, 2.426, 2.265, 2.299, 2.376,
+    2.319, 2.188, 2.13, 2.094, 2.063, 1.793, 1.819, 1.795, 1.521, 1.617, 1.541, 1.424, 1.467, 1.475, 1.675, 2.132,
+    2.037, 1.609, 0.789, 0.131, 0.099, 0.068, 0.071, 0.043, 0.13, 0.225, 0.132, 0.222, 0.815, 0.853, 0.875, 0.724,
+    0.63, 0.531, 0.531, 0.506, 0.482, 0.471, 0.457, 0.437, 0.434, 0.425, 0.42, 0.43, 0.488, 0.422, 0.496, 0.488,
+    0.432, 0.229, 0.419, 0.58, 0.492, 0.513, 0.514, 0.482, 0.009, 0.005, 0.004, 0.004, 0.003, 0.004, 0.009, 0.002);
+
+// A colour in linear light encoded in sRGB, not clipped at 1, as `minnaert.glsl` has it.
+vec3 saturnEncoded(vec3 c) {
+    c = max(c, 0.0);
+    return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, greaterThan(c, vec3(0.0031308)));
+}
+
+// The share of the sun the ring lets through to a point of Saturn's frame, `local`, the sun along
+// `sun` in that frame.
+float saturnRingShade(vec3 local, vec3 sun) {
+    if (abs(sun.y) < 1e-4) return 1.0;
+    float t = -local.y / sun.y;
+    if (t <= 0.0) return 1.0;
+    float radius = length((local + t * sun).xz);
+    if (radius <= saturnRingInner || radius >= saturnRingOuter) return 1.0;
+    float at = (radius - saturnRingInner) / (saturnRingOuter - saturnRingInner) * float(saturnRingBins) - 0.5;
+    int below = clamp(int(floor(at)), 0, saturnRingBins - 1);
+    int above = min(below + 1, saturnRingBins - 1);
+    float tau = mix(saturnRingTau[below], saturnRingTau[above], clamp(at - float(below), 0.0, 1.0));
+    return exp(-tau / abs(sun.y));
+}
+
+void surface(inout Surface s, vec4 parameters, float time) {
+    if (dot(s.normal, s.normal) < 0.5) return;
+    float mu = max(dot(s.normal, s.toEye), parameters.w);
+    float mu0 = max(dot(s.normal, s.toSun), 0.0);
+    s.color = saturnEncoded(decoded(s.color) * pow(vec3(mu), parameters.xyz - 1.0));
+    s.sunlight = pow(vec3(mu0), parameters.xyz) * saturnRingShade(s.local, objectDirection(s.toSun));
+}

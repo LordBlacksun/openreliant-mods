@@ -36,8 +36,9 @@ spheres callisto calist 1280625 1280625
 spheres triton triton 288141 288141
 
 # Earth's model has one level, and its sphere stands 1.25 million units from the model's origin, as
-# the game's does, centred where `sltool shp obj` puts the middle of the game's sphere. The game
-# doesn't make Earth a planet, so unlike the planets it isn't moved to stand on its origin.
+# the game's does, centred where `sltool shp obj` puts the middle of the game's sphere. The mod makes
+# Earth a planet, so the engine moves the sphere back to stand on its origin, as it does every
+# planet's.
 python3 sphere.py "$work/earth.obj" --radius 1048542 --centre -752661.5 5579.5 -993744.7 --texture realistic_planets_earth \
     --name earth
 "$sltool" shp from-obj "$work/earth.obj" "$mod/earth.shp"
@@ -65,8 +66,10 @@ python3 sphere.py "$work/saturn_lo.obj" --radius 2020365 --polar 1822445 --textu
 # its lower right edge, and its limb shows as the mod draws it: each channel with the exponent
 # `planets.luau` gives it, held at its least cosine. Saturn's sun stands 27 degrees north, the most it
 # does, and 20 degrees to the left, so that its night side begins at its right edge, where its ring
-# doesn't hide it. They're flattened as their spheres are, the planets 90 pixels across and the moons
-# 72. Each is drawn at four times its size and scaled down, so that the texture doesn't alias.
+# doesn't hide it, and its shadow falls on the ring behind it, as the ring's shadow falls on its
+# south, as the game draws them. They're flattened as their spheres are, the planets 90 pixels across
+# and the moons 72. Each is drawn at four times its size and scaled down, so that the texture doesn't
+# alias.
 python3 render.py "$mod/realistic_planets_venus.png" "$work/venus.png" --size 360 --lat 10 --lon 45 \
     --sun-lat 20 --sun-lon 30 --k 1.070 1.077 0.982 --least 0.25 --light 1 1 0.8
 python3 render.py "$mod/realistic_planets_earth.png" "$work/earth.png" --size 360 --lat 10 --lon 15 \

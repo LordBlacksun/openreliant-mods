@@ -7,10 +7,10 @@ comes from, so that anyone can check it or make it again. The scripts are in the
 folder.
 
 **Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
-and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. Lighting that follows the sun's
-direction, with Saturn's ring and its shadows lit by the sun and Earth's city lights on its night
-side, waits for OpenReliant 0.11 ([#33](https://github.com/OpenReliant/openreliant-mods/issues/33),
-[#40](https://github.com/OpenReliant/openreliant-mods/issues/40)).
+and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. The mod needs OpenReliant 0.11.
+Each body is lit by Minnaert's law in full, Saturn and its ring shade each other, Earth is a planet
+with its city lights on its night side, and every body turns and leans as it really does, sixty
+times as fast.
 
 ## The game's planets
 
@@ -48,10 +48,11 @@ What OpenReliant's source and `sltool` show about them:
 - The same four planets turn about their own Y by 0.0007 of a radian each tick. With 100 ticks a
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
   about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus and
-  Venus's clouds westward. A mod can't change the turn yet ([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+  Venus's clouds westward. The mod sets each body's turn and lean
+  ([Turning and leaning](#turning-and-leaning)).
 - The game doesn't make Earth a planet: its sphere, with a radius of 1,048,542 units, isn't moved to
   stand on its middle, and stands 1.25 million units from the model's origin. None of the game's
-  missions place Earth.
+  missions place Earth. The mod makes it a planet ([Turning and leaning](#turning-and-leaning)).
 - Each model carries an animation clip that never plays, so the spheres here leave it out.
 - The two levels of Neptune's detailed model map the texture differently from each other, so
   nothing of the original layout is worth keeping.
@@ -104,8 +105,9 @@ What OpenReliant's source and `sltool` show about them:
   of the original's. Around the original's planet, the real ring would reach 6 million units, and
   in mission 24 the player, who starts in the ring's plane 4.97 million units out, would start over
   the B ring. The far model's planet is 0.988 of the detailed one's size, as the original's is.
-- Earth's sphere keeps the game's radius and stands where the game's does, 1.25 million units from
-  its origin, so that it shows in the same place. It's a single model, as the game's is.
+- Earth's sphere keeps the game's radius and is built where the game's stands, 1.25 million units
+  from its origin. As a planet, it's moved back onto the object's place by the engine, as every
+  planet is. It's a single model, as the game's is.
 - Jupiter's moons and Triton keep the sizes of the game's models, which aren't in proportion to each
   other. Triton's detailed and far models both have a radius of 288,141 units.
   Europa's and Ganymede's detailed models have a radius of 288,141 units. Io's near level is uneven,
@@ -115,6 +117,37 @@ What OpenReliant's source and `sltool` show about them:
   are.
 - The textures are named `realistic_planets_<body>`, so the game's own stay for any other model that
   uses them.
+
+## Turning and leaning
+
+OpenReliant keeps the planets in a table that a mod's load script can change and add to. The mod's
+load script, `records.luau`, sets how each body turns and leans, and makes Earth a planet.
+
+- Each body turns with its sidereal day from NASA's planetary fact sheets, sixty times as fast: an
+  hour passes in a minute, so Jupiter, the fastest, turns once every ten minutes, and Earth once
+  every 24. `TIME_SCALE` at the top of the script sets the factor.
+- North is the pole the International Astronomical Union names, on the north side of the solar
+  system, at the top of each texture. Neptune, Saturn, Jupiter and Earth turn eastward, Uranus and
+  Venus westward.
+- Venus's map shows its cloud tops, which turn westward once in about five days, as Akatsuki's maps
+  show ([Venus](#venus)), so Venus turns with them rather than with its ground, which takes 243
+  days.
+- Each pole leans from the pole of the planet's orbit by its obliquity: Neptune's by 28.32 degrees,
+  Uranus's by 82.23, Saturn's by 26.73, Jupiter's by 3.13, Venus's by 2.64 and Earth's by 23.44. The
+  game has no orbits, so the mission's frame stands in: a pole leans from the planet's up as the
+  mission places it.
+- A moon turns once an orbit, as Io, Europa, Ganymede, Callisto, Titan and Triton do, and leans as
+  its planet does, since it orbits in the plane of its planet's equator. Triton turns westward, as
+  it orbits Neptune, about a pole some 30 degrees from the solar system's north.
+- Every pole leans toward its body's left, -X, as the mission places it, as the game has no seasons
+  to take the way from. Leaned this way, Saturn's ring shows open from where the player starts each
+  of the game's missions with Saturn, by 8 to 37 degrees. Unleaned, it's within 3 degrees of edge on
+  in four of them.
+- Earth becomes a planet, so the sun alone lights it, as it lights the others, and its night side is
+  dark but for its city lights ([City lights](#city-lights)).
+- The band the game draws over the rim of Neptune, Uranus, Jupiter and Venus is left out: each
+  planet's limb law, fitted to its measured photometry, already gives the rim its light
+  ([The limb](#the-limb)).
 
 ## Neptune
 
@@ -314,8 +347,8 @@ Neptune's: close to Cassini's look, with each channel in Jupiter's own proportio
   glow. So the texture's mean luminance is set to 0.3, a choice for the game, as the stretch is.
 - As for Neptune, the texture's blue is divided by 0.8 for the game's light.
 
-Jupiter turns the wrong way in the game too, until a mod can set a planet's spin
-([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+The game turns Jupiter westward. The mod turns it eastward, as it really turns
+([Turning and leaning](#turning-and-leaning)).
 
 ## Uranus
 
@@ -363,8 +396,8 @@ Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from K
   near-white pixels on its lit disk than Neptune shows, but less colour, as the real planet is paler.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
-Uranus really turns westward, so the game turns it the right way, as it does Venus, if too fast
-([OpenReliant/openreliant#1083](https://github.com/OpenReliant/openreliant/issues/1083)).
+Uranus really turns westward, about a pole that leans 82 degrees, and the mod turns it so
+([Turning and leaning](#turning-and-leaning)).
 
 ## Saturn
 
@@ -421,8 +454,8 @@ Cassini's colours.
   hexagon, comes from the maps of June 2018, when Hubble saw the north from 26 degrees above. It's
   scaled to 2025's brightness and blended in from 70 to 76 degrees. Past 84 degrees south the map
   fades into the last degrees' mean colour.
-- Saturn doesn't turn in the game, so a mission shows whichever side it sets toward the player. The
-  map keeps System III longitudes, 0 in the middle column.
+- The map keeps System III longitudes, 0 in the middle column. The game doesn't turn Saturn, and the
+  mod turns it eastward with System III's period ([Turning and leaning](#turning-and-leaning)).
 
 ### Colour, contrast and brightness
 
@@ -455,18 +488,21 @@ Cassini's colours.
   equatorial zone seen and lit from overhead, as the two look about alike from Earth.
 - The mod's player script draws the ring with a surface function, `rings.glsl`, registered
   see-through. Seen at a slant, the ring lets less of the light behind it through, exp(-tau / mu),
-  so the C ring is see-through face on and opaque edge on, and its particles scatter the share of
-  the sunlight the law above gives toward the eye. A surface function can't read where the light
-  comes from, so the ring is lit as if the sun stood 30 degrees above it, and it looks the same from
-  both sides, as the original's ring does.
+  so the C ring is see-through face on and opaque edge on. On the side the sun lights, its particles
+  scatter the share of the sunlight the law above gives toward the eye. On the other side the light
+  comes through the ring: S mu0 / (mu - mu0) (exp(-tau / mu) - exp(-tau / mu0)), so seen from there
+  the C ring and the Cassini Division glow and the B ring is dark, as they really do.
+- Where Saturn stands between the ring and the sun, the ring gets no sunlight: the function follows
+  each pixel's ray toward the sun, in Saturn's own frame, to the flattened planet. So the planet's
+  shadow falls across the ring, as wide as the planet.
+- Saturn's own surface function, `saturn.glsl`, shades the planet by the ring. Each pixel's ray
+  toward the sun crosses the ring's plane at some radius, and where the ring is, it lets through
+  exp(-tau / mu0) of the sunlight, tau taken from the ring's texture in 128 steps from its inner
+  edge to its outer. The B ring's shadow is the darkest, and the Cassini Division's and the C ring's
+  are light.
 - The game blends colours as they're encoded, not in linear light, so a faint layer that looks right
   against the black sky comes out too bright over the planet. The function sets its colour and alpha
   so that the result is exact over the sky, and right over a planet behind it at about 0.5 encoded.
-- The ring casts no shadow on the planet, nor the planet on the ring, and the side of the ring away
-  from the sun looks lit. Seen from that side, the real C ring and Cassini Division glow and the B
-  ring is dark. All of this needs surface functions to read the light's direction
-  ([OpenReliant/openreliant#1084](https://github.com/OpenReliant/openreliant/issues/1084),
-  [#33](https://github.com/OpenReliant/openreliant-mods/issues/33)).
 
 ### Sharper maps
 
@@ -506,8 +542,8 @@ the blue, and hardly at all in green and red.
 - The clouds turn about 3 degrees an hour westward near the equator, about 90 m/s, measured by
   matching the clouds' detail between every two maps less than a day apart. More than 35 degrees
   from the equator the views are too slanted for the clouds to be followed, and the rate is held at
-  its last value. Venus's clouds really turn westward, once in about five days, so the game turns
-  Venus the right way, if much too fast.
+  its last value. Venus's clouds really turn westward, once in about five days, and the mod turns
+  Venus with them ([Turning and leaning](#turning-and-leaning)).
 - The maps are moved back by the winds to the middle of the four days and averaged. The clouds
   change over those days, so where two views meet, they differ. The maps' broad brightness is
   blended over wide margins, so that no seam shows, and their detail comes from the view that sees
@@ -735,9 +771,9 @@ GOES-18 sees it from space. The Blue Marble shows the ground with the air taken 
 black. Seen from space, the air's haze lights the sea up blue and softens the land, as DSCOVR's
 pictures of the whole Earth show.
 
-None of the game's missions place Earth, so only new missions show it. Its night side stays dark:
-city lights there need the light's direction, which surface functions can't read yet
-([#40](https://github.com/OpenReliant/openreliant-mods/issues/40)).
+None of the game's missions place Earth, so only new missions show it. The mod makes Earth a
+planet, and its night side shows its city lights, from NASA's Black Marble
+([City lights](#city-lights)).
 
 ### Sources considered
 
@@ -745,7 +781,7 @@ city lights there need the light's direction, which surface functions can't read
 |---|---|---|---|
 | [NASA's Blue Marble](https://science.nasa.gov/resource/blue-marble/) (2002), `land_ocean_ice_cloud_8192.tif` | Months of MODIS's pictures from Terra of the land, the sea, the sea ice and the clouds, joined into one true-colour map of 8192 by 4096 | Public domain (NASA Goddard Space Flight Center) | Yes |
 | NASA's Blue Marble: Next Generation (2004) | A map of each month at 500 m a pixel, without clouds | Public domain | No: its clouds would have to come from elsewhere |
-| NASA's Black Marble | Earth's city lights at night | Public domain | Not yet ([#40](https://github.com/OpenReliant/openreliant-mods/issues/40)) |
+| [NASA's Black Marble](https://earthobservatory.nasa.gov/features/NightLights) (2016), `BlackMarble_2016_3km.jpg` | Earth's city lights on clear nights of 2016, from VIIRS on Suomi NPP, over a dark blue picture of the ground, 13,500 by 6,750 | Public domain (NASA Earth Observatory) | Yes, for the city lights |
 | [GOES-18's and GOES-19's full-disk pictures](https://registry.opendata.aws/noaa-goes/), ABI L2 MCMIP | The whole disk every 10 minutes from 137 and 75 degrees west, as I/F in 16 bands at 2 km a pixel | Public domain (NOAA) | Yes, the pair of 21 June 2025 at 21:00 UTC, for the haze and the limb |
 | DSCOVR's camera, EPIC | Earth's whole sunlit disk from the L1 point | Public domain (NASA) | No: its calibrated data needs a login |
 | [NASA's Earth Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html) | Earth's visual geometric albedo | Public domain | For the brightness |
@@ -781,13 +817,33 @@ city lights there need the light's direction, which surface functions can't read
   colour is a bluish grey, sRGB (124, 129, 141) at that luminance.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
+### City lights
+
+- The night side shows the city lights of NASA's Black Marble of 2016, as the texture's emissive
+  map, `realistic_planets_earth_emissive.png`, laid out as the texture is.
+- The Black Marble draws the lights over a dark blue picture of the ground and the sea, which isn't
+  light the night side gives off. In linear light the ground is always bluer than red, by 1.9 times
+  or more, the ratio of Australia's reddest deserts, and the lights are warm, (1, 0.78, 0.61). So a
+  texel's red, less its blue over 1.9, is the lights' red, which the ground can't give, and the map
+  keeps the lights alone, in their colour. It's scaled down to 4096 by 2048 in linear light first,
+  so that a town too small for a texel still lights it by its share.
+- Earth's surface function, `earth.glsl`, shows the lights only where the sun has set: they fade in
+  from sunset and show whole once the sun is 6 degrees below the horizon, the end of civil twilight.
+  The Black Marble is a picture of clear nights, so where the texture shows thick clouds, the lights
+  dim, by up to 85%, as the clouds would hide them.
+- An emissive map needs the MATERIALS setting under VIDEO, which is on by default.
+
 ## The limb
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
-The mod's player script, `planets.luau`, draws this with a surface function, `minnaert.glsl`, on
-each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
+The mod's player script, `planets.luau`, draws this with a surface function on each body's
+texture: `minnaert.glsl`, or for Saturn `saturn.glsl` and for Earth `earth.glsl`, which add the
+ring's shadow and the city lights. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as
+before.
 
-- The function applies the part of Minnaert's law that depends on the view, mu^(k-1), in linear
+- The function applies Minnaert's law in full. The part that depends on the sun, mu0^k, sets how
+  much of the sun lights the pixel, and the part that depends on the view, mu^(k-1), goes into the
+  colour, in linear
   light, with an exponent k for each channel, measured for each planet.
 - Neptune's come from the Voyager frames: 0.680 for red, from the orange frames, as Voyager had no
   red filter, 0.712 for green and 0.768 for blue. As k is lowest in red, the limb brightens most in
@@ -835,12 +891,11 @@ each body's texture. It needs PER-PIXEL LIGHTING; without it, the planets are dr
   green, for Earth 1.41 in blue, for Titan 1.19 in red and blue, for Jupiter's moons from 1.63 for Io
   in blue to 2.12 for Callisto in blue, and for Triton 1.52 in red. The middle of the disk is
   unchanged.
-- A surface function can't read where the light comes from, so the engine's own lighting stands in
-  for the part that depends on the sun, mu0^k. For a planet it's the sun's cosine, softened past
-  the terminator, which matches mu0^0.75 to within 1% where the sun is more than 30 degrees up, is
-  13% too bright at 14 degrees, and carries light about 14 degrees past the terminator
-  ([OpenReliant/openreliant#1084](https://github.com/OpenReliant/openreliant/issues/1084)).
-- There's no glow outside the disk: a surface function only draws on the planet itself.
+- With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
+  terminator is soft, as a hazy planet's is, and it stands where the sun sets.
+- There's no glow outside the disk: a surface function only draws on the planet itself. The
+  atmosphere band that a mod can now set could draw Titan's blue fringe and Earth's thin blue limb
+  ([#45](https://github.com/OpenReliant/openreliant-mods/issues/45)).
 
 ## Making it again
 
@@ -848,7 +903,7 @@ The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 70 MB for Neptune, 93 MB for
 Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus, 62 MB for Titan, 1.4 GB for Jupiter's
-moons and Triton, and 730 MB for Earth, and makes the same textures again.
+moons and Triton, and 740 MB for Earth, and makes the same textures again.
 
 ## Credits and licences
 
@@ -862,6 +917,8 @@ moons and Triton, and 730 MB for Earth, and makes the same textures again.
 - NASA's Blue Marble: NASA Goddard Space Flight Center, image by Reto Stöckli (land surface, shallow
   water, clouds), enhancements by Robert Simmon (ocean colour, compositing), from MODIS's data, in
   the public domain.
+- NASA's Black Marble of 2016: NASA Earth Observatory images by Joshua Stevens, using Suomi NPP
+  VIIRS data from Miguel Román, NASA's Goddard Space Flight Center, in the public domain.
 - GOES-18's and GOES-19's pictures: NOAA, in the public domain, from NOAA's open data on Amazon Web
   Services.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
@@ -910,7 +967,7 @@ moons and Triton, and 730 MB for Earth, and makes the same textures again.
   Institute for the Cassini data and NASA/JPL-Caltech/University of Arizona for the map of its
   surface, for Jupiter's moons NASA/JPL for the Voyager data and the USGS Astrogeology Science
   Center for its maps, for Triton NASA/JPL for the Voyager data and NASA/JPL and the Lunar and
-  Planetary Institute for its map, and for Earth NASA Goddard Space Flight Center for the Blue Marble
-  and NOAA for the GOES data.
+  Planetary Institute for its map, and for Earth NASA Goddard Space Flight Center for the Blue
+  Marble, NASA Earth Observatory for the Black Marble and NOAA for the GOES data.
 - The spheres, the manifest and the scripts are OpenReliant's, under the Mozilla Public License
   2.0.
