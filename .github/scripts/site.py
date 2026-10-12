@@ -746,6 +746,13 @@ def main() -> int:
             shutil.copy(mod.thumbnail, SITE / "thumbs" / f"{mod.id}.png")
     release = latest_openreliant()
     releases = mod_releases()
+    # A mod of the collection whose current version has no published release, such as one held back
+    # as a draft until the OpenReliant it needs is out, shows its newest published release.
+    published = {found["tag"] for found in releases}
+    for mod in mods:
+        if mod.artist is None and mod.tag not in published:
+            if newest := next((found["tag"] for found in releases if tag_parts(found["tag"])[0] == mod.id), None):
+                mod.as_released(newest)
     # Each mod's latest release's date, from the newest first.
     updated_at: dict[str, str] = {}
     for found_release in releases:

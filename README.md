@@ -172,7 +172,11 @@ A mod's version is the `Version` in its `mod.ini`. To release it, raise the vers
    [the updates](https://openreliant.github.io/openreliant-mods/updates/), every release with what
    changed in it, newest first.
 
-A version that has a release already is left alone, so other changes to `main` release nothing. On
+A version that has a release already is left alone, so other changes to `main` release nothing. A
+raised version is published as soon as it reaches `main`, so raise the version of a mod that needs a
+newer OpenReliant only once that OpenReliant is out. To hold back a release that went out too early,
+turn it back into a draft: its tag stays, so the version isn't released again, and the site and
+`mods.json` show the mod's newest published release instead, as its `mod.ini` described it then. On
 a pull request, the Check workflow packs every mod and builds the site, to catch a mod that doesn't
 pack or isn't in a category. `python3 .github/scripts/release.py --dry-run` does the same locally,
 into `dist/`, and `python3 .github/scripts/site.py` writes the site into `site/`.
