@@ -31,6 +31,9 @@ const RealisticPlanetsHaze earthHaze = RealisticPlanetsHaze(
     // Its albedo, and Rayleigh's phase function alone.
     vec3(1.0),
     vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0),
+    // No forward light from cloud tops: Earth's clouds and ground scatter about as evenly as its
+    // texture holds them.
+    0.0, 0.6,
     // The phase angle the texture's haze is taken at; blue, green and red to the texture's channels,
     // at the texture's brightness, half Earth's true one; and a quarter of the air's light blooming.
     19.0,

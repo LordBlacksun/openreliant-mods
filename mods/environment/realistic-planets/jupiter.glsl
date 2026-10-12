@@ -15,6 +15,9 @@ const RealisticPlanetsHaze jupiterHaze = RealisticPlanetsHaze(
     // Its albedo, and a forward lobe with a faint backward one.
     vec3(1.0),
     vec3(0.721, 0.694, 0.668), vec3(-0.662, -0.774, -0.867), vec3(0.978, 0.993, 0.998), vec3(0.0217, 0.0071, 0.0019),
+    // No forward light from the cloud tops: Cassini's phase curve has Jupiter about a quarter
+    // darker than a plain ball at partial phases (Mayorga and others, 2016), as the disk already is.
+    0.0, 0.6,
     // The texture shows Jupiter as from the sun; the wavelengths to the texture's colours, and a
     // quarter of the haze's light blooming.
     0.0,

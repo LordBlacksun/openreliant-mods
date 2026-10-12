@@ -16,6 +16,9 @@ const RealisticPlanetsHaze titanHaze = RealisticPlanetsHaze(
     // Its albedo, and two forward lobes, the second in blue alone.
     vec3(1.0, 0.854, 0.923),
     vec3(0.758, 0.682, 0.689), vec3(0.232, 0.594, 0.594), vec3(0.556, 1.0, 1.0), vec3(0.444, 0.0, 0.0),
+    // The cloud tops' forward light, its strength and lobe: about 1.3 times the crescent's light at
+    // 141 degrees, as Cassini's frames show it.
+    0.6, 0.8,
     // The texture's frames' mean phase angle, the filters to the texture's colours, and a quarter of
     // the haze's light blooming, since the bloom would spread a backlit Titan's bright haze well past
     // what Cassini saw.

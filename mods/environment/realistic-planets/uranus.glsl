@@ -15,6 +15,9 @@ const RealisticPlanetsHaze uranusHaze = RealisticPlanetsHaze(
     // Its albedo, and one forward lobe, as Neptune's.
     vec3(1.0),
     vec3(0.59), vec3(0.0), vec3(1.0), vec3(0.0),
+    // The cloud tops' forward light, its strength and lobe: about twice the crescent's light at 147
+    // degrees, as Voyager 2's frames show it, with Neptune's lobe.
+    0.34, 0.8,
     // The texture shows Uranus as from the sun; blue, green and red to the texture's channels, at
     // the texture's brightness, and a quarter of the haze's light blooming.
     0.0,

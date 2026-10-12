@@ -26,6 +26,9 @@ const RealisticPlanetsHaze saturnHaze = RealisticPlanetsHaze(
     // Its albedo, and a narrow forward lobe with a ninth of the light, Rayleigh's with the rest.
     vec3(0.38, 1.0, 0.91),
     vec3(0.964), vec3(0.0), vec3(0.112), vec3(0.0),
+    // The cloud tops' forward light, its strength and lobe: four to eight times the crescent's light
+    // at 151 degrees, cream rather than grey, as Cassini's frames show it.
+    0.83, 0.8,
     // The texture shows Saturn as from the sun; the filters to the texture's colours, and a quarter
     // of the haze's light blooming.
     0.0,

@@ -16,13 +16,18 @@
 // steps, and each step scatters the sunlight that reaches it toward the eye, once, as much as the
 // haze's extinction, single-scattering albedo and phase function say, dimmed by the haze between it
 // and the eye. The sunlight is dimmed on its way in too, by Chapman's integral, so the haze on the
-// night side is lit only high up, where the sun still reaches it past the body's edge. Over the disk
-// the line ends at the disk, and only the light the texture doesn't hold already counts: the texture
-// shows the body, haze included, at one phase angle, so the haze over the disk adds what its phase
-// function gives beyond what it gives there, which with the sun behind the body is the crescent its
-// forward scattering lights. Everything is worked out in the haze's three bands, a camera's filters
-// or three wavelengths, turned into the game's colours at the end, and added in linear light, lit by
-// the sun as the disk is (`scattered`), so the disk and the ring meet at the edge.
+// night side is lit only high up, where the sun still reaches it past the body's edge. Over the
+// disk the line ends at the disk, and only the light the texture doesn't hold already counts: the
+// texture shows the body, haze included, at one phase angle, so the haze over the disk adds what
+// its phase function gives beyond what it gives there, which with the sun behind the body is the
+// crescent its forward scattering lights. The thick haze at the cloud tops, below the sphere's
+// edge, adds its own forward light over the disk in the same way: single scattering off a thick
+// layer, Lommel and Seeliger's law, mu0 / (mu0 + mu), times a lobe of its own, beyond what that
+// lobe gives at the texture's phase angle, in the colour of the texture beneath it. With the sun
+// behind the body, this is most of a crescent's light. Everything is worked out in the haze's three
+// bands, a camera's filters or three wavelengths, turned into the game's colours at the end, and
+// added in linear light, lit by the sun as the disk is (`scattered`), so the disk and the ring meet
+// at the edge.
 
 #include "limb.glsl"
 
@@ -54,6 +59,10 @@ struct RealisticPlanetsHaze {
     vec3 secondLobe;
     vec3 firstShare;
     vec3 secondShare;
+    // The thick haze at the cloud tops: how strongly its forward light brightens the disk, as a share
+    // of the texture's brightness, and its lobe's asymmetry. A body without one has a strength of 0.
+    float deep;
+    float deepLobe;
     // The phase angle the texture shows the body at, degrees.
     float texturePhase;
     // The haze's I/F in its three bands to the game's linear sRGB (columns), as the body's texture
@@ -161,6 +170,7 @@ vec3 realisticPlanetsHazeLine(RealisticPlanetsHaze haze, float through, vec3 out
 // are the law's, or its haze beyond the disk on its ring, where they are 0.
 void realisticPlanetsHaze(inout Surface s, vec4 parameters, RealisticPlanetsHaze haze) {
     bool disk = parameters.w > 0.0;
+    vec3 texel = decoded(s.color);
     // The eye, the line of sight through the pixel and the sun, in the body's frame, in km,
     // stretched along the pole so that the body is round. On the texture, the pixel lies on the
     // body, whose equatorial radius in the model's units the stretched point's distance from the
@@ -198,6 +208,13 @@ void realisticPlanetsHaze(inout Surface s, vec4 parameters, RealisticPlanetsHaze
         return;
     }
     if (!realisticPlanetsLimb(s, parameters)) return;
+    // The cloud tops' forward light, beyond what the texture holds at its own phase angle.
+    float mu0 = max(dot(s.normal, s.toSun), 0.0);
+    float mu = max(dot(s.normal, s.toEye), 0.0);
+    float cosTexture = -cos(radians(haze.texturePhase));
+    float forward = max(realisticPlanetsHazeLobe(vec3(haze.deepLobe), -dot(s.toSun, s.toEye)).x
+        - realisticPlanetsHazeLobe(vec3(haze.deepLobe), cosTexture).x, 0.0);
+    light += texel * (haze.deep * forward * mu0 / max(mu0 + mu, 1e-4));
     s.scattered = light;
     // The haze's part of the pixel's light blooms as the ring's does: its share of the encoded
     // light that the bloom takes, with the disk lit as a white sun would light it.

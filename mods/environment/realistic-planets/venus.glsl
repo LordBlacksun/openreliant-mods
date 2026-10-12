@@ -15,6 +15,9 @@ const RealisticPlanetsHaze venusHaze = RealisticPlanetsHaze(
     // Its albedo, and two forward lobes, the droplets' two sizes, with a little of Rayleigh's.
     vec3(1.0),
     vec3(0.897, 0.874, 0.848), vec3(0.542, 0.474, 0.48), vec3(0.104, 0.172, 0.259), vec3(0.896, 0.779, 0.588),
+    // The cloud tops' forward light, its strength and lobe: Venus's brightness by phase angle
+    // (Mallama and others, 2017) within about a tenth from 90 to 160 degrees.
+    0.45, 0.6,
     // The phase angle the texture's colour is taken at, the wavelengths to the texture's colours,
     // and a quarter of the haze's light blooming.
     45.0,
