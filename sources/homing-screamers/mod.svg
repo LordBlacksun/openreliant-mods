@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240">
+<defs>
+<radialGradient id="sky" cx="62%" cy="38%" r="75%"><stop offset="0" stop-color="#14264a"/><stop offset="1" stop-color="#03060d"/></radialGradient>
+<radialGradient id="flame" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff4d6"/><stop offset="0.45" stop-color="#ffb347"/><stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/></radialGradient>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+</defs>
+<rect width="320" height="240" fill="url(#sky)"/>
+<g fill="#ffffff">
+<circle cx="18" cy="22" r="0.9" opacity="0.7"/><circle cx="54" cy="58" r="0.6" opacity="0.5"/>
+<circle cx="97" cy="18" r="1.1" opacity="0.8"/><circle cx="128" cy="62" r="0.7" opacity="0.5"/>
+<circle cx="171" cy="30" r="0.8" opacity="0.6"/><circle cx="205" cy="14" r="1.2" opacity="0.9"/>
+<circle cx="288" cy="34" r="0.9" opacity="0.7"/><circle cx="302" cy="76" r="0.6" opacity="0.5"/>
+<circle cx="279" cy="148" r="1.0" opacity="0.7"/><circle cx="306" cy="196" r="0.8" opacity="0.6"/>
+<circle cx="248" cy="214" r="0.6" opacity="0.5"/><circle cx="196" cy="182" r="1.1" opacity="0.8"/>
+<circle cx="141" cy="214" r="0.7" opacity="0.5"/><circle cx="104" cy="168" r="0.6" opacity="0.4"/>
+<circle cx="12" cy="128" r="1.0" opacity="0.6"/><circle cx="66" cy="104" r="0.7" opacity="0.5"/>
+<circle cx="230" cy="52" r="0.6" opacity="0.5"/><circle cx="160" cy="146" r="0.8" opacity="0.6"/>
+</g>
+<!-- Where a Screamer flew before: straight on, past the target. -->
+<path d="M36,214 L150,20" stroke="#8fa3c4" stroke-width="1.5" stroke-dasharray="5 6" stroke-opacity="0.45" fill="none"/>
+<!-- Its trail now: off that line and onto the target. -->
+<path d="M36,214 C79,141 136,108 184,101" stroke="#ff8a2c" stroke-width="8" stroke-opacity="0.35" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M36,214 C79,141 136,108 184,101" stroke="#ffb15c" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<g fill="#ffd9a8" opacity="0.5"><circle cx="58" cy="176" r="3.2"/><circle cx="84" cy="144" r="2.6"/><circle cx="114" cy="121" r="2.1"/><circle cx="146" cy="107" r="1.6"/></g>
+<!-- The target, held in its lock brackets. -->
+<g stroke="#ff4d3a" stroke-width="2.5" fill="none" stroke-linecap="square">
+<path d="M222,86 V77 H231"/><path d="M253,77 H262 V86"/><path d="M262,104 V113 H253"/><path d="M231,113 H222 V104"/>
+</g>
+<polygon points="255,95 237,85 241,95 237,105" fill="#a9b4c6" stroke="#dfe6f1" stroke-width="0.8" stroke-linejoin="round"/>
+<!-- The Screamer, nose on the target. -->
+<g transform="translate(198,99) rotate(-8.3)">
+<circle cx="-16" cy="0" r="9" fill="url(#flame)"/>
+<polygon points="-14,-2.5 -18,-6.5 -10,-2.5" fill="#c9d2df"/>
+<polygon points="-14,2.5 -18,6.5 -10,2.5" fill="#c9d2df"/>
+<rect x="-14" y="-2.5" width="22" height="5" rx="2" fill="#eef2f8"/>
+<polygon points="8,-2.5 14,0 8,2.5" fill="#ff6a3d"/>
+</g>
+</svg>
