@@ -1,6 +1,6 @@
 // Realistic Planets (planets.luau): Venus and its upper haze (haze.glsl), above the cloud tops: small
 // and micron-sized droplets of sulphuric acid, about 3 km a scale height, scattering strongly forward
-// and absorbing next to nothing. The mod's README gives the numbers' sources.
+// and absorbing next to nothing. The mod's README gives the sources of the numbers.
 
 #include "haze.glsl"
 
@@ -18,8 +18,8 @@ const RealisticPlanetsHaze venusHaze = RealisticPlanetsHaze(
     // The cloud tops' forward light, its strength and lobe: Venus's brightness by phase angle
     // (Mallama and others, 2017) within about a tenth from 90 to 160 degrees.
     0.45, 0.6,
-    // The phase angle the texture's colour is taken at, the wavelengths to the texture's colours,
-    // and a quarter of the haze's light blooming.
+    // The phase angle of the texture's colour, the wavelengths to the texture's colours, and the
+    // share of the haze's light that blooms.
     45.0,
     mat3(-0.07305, 0.07647, 0.59359, 0.17774, 0.50200, 0.00681, 0.49614, 0.02599, -0.01317),
     0.25);

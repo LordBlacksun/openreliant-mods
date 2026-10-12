@@ -10,7 +10,8 @@
 // chosen to give the right result over a black sky exactly, and over a planet behind the ring at the
 // brightness `parameters.z`, encoded.
 //
-// parameters.y: the least cosine of the view's angle, so that the ring seen edge on stays finite.
+// parameters.x: unused.
+// parameters.y: the smallest cosine of the view angle, so that the ring stays finite edge on.
 // parameters.z: the brightness behind the ring that the blend is fitted to, encoded.
 
 // Saturn's equatorial and polar radius in the model's units, as `sphere.py` makes its detailed

@@ -495,7 +495,7 @@ Cassini's colours.
   comes through the ring: S mu0 / (mu - mu0) (exp(-tau / mu) - exp(-tau / mu0)), so seen from there
   the C ring and the Cassini Division glow and the B ring is dark, as they really do.
 - Where Saturn stands between the ring and the sun, the ring gets no sunlight: the function follows
-  each pixel's ray toward the sun, in Saturn's own frame, to the flattened planet. So the planet's
+  each pixel's ray toward the sun, in Saturn's frame, to the flattened planet. So the planet's
   shadow falls across the ring, as wide as the planet.
 - Saturn's own surface function, `saturn.glsl`, shades the planet by the ring. Each pixel's ray
   toward the sun crosses the ring's plane at some radius, and where the ring is, it lets through
@@ -539,7 +539,7 @@ the blue, and hardly at all in green and red.
   Venus from near the sun's direction, and those maps show the glory: bright rings that the cloud
   droplets throw back toward the sun, which move with the camera.
 - Each map's limb darkening is taken out with Minnaert's law, I/F = B mu0^k mu^(k-1). The exponent k
-  is fitted to each map with each latitude's own brightness, so that the bands' brightness, darker
+  is fitted to each map with the brightness of each latitude, so that the bands' brightness, darker
   near the equator where the sun stands highest, doesn't count as limb darkening. The maps' mean,
   0.86, is taken out of all of them alike. Fitted as one law over the whole map, k comes out near
   0.72, as the dark equator reads as part of the law.
@@ -695,7 +695,7 @@ browner trailing side, and Ganymede and Callisto a faintly warm grey.
   angle, so the ratios hold the colour alone. The sets' ratios are averaged, the best view of each
   place counting the most.
 - On these moons, darker ground is redder. So each ratio is fitted to the map's brightness, and at
-  each texel the colour follows the texel's own brightness, a small bright crater taking the bluer
+  each texel the colour follows the texel's brightness, a small bright crater taking the bluer
   colour of bright ground, times what the fit leaves, smoothed over six of the frames' pixels: from
   about 2.5 degrees on Io to 9 on Callisto, whose frames are the coarsest. Io's colour follows its
   frames the most, as its yellow sulphur, white frost and dark lava don't line up with brightness
@@ -862,7 +862,7 @@ as before.
   its limb turns paler and a little blue.
 - Venus's come from six sets of Venus Express's pictures, taken at 365, 513 and 965 nm within a
   minute of each other in July and August 2007, at phase angles of 44 to 55 degrees, and fitted as
-  Akatsuki's maps are, with each latitude's own brightness. Their exponents are 0.835 at 365 nm,
+  Akatsuki's maps are, with the brightness of each latitude. Their exponents are 0.835 at 365 nm,
   1.081 at 513 and 1.023 at 965: 1.070 for red, 1.077 for green and 0.982 for blue. In visible light
   Venus's limb darkens a little more than a plain ball's, least in blue, so its limb turns a little
   darker and a little blue.

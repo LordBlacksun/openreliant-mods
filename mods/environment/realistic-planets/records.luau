@@ -1,27 +1,27 @@
--- Realistic Planets: how each body turns and leans, in OpenReliant's table of planets
--- (records.planets), the planets' white light, the rings the haze beyond each planet's and Titan's
--- disk is drawn on, and Earth made a planet, so that the sun alone lights it, as it lights the
--- others. This is a load script: it runs once, as OpenReliant starts.
+-- Realistic Planets: sets how each body turns and leans in OpenReliant's table of planets
+-- (records.planets), makes the planets' light white, sets the rings that the haze beyond the disk
+-- of each planet and Titan is drawn on, and makes Earth a planet, so that only the sun lights it,
+-- like the others. This is a load script, so it runs once as OpenReliant starts.
 
 local records = require("openreliant.records")
 
--- The planets' own light, white: the textures hold each body's true colour. The game's key lights,
--- (1, 1, 0.8), would turn them yellow, and only the planets and their atmospheres take this light.
+-- The light on the planets, white, since the textures hold each body's true colour. The game's key
+-- lights, (1, 1, 0.8), would turn them yellow. Only the planets and their atmospheres use this light.
 records.planet_light = vector.create(1, 1, 1)
 
 -- How many times faster than in reality the bodies turn. At 60 an hour passes in a minute, and
 -- Jupiter, the fastest, turns once every ten minutes.
 local TIME_SCALE = 60
 
--- Each body's sidereal day in hours, negative where it turns westward, and how far its north pole
--- leans from the pole of its orbit, in degrees, from NASA's planetary fact sheets. North is the one
--- the International Astronomical Union names, on the north side of the solar system, which is at
--- the top of each body's texture: so Venus and Uranus lean 2.64 and 82.23 degrees and turn
--- westward. Venus's map shows its cloud tops, which turn westward once in about five days, as
--- Akatsuki's maps show them, far faster than the ground under them. A moon turns once an orbit and
--- leans as its planet does, since it orbits in the plane of its planet's equator. Triton's north
--- pole stands about 30 degrees from the solar system's, and it turns westward, as it orbits
--- Neptune.
+-- Each body's sidereal day in hours, negative if it turns westward, and how far its north pole
+-- leans from the pole of its orbit, in degrees, from NASA's planetary fact sheets. North is the
+-- pole the International Astronomical Union calls north, on the north side of the solar system,
+-- and it is at the top of each body's texture. So Venus and Uranus lean 2.64 and 82.23 degrees and
+-- turn westward. Venus's map shows its cloud tops, which turn westward once in about five days
+-- according to Akatsuki's maps, much faster than the ground under them. A moon turns once per
+-- orbit and leans like its planet, since it orbits in the plane of the planet's equator. Triton's
+-- north pole is about 30 degrees from the solar system's, and it turns westward, the same way it
+-- orbits Neptune.
 local BODIES = {
     neptune = { day = 16.11, tilt = 28.32, haze = { surface = "neptune_haze", inner = 0.98, outer = 1.014 } },
     triton = { day = -141.04, tilt = 30 },
@@ -37,21 +37,22 @@ local BODIES = {
     earth = { day = 23.934, tilt = 23.44, haze = { surface = "earth_haze", inner = 0.98, outer = 1.026 } },
 }
 
--- Which way each north pole leans: toward the body's left, -X, as the mission places it. The game has
--- no orbits to take a season from, and this way, from where the player starts each of the game's
--- missions with Saturn, its ring shows open, by 8 to 37 degrees, where unleaned it's often edge on.
+-- Which way each north pole leans: toward the body's left, -X, in the orientation the mission gives
+-- it. The game has no orbits to take a season from. With this lean, Saturn's ring is open by 8 to
+-- 37 degrees from where the player starts in each mission with Saturn; without it, the ring is
+-- often edge on.
 local TILT_TOWARD = -math.pi / 2
 
--- Sets a planet's spin and lean from its body. The band the game draws over the rim of Neptune,
--- Uranus, Jupiter and Venus is left out, as each body's limb law, fitted to its measured
--- photometry, already gives the rim its light. A body with a haze beyond its disk has it drawn by
--- its surface function (planets.luau) on a ring from `inner` to `outer` times its radius, out to
--- where haze.glsl cuts the haze off, 20 scale heights above the edge: about 340 km for Neptune, 440
--- km for Uranus, 380 km for Jupiter, 70 km for Venus and 160 km for Earth, a hundredth or two of
--- their radii, and 600 km for Titan, a fifth. OpenReliant takes half the widest span of a planet's
--- model as its radius, which for Saturn is its rings' outer edge, 141,000 km: Saturn's ring runs
--- from just inside its polar edge, 54,364 km, to 1,000 km above its equator, past the 810 km its
--- haze reaches.
+-- Sets a planet's spin and lean from its body. It removes the band the game draws over the rim of
+-- Neptune, Uranus, Jupiter and Venus, since each body's limb law, fitted to its measured
+-- photometry, already lights the rim. A body's haze beyond its disk is drawn by its surface
+-- function (planets.luau) on a ring from `inner` to `outer` times its radius. The ring reaches
+-- past where haze.glsl cuts the haze off, 20 scale heights above the edge: about 340 km for
+-- Neptune, 440 km for Uranus, 380 km for Jupiter, 70 km for Venus and 160 km for Earth, one or two
+-- hundredths of their radii, and 600 km for Titan, a fifth of its radius. OpenReliant uses half
+-- the widest span of a planet's model as its radius, which for Saturn is the outer edge of its
+-- rings, 141,000 km. So Saturn's haze ring runs from just inside its polar edge, 54,364 km, to
+-- 1,000 km above its equator, beyond the 810 km that its haze reaches.
 local function apply(planet, body)
     planet.spin = 2 * math.pi * TIME_SCALE / (body.day * 3600)
     planet.tilt = math.rad(body.tilt)
