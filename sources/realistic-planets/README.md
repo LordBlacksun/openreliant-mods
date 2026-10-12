@@ -33,10 +33,11 @@ Run each script from its own folder, in this order:
 3. `uranus/build.sh` downloads Hubble's OPAL maps of Uranus and Karkoschka's spectrum, about 3 MB,
    into `uranus/data`, and makes `realistic_planets_uranus.png`.
 4. `saturn/build.sh` downloads Cassini's global maps of Saturn, Hubble's OPAL maps, Karkoschka's
-   spectrum, Voyager 2's profiles of the rings and Cassini's mosaic across them, about 180 MB, into
-   `saturn/data`, makes `realistic_planets_saturn.png` and the ring's,
-   `realistic_planets_saturn_rings.png`, and prints the ring's optical depth for `saturn.glsl`. It
-   takes about 15 seconds.
+   spectrum, Voyager 2's profiles of the rings, Cassini's mosaic across them and its frames of the
+   limb at high phase, about 220 MB, into `saturn/data`, makes `realistic_planets_saturn.png` and
+   the ring's, `realistic_planets_saturn_rings.png`, prints the ring's optical depth for
+   `saturn.glsl`, and fits Saturn's haze, printing the numbers for `saturn.glsl`. It takes under a
+   minute.
 5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
    into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
    `planets.luau`. It takes about a minute.
@@ -76,7 +77,9 @@ Run each script from its own folder, in this order:
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
 | `globe.py` | Points from a body's centre toward a latitude and longitude, takes the area-weighted mean over its global map, and fits a circle to its disk's edge in a frame, for the bodies' scripts |
 | `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune, Jupiter's moons and Triton |
-| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera, once and, as an estimate, more than once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's and Titan's fits |
+| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera, once and, as an estimate, more than once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's, Saturn's and Titan's fits |
+| `cassini.py` | Reads Cassini's calibrated frames, works out their geometry and fits a disk to its lit limb, for Titan's and Saturn's scripts |
+| `edges.py` | Fits a body's edge on frames that see a stretch of its limb, round or flattened, bins the I/F by height across it, works out where the camera sees each stretch from, and fits the haze to the stretches, for Neptune's and Saturn's haze |
 | `multiple.py` | A Monte Carlo of all orders of scattering in a body's haze, and the numbers of the estimate of the light scattered more than once fitted to it, for Neptune's and Titan's fits |
 | `neptune/frames.json` | The Voyager frames used for the texture, with their geometry from OPUS and their download links |
 | `neptune/haze.json` | The Voyager frames at high phase, for the haze and its check, with their geometry from OPUS and their download links |
@@ -91,10 +94,12 @@ Run each script from its own folder, in this order:
 | `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture |
 | `uranus/fetch.py` | Downloads Hubble's OPAL maps of Uranus and the spectrum |
 | `uranus/compose.py` | Composes the texture from OPAL's maps and the spectrum |
-| `saturn/fetch.py` | Downloads Cassini's and Hubble's maps, the spectrum, Voyager's ring profiles and Cassini's mosaic of the rings |
-| `saturn/compose.py` | Composes the planet's texture from Cassini's maps, calibrated with Hubble's, and the spectrum |
+| `saturn/haze.json` | The Cassini frames of the limb at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
+| `saturn/fetch.py` | Downloads Cassini's and Hubble's maps, the spectrum, Voyager's ring profiles, Cassini's mosaic of the rings and the frames that `haze.json` names |
+| `saturn/compose.py` | Composes the planet's texture from Cassini's maps, calibrated with Hubble's, and the spectrum, and writes the texture's colours for the haze to `data/colour.json` |
 | `saturn/rings.py` | Composes the ring's texture from Voyager's profiles and Cassini's mosaic |
 | `saturn/ringdepth.py` | Prints the ring's optical depth for `saturn.glsl`, from the ring's texture |
+| `saturn/haze.py` | Fits the model of the haze beyond the disk to the frames at high phase, and prints the numbers for `saturn.glsl` |
 | `venus/fetch.py` | Downloads Akatsuki's ultraviolet maps and Venus Express's pictures with their geometry |
 | `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
 | `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
@@ -102,7 +107,6 @@ Run each script from its own folder, in this order:
 | `titan/frames.json` | The Cassini frames at low phase, for the texture and the haze, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/haze.json` | The Cassini frames at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
-| `titan/cassini.py` | Reads the frames, works out their geometry and fits the disk to the lit limb, for `compose.py` and `haze.py` |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, composes the texture with the map of the surface and the spectrum, and writes the texture's colours for the haze to `data/colour.json` |
 | `titan/haze.py` | Fits the model of the haze beyond the disk to the frames at low and high phase, and prints the numbers for `titan.glsl` |
 | `screenshots/titan.png` | The picture on the mod's page after its thumbnail: Titan in OpenReliant's mission 25, from 1.1 million units, 3.8 of its radii, at 30, 100, 150 and 165 degrees of phase, with the bloom and without the flight display, four views of 1920 by 1080 halved into one |

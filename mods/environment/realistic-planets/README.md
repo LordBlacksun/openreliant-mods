@@ -9,8 +9,8 @@ folder.
 **Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
 and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. The mod needs OpenReliant 0.12.
 Each body is lit by Minnaert's law in full, Saturn and its ring shade each other, Earth is a planet
-with its city lights on its night side, Neptune's and Titan's haze show beyond their disks, and every
-body turns and leans as it really does, sixty times as fast.
+with its city lights on its night side, Neptune's, Saturn's and Titan's haze show beyond their
+disks, and every body turns and leans as it really does, sixty times as fast.
 
 ## The game's planets
 
@@ -502,6 +502,7 @@ Cassini's colours.
 | Voyager 2's photopolarimeter, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/voyager/pps/profiles.html) | The rings' optical depth, measured as they passed in front of the star delta Scorpii in August 1981, at 10 km a sample | Public domain (NASA/JPL) | For how much light the ring stops |
 | Voyager 2's imaging, through the same node | The lit rings' brightness in I/F, from its finest mosaic of them, August 1981, at 10 km a sample | Public domain (NASA/JPL) | For the ring's brightness |
 | [Cassini's sweep across the rings](https://pds-rings.seti.org/press_releases/pages/PIA11xxx/PIA11142.html) (PIA11142) | A natural colour mosaic across the lit rings, November 2008 | Public domain (NASA/JPL/Space Science Institute) | For the ring's colour |
+| Cassini's wide-angle camera at high phase, through [OPUS](https://opus.pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2052 and COISS_2080 volumes, with their geometry from OPUS and the clock angle of Saturn's pole from the volumes' indexes | Public domain (NASA/JPL/Space Science Institute) | Yes, 9 frames in the blue, green and red filters from 2009 and 2013, for the haze |
 
 ### The planet's map
 
@@ -595,6 +596,77 @@ These are the sharpest open global maps of Saturn there are. At mission 21's vie
 the middle of the disk shows about 116 km a pixel at 1080p, against the map's 160 or so. A sharper
 map would take a mosaic of Cassini's own frames, taken on many days
 ([#34](https://github.com/OpenReliant/openreliant-mods/issues/34)).
+
+### Saturn's haze
+
+`saturn.glsl` adds Saturn's haze over the disk and beyond it, with the model of Titan's and
+Neptune's haze from `haze.glsl`, and `saturn/haze.py` fits its numbers to Cassini's frames at high
+phase.
+
+- The frames (`saturn/haze.json`), from Cassini's wide-angle camera in its blue, green and red
+  filters: two sets of 5 January 2009, an hour and a half apart, at 151 and 153 degrees of phase,
+  about 33 km a pixel, each a long stretch of the lit crescent's limb; and one set of 4 January 2013,
+  backlit at 176 degrees, about 35 km a pixel, where the haze shows as a thin bright arc round the
+  dark disk.
+- Cassini stood about 9.3 of Saturn's radii from its middle, so each stretch's own phase angle, and
+  the sun's height above it, are worked out from where it stood, as for Neptune: 154 to 158 degrees
+  in 2009, and about 178 in 2013. The sun's direction in each frame comes from the frame's
+  geometry.
+- Saturn is flattened, and its outline in a frame is an ellipse whose shape the camera's latitude
+  sets: seen from 15 to 21 degrees south, its polar half-axis is about 0.91 of its equatorial one.
+  Fitted with that shape, the edges of 2009 stand 58,900 to 59,400 km from the middle along the
+  equator, where a circle would put them about 65,000 km out. Heights are measured across the
+  outline.
+- The exposures of 2013 were long, 90 to 560 seconds, and the arc's brightest pixels are saturated,
+  as is the crescent in the first set of 2009: they pile up at one level, and are left out of the
+  measurements. In 2013 the arc is the haze itself, so where saturated pixels fill a bin, the fit
+  holds the model at least as bright as the pile. Below the arc, where light scattered more than
+  once and the rings' light on the night side add to the haze's own, it holds the model at most as
+  bright as the frame.
+- The camera's stray light differs along the limb, so each stretch's sky, its median from 600 to
+  1,500 km above the edge, is taken off.
+- The model: one haze whose extinction falls exponentially with height, the same all round Saturn,
+  which stands for the gas and the haze together, with a Henyey-Greenstein lobe and Rayleigh's for
+  the rest of the light. The light scattered more than once isn't estimated for Saturn: the fit
+  takes single scattering alone, and the game draws it so.
+- The fit, by least squares, each bin weighted by 5% of its I/F plus 0.0003: in 2009 from 90 to 400
+  km above the edge, where the crescent's light, which the camera's blur spreads past the edge, has
+  faded; in 2013 from the edge to 400 km above it, on the arc's outer side. Each filter has its own
+  extinction, scale height and single-scattering albedo, and all of them share the lobe and its
+  share. Each frame has its own stray light, as for Titan, and the camera's blur is a Gaussian of
+  0.6 pixels. The edges of 2009 are the game's spheroid; the edge of 2013, on the arc's outer side,
+  comes out 230 to 270 km above it.
+- The fit:
+
+  | | Blue, 463 nm | Green, 568 nm | Red, 647 nm |
+  |---|---|---|---|
+  | Extinction 100 km above the edge | 0.00011 per km | 0.000054 per km | 0.000078 per km |
+  | Scale height | 40 km | 29 km | 30 km |
+  | Single-scattering albedo | 0.38 | 1.00 | 0.91 |
+
+  The phase function comes out as a narrow forward peak, a lobe with an asymmetry of 0.96 taking a
+  ninth of the light, and Rayleigh's with the rest. The haze is darkest in blue, as Saturn's
+  yellowish haze is. The arc's peak in 2013 is saturated, so its brightness comes from the model,
+  held between the saturated level and the frame's light below the arc: about an I/F of 1 to 2,
+  where Cassini saw it, 2 degrees from the sun.
+- The colour and the haze over the disk work as Titan's and Neptune's: `compose.py` writes the
+  matrix that turns the three filters' I/F into the texture's colours to `data/colour.json`, and
+  over the disk the haze adds only what its phase function gives beyond what it gives at the
+  texture's phase, near the sun's direction. It's cut off 1,000 km above the edge, and a quarter of
+  its light blooms.
+- `haze.glsl` works a flattened body out in a frame stretched along its pole, where it's round.
+  OpenReliant takes half the widest span of a planet's model as its radius, which for Saturn is its
+  rings' outer edge, 141,000 km, so `records.luau` gives Saturn a ring from 0.378 to 0.435 of that,
+  from just inside its polar edge to the haze's top, and `saturn.glsl` gives the haze that unit. The
+  ring's shadow dims the haze as it dims the disk.
+- The check: drawn in the game without its bloom from where Cassini took the second set of 2009, at
+  50 km a pixel, the haze beyond the edge shows a pixel or two of glow, as Cassini's frames do.
+- What it leaves out: the haze is the same all round Saturn, where the frames see southern middle
+  latitudes in 2009 and low northern ones in 2013. The disk's crescent at high phase is about an
+  eighth of Cassini's at its peak, and grey-blue where Cassini's is cream
+  ([#56](https://github.com/OpenReliant/openreliant-mods/issues/56)). The rings, which OpenReliant
+  draws over the haze's ring, hide it where their far side passes behind the limb
+  ([OpenReliant/openreliant#1120](https://github.com/OpenReliant/openreliant/issues/1120)).
 
 ## Venus
 
@@ -1051,8 +1123,9 @@ planet, and its night side shows its city lights, from NASA's Black Marble
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
 The mod's player script, `planets.luau`, draws this with a surface function on each body's
-texture: `minnaert.glsl`, or for Saturn `saturn.glsl`, for Earth `earth.glsl`, and for Neptune and
-Titan `neptune.glsl` and `titan.glsl`, which add the ring's shadow, the city lights and the haze.
+texture: `minnaert.glsl`, or for Saturn `saturn.glsl`, which adds the ring's shadow and the haze,
+for Earth `earth.glsl`, which adds the city lights, and for Neptune and Titan `neptune.glsl` and
+`titan.glsl`, which add the haze.
 Each takes the law from `limb.glsl`. It needs PER-PIXEL LIGHTING; without it, the planets are drawn
 as before.
 
@@ -1108,9 +1181,9 @@ as before.
   unchanged.
 - With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
   terminator is soft, as a hazy planet's is, and it stands where the sun sets.
-- A surface function on the planet only draws on its disk. Neptune's and Titan's add their haze in
-  front of the disk, and draw their haze beyond the disk on a ring of their own
-  ([The haze at high phase](#the-haze-at-high-phase),
+- A surface function on the planet only draws on its disk. Neptune's, Saturn's and Titan's add
+  their haze in front of the disk, and draw their haze beyond the disk on a ring of their own
+  ([The haze at high phase](#the-haze-at-high-phase), [Saturn's haze](#saturns-haze),
   [The haze over and beyond the disk](#the-haze-over-and-beyond-the-disk)). The other bodies' haze
   beyond the disk, such as Earth's thin blue limb, is
   [#45](https://github.com/OpenReliant/openreliant-mods/issues/45).
@@ -1120,7 +1193,7 @@ as before.
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
 folder. A build downloads what each texture is made from, about 150 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus, 180 MB for Saturn, 270 MB for Venus, 200 MB for Titan, 1.4 GB for Jupiter's
+Jupiter, 3 MB for Uranus, 220 MB for Saturn, 270 MB for Venus, 200 MB for Titan, 1.4 GB for Jupiter's
 moons and Triton, and 740 MB for Earth, and makes the same textures again.
 
 ## Credits and licences
@@ -1141,8 +1214,9 @@ moons and Triton, and 740 MB for Earth, and makes the same textures again.
   Services.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
   (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2053 to
-  COISS_2064 volumes, calibrated with CISSCAL.
-- Neptune's and Titan's haze: S. Chapman, "The absorption and ionising effect of monochromatic
+  COISS_2064 volumes and Saturn's from its COISS_2052 and COISS_2080 volumes, calibrated with
+  CISSCAL.
+- Neptune's, Saturn's and Titan's haze: S. Chapman, "The absorption and ionising effect of monochromatic
   radiation in an atmosphere on a rotating earth, part II: grazing incidence", Proceedings of the
   Physical Society 43 (1931); L. G. Henyey and J. L. Greenstein, "Diffuse radiation in the Galaxy",
   The Astrophysical Journal 93 (1941); for Neptune's tropopause, G. F. Lindal, "The atmosphere of

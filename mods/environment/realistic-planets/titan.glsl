@@ -5,7 +5,10 @@
 #include "haze.glsl"
 
 const RealisticPlanetsHaze titanHaze = RealisticPlanetsHaze(
-    // The sphere's radius in the game: the haze's edge in green, where the texture's disk ends.
+    // The sphere's radius in the game: the haze's edge in green, where the texture's disk ends. Titan
+    // is round, and its model holds the sphere alone.
+    2741.0,
+    1.0,
     2741.0,
     // The radius the main haze's extinction is given at, 100 km above 2710 km, and the radius the
     // haze is cut off at, 700 km above it.

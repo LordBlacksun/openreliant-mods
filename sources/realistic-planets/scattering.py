@@ -146,12 +146,18 @@ def vec3(values, digits):
 
 
 def constructor(name, unit, reference, top, extinction, scale, layer, layer_radius, layer_width, texture_cosine,
-                albedo, first_lobe, second_lobe, first_share, second_share, multiple, colour, bloom):
+                albedo, first_lobe, second_lobe, first_share, second_share, multiple, colour, bloom, polar=1.0, ring_unit=None):
     """The `RealisticPlanetsHaze` that `haze.glsl` takes, called `name`, as GLSL: its fields in their
     order, each filter's numbers as a vec3, `multiple` each filter's (beam, glow, fall, middle,
-    width), and `colour` the matrix's columns, one for each filter."""
+    width), or none for no light scattered more than once, and `colour` the matrix's columns, one
+    for each filter. `polar` is a flattened body's polar radius as a share of `unit`, and
+    `ring_unit` the unit of the ring the haze beyond the disk is drawn on, km, `unit` by default."""
+    if multiple is None:
+        # No beam and no glow; the glow's fall and width only need to be other than 0.
+        multiple = [(0.0, 0.0, 1.0, 0.0, 1.0)] * 3
     beam, glow, fall, middle, width = np.array(multiple).T
-    fields = [f'{unit:.1f}', f'{reference:.1f}', f'{top:.1f}', vec3(extinction, 4), vec3(scale, 4), vec3(layer, 4),
+    fields = [f'{unit:.1f}', f'{polar:.4f}', f'{unit if ring_unit is None else ring_unit:.1f}', f'{reference:.1f}', f'{top:.1f}',
+              vec3(extinction, 4), vec3(scale, 4), vec3(layer, 4),
               vec3(layer_radius, 5), vec3(layer_width, 3), f'{texture_cosine:.3f}', vec3(albedo, 3), vec3(first_lobe, 3),
               vec3(second_lobe, 3), vec3(first_share, 3), vec3(second_share, 3), vec3(beam, 3), vec3(glow, 3), vec3(fall, 4),
               vec3(middle, 3), vec3(width, 3), 'mat3(' + ', '.join(f'{v:.5f}' for column in colour for v in column) + ')', f'{bloom:g}']

@@ -1,11 +1,57 @@
 // Saturn (Realistic Planets, planets.luau): lit by Minnaert's law (limb.glsl), as the other planets
-// are, and shaded by its ring. The sun's ray from each pixel, in Saturn's own frame, where the ring
-// lies in the plane of the equator, crosses that plane at some radius; where the ring is there, it
-// lets through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and mu0 the
-// cosine of the sun's angle from the ring's pole.
+// are, with its haze (haze.glsl), as Cassini's frames show it at 151 to 176 degrees of phase, and
+// shaded by its ring. sources/realistic-planets/saturn/haze.py fits the haze's numbers below, in
+// Cassini's blue, green and red filters, and prints them. The haze stands for the gas and the haze
+// together.
 //
-// parameters.xyz: k for red, green and blue.
-// parameters.w: the least cosine of the view the law was fitted at.
+// The ring's shadow: the sun's ray from each pixel, in Saturn's own frame, where the ring lies in
+// the plane of the equator, crosses that plane at some radius; where the ring is there, it lets
+// through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and mu0 the cosine of
+// the sun's angle from the ring's pole. It dims the disk's sunlight and the haze's light alike.
+//
+// parameters.xyz: k for red, green and blue, on the planet's texture; 0 on its haze's ring.
+// parameters.w: the least cosine of the view the law was fitted at; 0 on its haze's ring.
+
+#include "haze.glsl"
+
+const RealisticPlanetsHaze saturnHaze = RealisticPlanetsHaze(
+    // The spheroid's equatorial radius in the game, Saturn's at 1 bar: the edge of the lit limb in
+    // each filter, where the texture's disk ends; its polar radius's share of it; and the unit of
+    // the ring the haze beyond the disk is drawn on, the rings' outer edge, which is half the
+    // widest span of Saturn's model.
+    60268.0,
+    0.9020,
+    141000.0,
+    // The radius the haze's extinction is given at, 100 km above the edge, and the radius it is cut
+    // off at, 1,000 km above it.
+    60368.0,
+    61268.0,
+    // The haze's extinction and scale height.
+    vec3(0.0001147, 5.443e-05, 7.78e-05),
+    vec3(40.35, 29.03, 30.37),
+    // No detached layer.
+    vec3(0, 0, 0),
+    vec3(60268, 60268, 60268),
+    vec3(1, 1, 1),
+    // The phase angle the texture shows Saturn at: Hubble's maps, from near the sun's direction.
+    -1.000,
+    // The albedo, and the phase function: one Henyey-Greenstein lobe, a narrow forward peak with a
+    // ninth of the light, and Rayleigh's with the rest.
+    vec3(0.38, 1, 0.908),
+    vec3(0.964, 0.964, 0.964),
+    vec3(0, 0, 0),
+    vec3(0.112, 0.112, 0.112),
+    vec3(0, 0, 0),
+    // The light scattered more than once isn't estimated for Saturn: no beam and no glow.
+    vec3(0, 0, 0),
+    vec3(0, 0, 0),
+    vec3(1, 1, 1),
+    vec3(0, 0, 0),
+    vec3(1, 1, 1),
+    // Cassini's blue, green and red filters' I/F to the game's colours.
+    mat3(-0.10745, 0.14639, 0.55445, 0.22973, 0.33104, -0.02729, 0.31752, -0.00177, -0.00764),
+    // A quarter of the haze's light blooms, as for Titan's and Neptune's.
+    0.25);
 
 // The ring's inner and outer radius in the model's units, as `sphere.py` makes it, and its optical
 // depth seen face on in bins evenly spaced between them, each the mean of the light the texture's
@@ -23,8 +69,6 @@ const float saturnRingTau[saturnRingBins] = float[](
     0.63, 0.531, 0.531, 0.506, 0.482, 0.471, 0.457, 0.437, 0.434, 0.425, 0.42, 0.43, 0.488, 0.422, 0.496, 0.488,
     0.432, 0.229, 0.419, 0.58, 0.492, 0.513, 0.514, 0.482, 0.009, 0.005, 0.004, 0.004, 0.003, 0.004, 0.009, 0.002);
 
-#include "limb.glsl"
-
 // The share of the sun the ring lets through to a point of Saturn's frame, `local`, the sun along
 // `sun` in that frame.
 float saturnRingShade(vec3 local, vec3 sun) {
@@ -41,5 +85,11 @@ float saturnRingShade(vec3 local, vec3 sun) {
 }
 
 void surface(inout Surface s, vec4 parameters, float time) {
-    if (realisticPlanetsLimb(s, parameters)) s.sunlight *= saturnRingShade(s.local, objectDirection(s.toSun));
+    realisticPlanetsHaze(s, parameters, saturnHaze);
+    // On the texture the pixel lies on the disk, in the model's units. On the haze's ring, whose
+    // unit is the rings' outer edge, the line of sight crosses the plane that faces the camera
+    // through the middle about where it passes nearest Saturn.
+    float shade = saturnRingShade(parameters.w > 0.0 ? s.local : s.local * saturnRingOuter, objectDirection(s.toSun));
+    s.sunlight *= shade;
+    s.scattered *= shade;
 }

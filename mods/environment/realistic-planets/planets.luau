@@ -1,8 +1,8 @@
 -- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
--- (minnaert.glsl), Saturn shaded by its ring (saturn.glsl), Earth with its city lights at night
--- (earth.glsl), and Neptune and Titan with their haze (neptune.glsl, titan.glsl). This is a player
--- script: it runs for the whole game. The functions need PER-PIXEL LIGHTING. How the bodies turn
--- and lean, and which rings Neptune's and Titan's haze are drawn on, is in records.luau.
+-- (minnaert.glsl), Earth with its city lights at night (earth.glsl), Saturn shaded by its ring, and
+-- Neptune, Saturn and Titan with their haze (neptune.glsl, saturn.glsl, titan.glsl). This is a
+-- player script: it runs for the whole game. The functions need PER-PIXEL LIGHTING. How the bodies
+-- turn and lean, and which rings their haze is drawn on, is in records.luau.
 
 local shaders = require("openreliant.shaders")
 
@@ -47,12 +47,21 @@ shaders.register_surface({
 
 -- Saturn: the exponents of Hubble's OPAL maps of August 2025 (0.40 at 395 nm, 0.65 at 502 and 0.80
 -- at 631), at the red, green and blue channels' wavelengths for Saturn's spectrum (605, 542 and 455
--- nm), and the same least cosine.
+-- nm), and the same least cosine; and its haze in front of the disk.
 shaders.register_surface({
     name = "saturn",
     shader = "saturn.glsl",
     textures = { "realistic_planets_saturn" },
     parameters = { 0.770, 0.697, 0.540, 0.25 },
+})
+
+-- Saturn's haze beyond its disk, which saturn.glsl draws where it is given no parameters: the
+-- sunlight its haze scatters, fitted to Cassini's frames at 151 to 176 degrees of phase by the
+-- collection's sources/realistic-planets/saturn/haze.py. records.luau gives Saturn the ring it
+-- draws on.
+shaders.register_surface({
+    name = "saturn_haze",
+    shader = "saturn.glsl",
 })
 
 -- Venus: the exponents of Venus Express's pictures (0.835 at 365 nm, 1.081 at 513 and 1.023 at 965),

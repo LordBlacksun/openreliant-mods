@@ -5,9 +5,10 @@
 // lights the disk by that law (limb.glsl) and adds the haze in front of it. On the ring that
 // OpenReliant draws behind the body for its atmosphere (records.luau), where the parameters are 0,
 // it draws the haze beyond the disk. The texture's points are in its model's units, and the ring's
-// in the body's radii. The mod's sources work the model out in the same way, in
-// sources/realistic-planets/scattering.py, to fit each body's numbers, and the mod's README
-// describes it.
+// in its own unit (`ringUnit`). A flattened body, such as Saturn, is worked out in a frame
+// stretched along its pole, the model's Y axis, where it is round. The mod's sources work the model
+// out in the same way, in sources/realistic-planets/scattering.py, to fit each body's numbers, and
+// the mod's README describes it.
 //
 // Each pixel's line of sight is followed through the haze in steps. Each step scatters the sunlight
 // that reaches it toward the eye, as much as its haze's extinction, single-scattering albedo and
@@ -31,6 +32,13 @@
 struct RealisticPlanetsHaze {
     // The sphere's radius in the game, km: where the texture's disk ends.
     float unit;
+    // A flattened body's polar radius as a share of `unit`, along the model's Y axis: 1 for a round
+    // one.
+    float polar;
+    // The unit of the ring that OpenReliant draws the haze beyond the disk on, km: the radius it
+    // takes for the body, half the widest span of the model's first part. That is `unit`, or more
+    // where the model holds more than the body, such as Saturn's rings.
+    float ringUnit;
     // The radius the main haze's extinction is given at, and the radius it is cut off at, km.
     float reference;
     float top;
@@ -189,13 +197,17 @@ vec3 realisticPlanetsHazeLine(RealisticPlanetsHaze haze, float through, vec3 out
 // are the law's, or its haze beyond the disk on its ring, where they are 0.
 void realisticPlanetsHaze(inout Surface s, vec4 parameters, RealisticPlanetsHaze haze) {
     bool disk = parameters.w > 0.0;
-    // The eye, the line of sight through the pixel and the sun, in the body's frame, in km. On the
-    // texture, the pixel lies on the sphere, whose radius in the model's units its distance from
-    // the middle gives.
-    float km = disk ? haze.unit / length(s.local) : haze.unit;
-    vec3 eye = objectPoint(vec3(0.0)) * km;
-    vec3 ray = normalize(s.local * km - eye);
-    vec3 sun = objectDirection(s.toSun);
+    // The eye, the line of sight through the pixel and the sun, in the body's frame, in km,
+    // stretched along the pole so that the body is round. On the texture, the pixel lies on the
+    // body, whose equatorial radius in the model's units the stretched point's distance from the
+    // middle gives.
+    vec3 stretch = vec3(1.0, 1.0 / haze.polar, 1.0);
+    vec3 local = s.local * stretch;
+    float km = disk ? haze.unit / length(local) : haze.ringUnit;
+    vec3 eye = objectPoint(vec3(0.0)) * stretch * km;
+    vec3 ray = normalize(local * km - eye);
+    vec3 toSun = objectDirection(s.toSun);
+    vec3 sun = dot(toSun, toSun) > 0.5 ? normalize(toSun * stretch) : vec3(0.0);
     vec3 nearest = eye - dot(eye, ray) * ray;
     float through = length(nearest);
     // How far the lines of sight through the pixel spread from the body's middle, km.

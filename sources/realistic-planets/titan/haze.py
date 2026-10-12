@@ -55,7 +55,6 @@ import sys
 import numpy as np
 from scipy import ndimage, optimize, sparse
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import cassini  # noqa: E402
 import globe  # noqa: E402
@@ -127,12 +126,6 @@ OWN_LOWEST = [0.0, 40.0, -3e-3]
 OWN_HIGHEST = [0.05, 2000.0, 3e-3]
 
 
-def sun_direction(f):
-    """The sun's direction in a frame, radians from right toward up."""
-    right, up, _, sun = cassini.axes(f)
-    return np.arctan2(sun @ up, sun @ right)
-
-
 def polar(image, cx, cy, radii, angles):
     """An image along rays from (`cx`, `cy`), NaN beyond its edges."""
     xs = cx + np.outer(np.cos(angles), radii)
@@ -199,7 +192,7 @@ def prepare(data, frames, high):
         # which `cassini.trusted` sets to zero for the limb fit.
         image = cassini.frame(os.path.join(data, os.path.basename(f['urls'][1])))
         image = np.where(np.isfinite(image) & (image < cassini.MOST_IF), image, np.nan)
-        res, sun = f['resolution_km'], sun_direction(f)
+        res, sun = f['resolution_km'], cassini.sun_direction(f)
         if high:
             cx, cy, radius = ring_centre(np.nan_to_num(image), res, sun)
         else:
