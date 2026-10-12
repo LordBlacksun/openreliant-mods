@@ -1,7 +1,7 @@
 -- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
 -- (minnaert.glsl), Earth with its city lights at night (earth.glsl), Saturn shaded by its ring, and
--- Neptune, Saturn, Venus and Titan with their haze (neptune.glsl, saturn.glsl, venus.glsl,
--- titan.glsl). This is a player script: it runs for the whole game. The functions need PER-PIXEL
+-- Neptune, Jupiter, Saturn, Venus and Titan with their haze (neptune.glsl, jupiter.glsl,
+-- saturn.glsl, venus.glsl, titan.glsl). This is a player script: it runs for the whole game. The functions need PER-PIXEL
 -- LIGHTING. How the bodies turn and lean, and which rings their haze is drawn on, is in
 -- records.luau.
 
@@ -28,12 +28,20 @@ shaders.register_surface({
 
 -- Jupiter: the exponents of Hubble's OPAL maps of January 2015 (0.850 at 395 nm, 0.950 at 502 and
 -- 0.999 at 631), at the red, green and blue channels' wavelengths for Jupiter's spectrum (602, 541
--- and 454 nm), and the same least cosine.
+-- and 454 nm), and the same least cosine; and its haze in front of the disk.
 shaders.register_surface({
     name = "jupiter",
-    shader = "minnaert.glsl",
+    shader = "jupiter.glsl",
     textures = { "realistic_planets_jupiter" },
     parameters = { 0.988, 0.965, 0.905, 0.25 },
+})
+
+-- Jupiter's haze beyond its disk, which jupiter.glsl draws where it is given no parameters: the
+-- sunlight its stratospheric haze scatters, worked out from measurements of it by the collection's
+-- sources/realistic-planets/jupiter/haze.py. records.luau gives Jupiter the ring it draws on.
+shaders.register_surface({
+    name = "jupiter_haze",
+    shader = "jupiter.glsl",
 })
 
 -- Uranus: the exponents of Hubble's OPAL maps of November 2022 (0.85 at 467 nm, 0.80 at 547 and 0.57

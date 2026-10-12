@@ -75,6 +75,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import minnaert  # noqa: E402
 import photometry  # noqa: E402
+import scattering  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, out = sys.argv[1], sys.argv[2]
@@ -342,9 +343,8 @@ print('wrote', out)
 # scale, with the key light's blue divided out as the texture's is, since the sun lights the haze as
 # it lights the disk.
 key_light = np.array([1.0, 1.0, 1.0 / key_blue])
-wavelengths = sorted(photometry.HAZE.values())
-K = dict(zip(wavelengths, (((albedo * hat)[:, None] * M).sum(axis=0) for hat in tc.hats(lam, wavelengths))))
-colours = {name: (scale / fit * K[w] / np.interp(w, lam, albedo) * key_light).tolist() for name, w in photometry.HAZE.items()}
+colours = {name: (scale / fit * each * key_light).tolist()
+           for name, each in zip(scattering.WAVELENGTHS, tc.filter_colours(lam, albedo, M, list(scattering.WAVELENGTHS.values())))}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
     json.dump({'about': "Venus's I/F at each of the haze's wavelengths as the texture's linear sRGB, its blue divided by "
                         "the key light's: a row for each wavelength.", 'colours': colours}, f, indent=1)

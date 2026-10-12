@@ -22,6 +22,9 @@ from scipy.special import erfcx
 # The most optical depth along the light's path the estimate of the light scattered more than once
 # takes, as the shader does, past which e^-t is below 1e-34.
 MOST_DEPTH = 80.0
+# The wavelengths a haze built from measurements of its particles is worked out at, nm, in blue, green
+# and red (`mie.py`).
+WAVELENGTHS = {'blue': 450.0, 'green': 550.0, 'red': 650.0}
 
 
 def lobe(g, cos_theta):
