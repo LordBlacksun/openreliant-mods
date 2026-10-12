@@ -52,6 +52,7 @@ from scipy import ndimage, optimize, sparse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import cassini  # noqa: E402
+import globe  # noqa: E402
 import scattering  # noqa: E402
 
 # Heights are measured from `BASE` km from Titan's centre, about the haze's edge in red, and the haze
@@ -147,7 +148,7 @@ def ring_centre(image, res, sun):
             j = i + beyond[0]
             edge = radii[j - 1] + (ray[j - 1] - RING_EDGE * peak) / (ray[j - 1] - ray[j]) * (radii[j] - radii[j - 1])
             points.append((cx + np.cos(a) * edge, cy - np.sin(a) * edge))
-        cx, cy, radius = cassini.circle(np.array(points))
+        cx, cy, radius = globe.circle(np.array(points))
     return cx, cy, radius
 
 
@@ -199,21 +200,14 @@ def prepare(data, frames, high):
 
 def sky_iof(x, y, phase, haze):
     """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
-    from afar at `phase` degrees (`scattering.sky_light`)."""
+    from afar at `phase` degrees (`scattering.iof`): two lobes and the detached layer."""
     log_extinction, scale, log_layer, layer_height, layer_width, albedo, first, second, share = haze
-    reference = BASE + REFERENCE
 
-    def extinction(r):
-        layer = (r - BASE - layer_height) / layer_width
-        return scattering.main_haze(r, reference, log_extinction, scale) + np.exp(log_layer - 0.5 * layer ** 2)
+    def layer(r):
+        return np.exp(log_layer - 0.5 * ((r - BASE - layer_height) / layer_width) ** 2)
 
-    # The detached layer is optically thin, and is left out of the sunlight's depth.
-    def sun_depth(r, cos_chi):
-        return scattering.toward_sun(r, cos_chi, reference, log_extinction, scale)
-
-    light = scattering.sky_light(x, y, phase, extinction, sun_depth, BASE + TOP, STEPS, SPREAD)
-    cos_theta = -np.cos(np.radians(phase))
-    return albedo * (share * scattering.lobe(first, cos_theta) + (1 - share) * scattering.lobe(second, cos_theta)) * light / 4
+    return scattering.iof(x, y, phase, BASE + REFERENCE, log_extinction, scale, albedo, (first, second, share, 1 - share),
+                          BASE + TOP, STEPS, SPREAD, layer)
 
 
 def fit_filter(frames):

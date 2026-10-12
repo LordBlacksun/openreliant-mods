@@ -312,18 +312,24 @@ the other bodies, and adds its haze over the disk and beyond it, with the model 
   after closest approach, about 6 km a pixel. With the sun behind Neptune, the haze scatters the
   sunlight forward, toward the camera, and shows as a bright band along the lit limb, which fades
   within about 80 km above it.
+- At 152 degrees the camera stood about five of Neptune's radii from its middle, so it saw the edge
+  12 degrees off the middle's direction, at a phase angle of its own: about 160 degrees where the
+  frames look. Each frame's geometry is worked out from where the camera stood, and a pixel's size
+  at the edge from the camera's distance to the edge rather than to the middle. The frames at 136
+  degrees, from 32 radii, see the edge at about 137 degrees.
 - The cameras' pointing isn't archived ([Placing each frame](#placing-each-frame)), so each frame's
   limb is fitted on the frame itself: a circle through its half-maximum edge, where the brightness
   falls half way from the peak just inside it to the sky just outside. Its I/F is averaged in bins of
   height above the edge, in three stretches along the limb.
-- Each stretch's angle from the sun's direction comes from the lit crescent inside it. Seen at the
-  frame's phase angle, the sun sets on the disk the nearer the edge the further the stretch is from
-  the sun's direction, so Minnaert's law, with the texture's exponent for the filter, a brightness
-  and a floor of stray light, fitted to the stretch's light from 150 km inside the edge to 3,000 km,
-  gives the angle. The frames at 152 degrees see stretches 60 to 70 degrees from the sun's direction,
-  near a cusp, where the disk is dark 500 km inside the edge, and those at 136 degrees 40 to 65. The
-  haze's light alone hardly tells the angle: while the sun stands well above the haze, its light
-  falls off with height alike.
+- Each stretch's angle round from the sun's direction comes from the lit crescent inside it. The sun
+  sets on the disk the nearer the edge the further the stretch is from the sun's direction, so
+  Minnaert's law, with the texture's exponent for the filter, a brightness and a floor of stray
+  light, fitted to the stretch's light from 150 km inside the edge to 3,000 km, gives the angle. The
+  frames at 152 degrees see stretches 24 to 42 degrees round from the sun's direction, where the sun
+  sets a few hundred km inside the edge, and those at 136 degrees 37 to 63. The haze's light alone
+  hardly tells the angle: while the sun stands well above the haze, its light falls off with height
+  alike. The model takes each stretch's edge as a view from afar would show it, at the phase angle
+  there and with the sun as high above it.
 - The model: one haze whose extinction falls exponentially with height, the same all round Neptune,
   which stands for the gas and the haze together, without a detached layer. Its phase function is a
   Henyey-Greenstein lobe, with Rayleigh's for the rest of the light.
@@ -332,25 +338,25 @@ the other bodies, and adds its haze over the disk and beyond it, with the model 
   and the clear frames, the only ones at both phases, set the lobe's asymmetry and share for all of
   them. Each frame has its own stray light, as for Titan. The camera's blur is a Gaussian of 0.7
   pixels. The edges of the frames at 152 degrees are the game's sphere, and those at 136 degrees
-  come out 13 to 18 km lower.
+  come out 20 to 25 km lower.
 - The fit:
 
   | | Blue, 479 nm | Green, 566 nm | Orange, 591 nm |
   |---|---|---|---|
-  | Extinction at the edge | 0.00022 per km | 0.00027 per km | 0.00029 per km |
-  | Scale height | 16.2 km | 12.8 km | 13.0 km |
-  | Single-scattering albedo | 1.00 | 1.00 | 1.00 |
+  | Extinction at the edge | 0.00014 per km | 0.00017 per km | 0.00018 per km |
+  | Scale height | 16.6 km | 13.1 km | 13.3 km |
+  | Single-scattering albedo | 1.00 | 0.99 | 0.99 |
 
-  The phase function comes out as the lobe alone, with an asymmetry of 0.61: light scattered by 28
-  degrees, as at 152 degrees of phase, is about 25 times as bright as light scattered by 165 degrees,
-  as at the texture's 15.
-- In each filter, the edge lies where a line of sight grazing it crosses about 0.35 to 0.4 of an
-  optical depth of haze, and a line straight down from it about 0.0035. The scale heights are close
+  The phase function comes out as the lobe alone, with an asymmetry of 0.60: light scattered by 20
+  degrees, as at the edge in the frames at 152 degrees, is about 36 times as bright as light
+  scattered by 165 degrees, as at the texture's 15.
+- In each filter, the edge lies where a line of sight grazing it crosses about 0.22 to 0.26 of an
+  optical depth of haze, and a line straight down from it about 0.0023. The scale heights are close
   to the gas's own near Neptune's tropopause, about 15 km at 52 K (Lindal, 1992). The albedo comes
-  out at its limit in each filter: where the haze is thin, the fit can't tell more haze from brighter
-  haze, and the light scattered more than once, which the model leaves out, adds to what the frames
-  see. With two phases, the phase function is pinned between 28 and 44 degrees of scattering, and
-  elsewhere it's the lobe's shape.
+  out at or near its limit in each filter: where the haze is thin, the fit can't tell more haze from
+  brighter haze, and the light scattered more than once, which the model leaves out, adds to what
+  the frames see. With two phases, the phase function is pinned between 18 and 43 degrees of
+  scattering, and elsewhere it's the lobe's shape.
 - The colour and the haze over the disk work as Titan's: `compose.py` writes the matrix that turns
   the three filters' I/F into the texture's colours to `data/colour.json`, and over the disk the haze
   adds only what its phase function gives beyond what it gives at the texture's 15 degrees. Neptune's
@@ -358,20 +364,20 @@ the other bodies, and adds its haze over the disk and beyond it, with the model 
   300 km above the edge, where its extinction has fallen to a hundred-millionth of the edge's or
   less, and `records.luau` gives Neptune a ring out to 1.013 of its radius for it. A quarter of its
   light blooms, as Titan's does.
-- The check: drawn in the game without its bloom where the close frames look, at 152 degrees near a
-  cusp, from 2.5 of Neptune's radii, with the sun as high above the limb there and the same
-  scattering angle, at 10 km a pixel, the haze beyond the edge follows the model within 5% from the
-  edge to 60 km above it, and the model follows Voyager's close frames, less their stray light,
-  within about 10% from the edge to 30 km above it. Further out, the frames' stray light, which the
-  fit models only roughly, outweighs the haze. Looking at the limb on the sun's side at 7 km a
-  pixel, the haze follows the model as closely. Beyond the edge, OpenReliant adds the ring's light
-  to the sky in linear light, so the haze keeps its colour over the sun's glow.
+- The check: drawn in the game without its bloom from where Voyager took the close frames, 4.8 of
+  Neptune's radii from its middle at 153 degrees of phase, looking at the stretch they show, at 10
+  km a pixel, the haze beyond the edge follows the model within 10% from the edge to 40 km above it,
+  and Voyager's close frames, less their stray light, within 16%. Further out, the frames' stray
+  light, which the fit models only roughly, outweighs the haze. Looking at the limb on the sun's
+  side, at 152.5 degrees of phase there and 5 km a pixel, the haze follows the model within 7% from
+  the edge to 30 km above it. Beyond the edge, OpenReliant adds the ring's light to the sky in linear
+  light, so the haze keeps its colour over the sun's glow.
 - What it leaves out: over the disk, the crescent at high phase is too faint, as the haze above the
-  edge is thin, and the disk's law, fitted at 15 degrees of phase, has no forward scattering. Where
-  the close frames look, at 152 degrees near a cusp, it's about a third of Voyager's from 20 to 100
-  km inside the edge, and a tenth or less from 200 to 300 km inside, in every colour; across the
-  whole crescent at 133 degrees it holds about 0.55 of Voyager's light in red, 0.72 in green and
-  0.76 in blue ([#50](https://github.com/OpenReliant/openreliant-mods/issues/50)). Light scattered
+  edge is thin, and the disk's law, fitted at 15 degrees of phase, has no forward scattering. Seen
+  from where the close frames were taken, it's a quarter to a half of Voyager's from 20 to 300 km
+  inside the edge, in every colour; across the whole crescent at 133 degrees it holds about 0.56 of
+  Voyager's light in red, 0.75 in green and 0.79 in blue
+  ([#50](https://github.com/OpenReliant/openreliant-mods/issues/50)). Light scattered
   more than once is left out too
   ([#49](https://github.com/OpenReliant/openreliant-mods/issues/49)).
 

@@ -14,6 +14,12 @@ The frames (`haze.json`):
   but don't resolve the haze, which lies within a pixel or two of the edge there: they are for
   checking what the game draws, not for the fit.
 
+The geometry: at 152 degrees the camera stood about five of Neptune's radii from its middle, so it
+saw the edge 12 degrees off the middle's direction, at a phase angle of its own. Each stretch's
+geometry is worked out from the camera's place (`sight`), and a pixel's size at the edge from the
+camera's distance to the edge (`km_per_pixel`). The frames at 136 degrees, from 32 radii, are close
+to a view from afar.
+
 The measurements:
 
 - Each frame's limb is a circle fitted to its half-maximum edge: where, along each ray from the
@@ -22,15 +28,15 @@ The measurements:
   limb (`edge_guess`).
 - The limb is cut into `SEGMENTS` stretches, and in each the frame's I/F is averaged in bins of
   height above the edge.
-- The cameras' pointing isn't archived, so each stretch's angle from the sun's direction comes from
-  the lit crescent inside it (`crescent_angle`). Seen at the frame's phase angle, the sun's cosine
-  on the disk falls to 0 at the terminator, the nearer the edge the further the stretch is from the
-  sun's direction. Minnaert's law with the texture's exponent for the filter (`EXPONENT`), a
-  brightness and a floor of stray light is fitted to the stretch's I/F from `INSIDE` km inside the
-  edge, below the haze, and gives the angle. The frames at 152 degrees see stretches 60 to 70
-  degrees from the sun's direction, near a cusp, and those at 136 degrees 40 to 65. The haze's
-  light alone hardly tells the angle: while the sun stands well above the haze, its light falls off
-  with height alike.
+- The cameras' pointing isn't archived, so each stretch's angle round from the sun's direction comes
+  from the lit crescent inside it (`crescent_angle`): the sun's cosine on the disk falls to 0 at the
+  terminator, the nearer the edge the further the stretch is from the sun's direction. Minnaert's
+  law with the texture's exponent for the filter (`EXPONENT`), a brightness and a floor of stray
+  light is fitted to the stretch's I/F from `INSIDE` km inside the edge, below the haze, and gives
+  the angle. The haze's light alone hardly tells the angle: while the sun stands well above the
+  haze, its light falls off with height alike.
+- The model takes each stretch's edge as a view from afar would show it, at the phase angle there and
+  with the sun as high above it (`from_afar`).
 
 The model (`scattering.py`), which the shader works out for each pixel in the same way: one main
 haze, its extinction falling exponentially with height, the same all round Neptune, which stands for
@@ -59,6 +65,7 @@ import numpy as np
 from scipy import ndimage, optimize, sparse
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import globe  # noqa: E402
 import scattering  # noqa: E402
 import voyager  # noqa: E402
 
@@ -151,11 +158,11 @@ def frame(data, f):
     return np.where(gap | ndimage.binary_dilation(jumps, iterations=3)[:, None], np.nan, image)
 
 
-
 def km_per_pixel(f, data):
-    """A frame's pixel at Neptune's distance, km."""
+    """A frame's pixel at Neptune's edge, km: the pixel's angle times the camera's distance from the
+    edge, which is less than its distance from the middle."""
     fields = voyager.label(os.path.join(data, f['name'] + '_GEOMED.LBL'))
-    return f['distance_km'] * voyager.pixel(fields)
+    return np.sqrt(f['distance_km'] ** 2 - UNIT ** 2) * voyager.pixel(fields)
 
 
 def edge_guess(image, radius):
@@ -178,12 +185,9 @@ def edge_guess(image, radius):
     rng = np.random.default_rng(0)
     best, best_count = None, 0
     for _ in range(RANSAC_TRIALS):
-        three = points[rng.choice(len(points), 3, replace=False)]
-        try:
-            cx, cy, c = np.linalg.solve(np.c_[2 * three, np.ones(3)], (three ** 2).sum(axis=1))
-        except np.linalg.LinAlgError:
-            continue
-        r = np.sqrt(c + cx ** 2 + cy ** 2)
+        # Three points in a line give no circle, and a radius that is NaN, which the test below drops.
+        with np.errstate(invalid='ignore'):
+            cx, cy, r = globe.circle(points[rng.choice(len(points), 3, replace=False)])
         if not 0.7 * radius < r < 1.4 * radius:
             continue
         count = int((np.abs(np.hypot(points[:, 0] - cx, points[:, 1] - cy) - r) < RANSAC_NEAR).sum())
@@ -241,32 +245,55 @@ def binned(image, height, inside, bins):
         return (bins[:-1] + bins[1:]) / 2, total / count, count
 
 
-def crescent(depth, angle, phase, k):
-    """Minnaert's law's factor, mu0^k mu^(k-1), with exponent `k`, at `depth` km inside the edge of
-    a stretch `angle` degrees from the sun's direction, seen from afar at `phase` degrees, the view's
-    cosine held at `LEAST_MU`."""
+def sight(distance, phase, angle, depth):
+    """The line of sight of a camera `distance` km from Neptune's middle, at `phase` degrees, through
+    the disk `depth` km inside the edge, as `km_per_pixel` measures it there, `angle` degrees round
+    from the sun's direction: where it meets the sphere, in Neptune's radii from the middle, its
+    direction, and the sun's. The camera stands on the z axis, looking toward the middle, and the
+    sun's direction across the sky is along x."""
+    d = distance / UNIT
     a, p = np.radians(phase), np.radians(angle)
-    rho = 1 - depth / UNIT
-    mu = np.sqrt(np.clip(1 - rho ** 2, 0, None))
-    mu0 = rho * np.cos(p) * np.sin(a) + mu * np.cos(a)
+    off_middle = np.arcsin(1 / d) - np.atleast_1d(depth) / np.sqrt(distance ** 2 - UNIT ** 2)
+    line = np.stack([np.sin(off_middle) * np.cos(p), np.sin(off_middle) * np.sin(p), -np.cos(off_middle)], axis=-1)
+    reach = d * np.cos(off_middle) - np.sqrt(np.clip(1 - (d * np.sin(off_middle)) ** 2, 0, None))
+    return np.array([0.0, 0.0, d]) + reach[:, None] * line, line, np.array([np.sin(a), 0.0, np.cos(a)])
+
+
+def crescent(depth, angle, phase, distance, k):
+    """Minnaert's law's factor, mu0^k mu^(k-1), with exponent `k`, at `depth` km inside the edge of
+    a stretch `angle` degrees round from the sun's direction, seen by a camera `distance` km from the
+    middle at `phase` degrees, the view's cosine held at `LEAST_MU`."""
+    point, line, sun = sight(distance, phase, angle, depth)
+    mu0, mu = point @ sun, -np.sum(line * point, axis=1)
     return np.clip(mu0, 0, None) ** k * np.maximum(mu, LEAST_MU) ** (k - 1)
 
 
-def crescent_angle(depth, mean, phase, k):
-    """A stretch's angle from the sun's direction, degrees: where Minnaert's law, with a brightness
-    and a floor fitted along with it, best follows the crescent's I/F `mean` at `depth` km inside the
-    edge, seen at `phase` degrees."""
+def crescent_angle(depth, mean, phase, distance, k):
+    """A stretch's angle round from the sun's direction, degrees: where Minnaert's law, with a
+    brightness and a floor fitted along with it, best follows the crescent's I/F `mean` at `depth` km
+    inside the edge, seen by a camera `distance` km from the middle at `phase` degrees."""
     def residuals(p):
         brightness, floor, angle = p
-        return (brightness * crescent(depth, angle, phase, k) + floor - mean) / (RELATIVE * np.abs(mean) + ABSOLUTE)
+        return (brightness * crescent(depth, angle, phase, distance, k) + floor - mean) / (RELATIVE * np.abs(mean) + ABSOLUTE)
 
     fits = [optimize.least_squares(residuals, [0.5, 0.0, start], bounds=([0.0, -0.1, 0.0], [3.0, 0.2, 89.9])) for start in ANGLE_STARTS]
     return min(fits, key=lambda fit: fit.cost).x[2]
 
 
+def from_afar(distance, phase, angle):
+    """The edge that a camera `distance` km from Neptune's middle, at `phase` degrees, sees `angle`
+    degrees round from the sun's direction, as a view from afar shows it, which the haze's model
+    takes: the phase angle at the edge, and the angle round from the sun's direction that sets the
+    sun as high above it, degrees. The line of sight crosses the haze in the same way in both."""
+    point, line, sun = sight(distance, phase, angle, 0.0)
+    there = np.arccos(np.clip(-line[0] @ sun, -1, 1))
+    return np.degrees(there), np.degrees(np.arccos(np.clip(point[0] @ sun / np.sin(there), -1, 1)))
+
+
 def measure(data, f):
     """A frame's limb, in `SEGMENTS` stretches: each one's I/F averaged in bins of height above the
-    edge, with the pixels in each bin, and its angle from the sun's direction."""
+    edge, with the pixels in each bin, its angle round from the sun's direction, and its edge as a
+    view from afar shows it (`from_afar`)."""
     image = frame(data, f)
     km = km_per_pixel(f, data)
     guess = edge_guess(image, UNIT / km)
@@ -288,35 +315,24 @@ def measure(data, f):
         heights, mean, count = binned(image, height, along & (height >= bins[0]) & (height < bins[-1]), bins)
         depth, light, seen = binned(image, height, along & (height >= inward[0]) & (height < inward[-1]), inward)
         used = (seen >= LEAST_PIXELS) & np.isfinite(light)
-        angle = crescent_angle(-depth[used], light[used], f['phase'], EXPONENT[f['filter']])
-        stretches.append(dict(heights=heights, mean=mean, count=count, angle=angle))
+        angle = crescent_angle(-depth[used], light[used], f['phase'], f['distance_km'], EXPONENT[f['filter']])
+        phase, afar = from_afar(f['distance_km'], f['phase'], angle)
+        stretches.append(dict(heights=heights, mean=mean, count=count, angle=afar, phase=phase, round=angle))
     print(f"{f['name']} ({f['filter']}, {f['phase']:.1f} degrees, {km:.2f} km a pixel): edge rms {rms:.2f} px over "
-          f"{len(points)} points; stretches " + ', '.join(f"{s['angle']:.1f}" for s in stretches) + " degrees from the sun's direction")
+          f"{len(points)} points; stretches " + ', '.join(f"{s['round']:.1f}" for s in stretches) + " degrees round from the sun's "
+          "direction, at " + ', '.join(f"{s['phase']:.1f}" for s in stretches) + " degrees of phase")
     return dict(name=f['name'], filter=f['filter'], phase=f['phase'], km=km, stretches=stretches)
 
 
-def phase_function(cos_theta, lobe, share):
-    """The phase function at the scattering angle's cosine: the lobe's share, and Rayleigh's."""
-    return share * scattering.lobe(lobe, cos_theta) + (1 - share) * scattering.rayleigh(cos_theta)
-
-
 def stretch_iof(heights, angle, phase, own_filter, shared):
-    """The haze's I/F at `heights` km above `UNIT` across the limb at `angle` degrees from the sun's
-    direction, seen from afar at `phase` degrees."""
+    """The haze's I/F at `heights` km above `UNIT` across the limb at `angle` degrees round from the
+    sun's direction, seen from afar at `phase` degrees (`scattering.iof`): one lobe and Rayleigh's."""
     log_extinction, scale, albedo = own_filter
-    lobe, share = shared[:2]
-    reference = UNIT + REFERENCE
-
-    def extinction(r):
-        return scattering.main_haze(r, reference, log_extinction, scale)
-
-    def sun_depth(r, cos_chi):
-        return scattering.toward_sun(r, cos_chi, reference, log_extinction, scale)
-
+    lobe, share = shared
     a = np.radians(angle)
     r = UNIT + heights
-    light = scattering.sky_light(r * np.cos(a), r * np.sin(a), phase, extinction, sun_depth, UNIT + TOP, STEPS, SPREAD)
-    return albedo * phase_function(-np.cos(np.radians(phase)), lobe, share) * light / 4
+    return scattering.iof(r * np.cos(a), r * np.sin(a), phase, UNIT + REFERENCE, log_extinction, scale, albedo,
+                          (lobe, 0.0, share, 0.0), UNIT + TOP, STEPS, SPREAD)
 
 
 def fit(measured):
@@ -348,7 +364,7 @@ def fit(measured):
         index = np.nonzero(rows)[0]
         near = slice(max(index[0] - margin, 0), min(index[-1] + margin + 1, len(rows)))
         heights = s['heights'][near]
-        iof = stretch_iof(heights + shift, s['angle'], m['phase'], own_filter, shared)
+        iof = stretch_iof(heights + shift, s['angle'], s['phase'], own_filter, shared)
         iof = ndimage.gaussian_filter1d(iof, sigma, mode='nearest')
         sky = offset + tail * np.exp(-np.clip(heights, 0, None) / length)
         return (iof + sky)[rows[near]]
@@ -408,7 +424,7 @@ if __name__ == '__main__':
         print(f"  {m['name']} ({m['filter']}, {m['phase']:.1f} degrees): " + ', '.join(f'{k} {v:.4g}' for k, v in zip(OWN_FRAME, own)))
     colour_filters = ['Blue', 'Green', 'Orange']
     numbers = np.array([filters[name] for name in colour_filters]).T
-    lobe, share = shared[:2]
+    lobe, share = shared
     # One lobe and Rayleigh's, and no detached layer, whose extinction is 0.
     print('for neptune.glsl:')
     print(scattering.constructor(

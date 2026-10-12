@@ -73,7 +73,7 @@ Run each script from its own folder, in this order:
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
 | `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, bends a spectrum through filters, and finds the wavelength each channel stands for |
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
-| `globe.py` | Points from a body's centre toward a latitude and longitude, and takes the area-weighted mean over its global map, for the bodies' scripts |
+| `globe.py` | Points from a body's centre toward a latitude and longitude, takes the area-weighted mean over its global map, and fits a circle to its disk's edge in a frame, for the bodies' scripts |
 | `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune, Jupiter's moons and Triton |
 | `scattering.py` | Works out the sunlight a body's haze scatters toward the camera once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's and Titan's fits |
 | `neptune/frames.json` | The Voyager frames used for the texture, with their geometry from OPUS and their download links |
@@ -100,7 +100,7 @@ Run each script from its own folder, in this order:
 | `titan/frames.json` | The Cassini frames at low phase, for the texture and the haze, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/haze.json` | The Cassini frames at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
-| `titan/cassini.py` | Reads the frames, works out their geometry and fits the disk to the lit limb, or a circle to any edge, for `compose.py` and `haze.py` |
+| `titan/cassini.py` | Reads the frames, works out their geometry and fits the disk to the lit limb, for `compose.py` and `haze.py` |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, composes the texture with the map of the surface and the spectrum, and writes the texture's colours for the haze to `data/colour.json` |
 | `titan/haze.py` | Fits the model of the haze beyond the disk to the frames at low and high phase, and prints the numbers for `titan.glsl` |
 | `screenshots/titan.png` | The picture on the mod's page after its thumbnail: Titan in OpenReliant's mission 25, from 1.1 million units, 3.8 of its radii, at 30, 100, 150 and 165 degrees of phase, with the bloom and without the flight display, four views of 1920 by 1080 halved into one |

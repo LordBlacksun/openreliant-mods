@@ -14,8 +14,8 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     24864.0,
     25064.0,
     // The haze's extinction and scale height.
-    vec3(4.49e-07, 1.075e-07, 1.284e-07),
-    vec3(16.18, 12.75, 12.95),
+    vec3(3.311e-07, 8.212e-08, 9.619e-08),
+    vec3(16.58, 13.07, 13.25),
     // No detached layer.
     vec3(0, 0, 0),
     vec3(24764, 24764, 24764),
@@ -23,8 +23,8 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     // The mean phase angle of the frames the texture comes from, 15 degrees.
     -0.966,
     // The albedo, and the phase function: one Henyey-Greenstein lobe, without Rayleigh's.
-    vec3(1, 1, 0.998),
-    vec3(0.609, 0.609, 0.609),
+    vec3(1, 0.989, 0.995),
+    vec3(0.599, 0.599, 0.599),
     vec3(0, 0, 0),
     vec3(1, 1, 1),
     vec3(0, 0, 0),
