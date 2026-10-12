@@ -1,6 +1,6 @@
 // Realistic Planets (planets.luau): Jupiter and its haze (haze.glsl): a haze of small particles
 // above the clouds, about 19 km a scale height, scattering forward, with a faint backward lobe. The
-// mod's README gives the numbers' sources.
+// mod's README gives the sources of the numbers.
 
 #include "haze.glsl"
 
@@ -18,8 +18,8 @@ const RealisticPlanetsHaze jupiterHaze = RealisticPlanetsHaze(
     // No forward light from the cloud tops: Cassini's phase curve has Jupiter about a quarter
     // darker than a plain ball at partial phases (Mayorga and others, 2016), as the disk already is.
     0.0, 0.6,
-    // The texture shows Jupiter as from the sun; the wavelengths to the texture's colours, and a
-    // quarter of the haze's light blooming.
+    // The texture shows Jupiter as seen from the sun; the wavelengths to the texture's colours, and
+    // the share of the haze's light that blooms.
     0.0,
     mat3(-0.07895, 0.08304, 0.59734, 0.17935, 0.50883, 0.00580, 0.50345, 0.02853, -0.01364),
     0.25);

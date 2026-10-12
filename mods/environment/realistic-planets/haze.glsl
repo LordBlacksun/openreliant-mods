@@ -4,12 +4,12 @@
 // it reaches, its colour, and how strongly it scatters light forward. The mod's README gives each
 // body's numbers and where they come from.
 //
-// The function draws two things. On the body's texture, where parameters.w is the least cosine of
-// the view for Minnaert's law, it lights the disk by that law (limb.glsl) and adds the haze in front
-// of it. On the ring that OpenReliant draws behind the body for its atmosphere (records.luau), where
-// the parameters are 0, it draws the haze beyond the disk. The texture's points are in its model's
-// units, and the ring's in its own unit (`ringUnit`). A flattened body is worked out in a frame
-// stretched along its pole, the model's Y axis, where it is round.
+// The function draws two things. On the body's texture, where parameters.w is the smallest cosine
+// of the view angle for Minnaert's law, it lights the disk by that law (limb.glsl) and adds the
+// haze in front of it. On the ring that OpenReliant draws behind the body for its atmosphere
+// (records.luau), where the parameters are 0, it draws the haze beyond the disk. The texture's
+// points are in its model's units, and the ring's in its own unit (`ringUnit`). A flattened body is
+// worked out in a frame stretched along its pole, the model's Y axis, where it is round.
 //
 // The haze's extinction falls exponentially with height above the body's sphere, with a detached
 // layer above it where the body has one. Each pixel's line of sight is followed through the haze in

@@ -1,15 +1,17 @@
-// Saturn (Realistic Planets, planets.luau): lit by Minnaert's law (limb.glsl), as the other planets
-// are, with its haze (haze.glsl), as Cassini's frames show it at 151 to 176 degrees of phase, and
-// shaded by its ring. The haze is yellow, absorbing in the blue, about 30 to 40 km a scale height,
+// Saturn (Realistic Planets, planets.luau): lit by Minnaert's law (limb.glsl) like the other
+// planets, with its haze (haze.glsl) as Cassini's frames show it at 151 to 176 degrees of phase,
+// and shaded by its ring. The haze is yellow, absorbing in the blue, about 30 to 40 km a scale height,
 // mostly Rayleigh's scattering with a narrow forward lobe. The mod's README gives the numbers' sources.
 //
-// The ring's shadow: the sun's ray from each pixel, in Saturn's own frame, where the ring lies in
-// the plane of the equator, crosses that plane at some radius; where the ring is there, it lets
-// through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and mu0 the cosine of
-// the sun's angle from the ring's pole. It dims the disk's sunlight and the haze's light alike.
+// The ring's shadow: in Saturn's frame the ring lies in the plane of the equator, and the ray from
+// each pixel toward the sun crosses that plane at some radius. Where the ring is at that radius, it
+// lets through exp(-tau / mu0) of the sunlight, where tau is its optical depth seen face on and mu0
+// the cosine of the sun's angle from the ring's pole. It dims both the disk's sunlight and the
+// haze's light.
 //
 // parameters.xyz: k for red, green and blue, on the planet's texture; 0 on its haze's ring.
-// parameters.w: the least cosine of the view the law was fitted at; 0 on its haze's ring.
+// parameters.w: the smallest cosine of the view angle that the law was fitted to; 0 on its haze's
+// ring.
 
 #include "haze.glsl"
 
@@ -29,8 +31,8 @@ const RealisticPlanetsHaze saturnHaze = RealisticPlanetsHaze(
     // The cloud tops' forward light, its strength and lobe: four to eight times the crescent's light
     // at 151 degrees, cream rather than grey, as Cassini's frames show it.
     0.83, 0.8,
-    // The texture shows Saturn as from the sun; the filters to the texture's colours, and a quarter
-    // of the haze's light blooming.
+    // The texture shows Saturn as seen from the sun; the filters to the texture's colours, and the
+    // share of the haze's light that blooms.
     0.0,
     mat3(-0.10745, 0.14639, 0.44356, 0.22973, 0.33104, -0.02183, 0.31752, -0.00177, -0.00611),
     0.25);

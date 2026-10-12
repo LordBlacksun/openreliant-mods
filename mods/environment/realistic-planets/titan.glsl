@@ -1,7 +1,7 @@
 // Realistic Planets (planets.luau): Titan and its haze (haze.glsl), as Cassini's frames of 2009 and
 // 2010 show it from 28 to 164 degrees of phase: a thick orange haze, its extinction rising steeply
 // toward the blue, about 28 km a scale height, with a detached layer about 450 km above the ground.
-// The mod's README gives the numbers' sources.
+// The mod's README gives the sources of the numbers.
 
 #include "haze.glsl"
 
@@ -19,9 +19,9 @@ const RealisticPlanetsHaze titanHaze = RealisticPlanetsHaze(
     // The cloud tops' forward light, its strength and lobe: about 1.3 times the crescent's light at
     // 141 degrees, as Cassini's frames show it.
     0.6, 0.8,
-    // The texture's frames' mean phase angle, the filters to the texture's colours, and a quarter of
-    // the haze's light blooming, since the bloom would spread a backlit Titan's bright haze well past
-    // what Cassini saw.
+    // The mean phase angle of the texture's frames, the filters to the texture's colours, and the
+    // share of the haze's light that blooms: a quarter, since more bloom would spread the bright
+    // haze of a backlit Titan well past what Cassini saw.
     35.0,
     mat3(-0.14988, 0.21081, 0.55748, 0.27673, 0.35667, -0.02695, 0.35095, -0.00266, -0.00667),
     0.25);

@@ -6,12 +6,13 @@
 // paler, as the planet's haze does. The bodies' functions include it (planets.luau).
 //
 // parameters.xyz: k for red, green and blue.
-// parameters.w: the least cosine of the view the law was fitted at. Nearer the limb the law isn't
-// known, and the view's factor stays as it is there.
+// parameters.w: the smallest cosine of the view angle that the law was fitted to. Closer to the
+// limb the law isn't known, and the view's factor keeps the value it has there.
 
-// Lights the pixel `s` by Minnaert's law, of the exponents and the least cosine `parameters`: the
-// view's part goes into its colour, and the sun's part is how much of the sun lights it. Returns
-// false for sprites and effects, which have no normal, and are left as they are.
+// Lights the pixel `s` by Minnaert's law, with the exponents and the smallest cosine in
+// `parameters`: the view's part goes into its colour, and the sun's part sets how much of the sun
+// lights it. Returns false for sprites and effects, which have no normal, and leaves them as they
+// are.
 bool realisticPlanetsLimb(inout Surface s, vec4 parameters) {
     if (dot(s.normal, s.normal) < 0.5) return false;
     float mu = max(dot(s.normal, s.toEye), parameters.w);

@@ -1,6 +1,6 @@
 // Realistic Planets (planets.luau): Neptune and its haze (haze.glsl), as Voyager 2's frames show it at
 // 136 and 152 degrees of phase: a thin haze above the clouds, about 15 km a scale height, much the
-// same in every colour, scattering forward. The mod's README gives the numbers' sources.
+// same in every colour, scattering forward. The mod's README gives the sources of the numbers.
 
 #include "haze.glsl"
 
@@ -18,8 +18,8 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     // The cloud tops' forward light, its strength and lobe: about 2.5 times the crescent's light at
     // 160 degrees, and next to nothing at 133, as Voyager 2's frames show it.
     0.18, 0.8,
-    // The texture's frames' mean phase angle, the filters to the texture's colours, and a quarter of
-    // the haze's light blooming.
+    // The mean phase angle of the texture's frames, the filters to the texture's colours, and the
+    // share of the haze's light that blooms.
     15.0,
     mat3(-0.20353, 0.25230, 1.14396, -0.05585, 0.68837, -0.04884, 1.13900, 0.09700, -0.03506),
     0.25);

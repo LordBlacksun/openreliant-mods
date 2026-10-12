@@ -93,7 +93,6 @@ Run each script from its own folder, in this order:
 | `titan/frames.json` | The Cassini frames used for the texture, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, and composes the texture with the map of the surface and the spectrum |
-| `screenshots/titan.png` | The picture on the mod's page after its thumbnail: Titan in OpenReliant's mission 25, from 1.1 million units, 3.8 of its radii, at 30, 100, 150 and 165 degrees of phase, with the bloom and without the flight display, four views of 1920 by 1080 halved into one |
 | `moons/frames.json` | The Voyager frames used: for Jupiter's moons one colour set for each 20 degrees of each moon's longitude, and for Triton every colour set, with their geometry from OPUS and their download links |
 | `moons/fetch.py` | Downloads the frames and the USGS's maps |
 | `moons/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
@@ -110,3 +109,22 @@ Run each script from its own folder, in this order:
 `neptune/fits.json`, `neptune/twists.json` and `moons/fits.json` are kept in the repository as a
 record of the fitted pointing. The downloads, the mosaics and the note's figures aren't: the scripts
 make them again.
+
+## Screenshots
+
+The mod's page shows these pictures after its thumbnail, in the order of their names. They are taken
+in OpenReliant 0.12 with the default settings, so with the bloom and without the flight display,
+from a camera placed at a chosen phase angle from the sun. Every picture is 1920 by 1080 pixels: the
+single views are rendered at 3840 by 2160 and scaled down, and the pictures of four views combine
+four renders, at 3840 by 2160 for the crescents and 1920 by 1080 for Titan.
+
+| File | What it shows |
+|---|---|
+| `screenshots/1-saturn.png` | Saturn, with Titan in front, in mission 21 at 50 degrees of phase, from 1.6 times the ring's outer radius |
+| `screenshots/2-saturn-backlit.png` | Saturn in mission 21 at 150 degrees of phase, next to the sun, from 2.3 times the ring's outer radius |
+| `screenshots/3-jupiter.png` | Jupiter in mission 27 at 45 degrees of phase, from 2.5 times its radius |
+| `screenshots/4-neptune.png` | Neptune, with Triton to the left, in mission 3 at 105 degrees of phase, from 2.4 times Neptune's radius |
+| `screenshots/5-triton.png` | Triton in front of Neptune in mission 2 at 60 degrees of phase, from 2.4 times Triton's radius |
+| `screenshots/6-ganymede.png` | Ganymede in mission 83 at 75 degrees of phase, from 2.4 times its radius |
+| `screenshots/7-crescents.png` | Backlit crescents: Venus in mission 30 at 125 degrees of phase, Uranus in mission 11 at 120, Jupiter in mission 27 at 130 and Neptune in mission 3 at 130 |
+| `screenshots/titan.png` | Titan in mission 25 at 30, 100, 150 and 165 degrees of phase, from 3.8 times its radius |

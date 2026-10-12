@@ -2,7 +2,7 @@
 // (limb.glsl).
 //
 // parameters.xyz: k for red, green and blue.
-// parameters.w: the least cosine of the view the law was fitted at.
+// parameters.w: the smallest cosine of the view angle that the law was fitted to.
 
 #include "limb.glsl"
 
