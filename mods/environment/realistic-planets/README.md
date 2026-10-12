@@ -9,8 +9,8 @@ folder.
 **Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
 and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. The mod needs OpenReliant 0.12.
 Each body is lit by Minnaert's law in full, Saturn and its ring shade each other, Earth is a planet
-with its city lights on its night side, Neptune's, Jupiter's, Saturn's, Venus's and Titan's haze
-show beyond their disks, and every body turns and leans as it really does, sixty times as fast.
+with its city lights on its night side, every planet and Titan has its haze or air
+([The haze](#the-haze)), and every body turns and leans as it really does, sixty times as fast.
 
 ## The game's planets
 
@@ -164,7 +164,7 @@ with figures and references.
 | Source | What it is | Licence | Used |
 |---|---|---|---|
 | Voyager 2 imaging, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Calibrated narrow-angle frames from the 1989 flyby | Public domain (NASA/JPL) | Yes |
-| The same at high phase, through [OPUS](https://opus.pds-rings.seti.org/) | Calibrated wide- and narrow-angle frames of the lit limb at 136 to 153 degrees of phase, and of the whole crescent at 133 | Public domain (NASA/JPL) | Yes, 9 frames for the haze, and 33 to check it |
+| The same at high phase, through [OPUS](https://opus.pds-rings.seti.org/) | Calibrated wide- and narrow-angle frames of the lit limb at 136 to 153 degrees of phase, and of the whole crescent at 133 | Public domain (NASA/JPL) | Yes, 9 frames for the haze |
 | E. Karkoschka's spectra of the giant planets, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Neptune's geometric albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | Yes, for the colour |
 | [Hubble OPAL](https://archive.stsci.edu/hlsp/opal), 2015 | A real colour global map, 720x360, 2 pixels a degree | CC BY 4.0 | For the first test only |
 | [Solar System Scope](https://www.solarsystemscope.com/textures/) | A 2048x1024 map | CC BY 4.0 | No: partly made up, and oversaturated, as its page says |
@@ -297,90 +297,6 @@ appears to drift by several degrees after 20 August, and the clouds had changed 
 or two, so the mosaic showed curved seams and features that didn't line up. Using them would take
 the scan platform's pointing, or mosaics of frames taken close together in time, combined later.
 
-### The haze at high phase
-
-A surface function, `neptune.glsl`, lights Neptune's disk by Minnaert's law as `minnaert.glsl` lights
-the other bodies, and adds its haze over the disk and beyond it, with the model of Titan's haze
-([The haze over and beyond the disk](#the-haze-over-and-beyond-the-disk)), which both take from
-`haze.glsl`. `neptune/haze.py` fits the model's numbers to Voyager's frames at high phase.
-
-- The frames (`neptune/haze.json`), from 25 August 1989: the wide-angle camera's blue, green and
-  orange frames of a stretch of the lit limb at 152 degrees of phase, an hour and a half after
-  closest approach, about 7 km a pixel; the narrow-angle camera's clear frames of the same stretch
-  minutes later, about 1 km a pixel; and its clear frames of the limb at 136 degrees, twelve hours
-  after closest approach, about 6 km a pixel. With the sun behind Neptune, the haze scatters the
-  sunlight forward, toward the camera, and shows as a bright band along the lit limb, which fades
-  within about 80 km above it.
-- At 152 degrees the camera stood about five of Neptune's radii from its middle, so it saw the edge
-  12 degrees off the middle's direction, at a phase angle of its own: about 160 degrees where the
-  frames look. Each frame's geometry is worked out from where the camera stood, and a pixel's size
-  at the edge from the camera's distance to the edge rather than to the middle. The frames at 136
-  degrees, from 32 radii, see the edge at about 137 degrees.
-- The cameras' pointing isn't archived ([Placing each frame](#placing-each-frame)), so each frame's
-  limb is fitted on the frame itself: a circle through its half-maximum edge, where the brightness
-  falls half way from the peak just inside it to the sky just outside. Its I/F is averaged in bins of
-  height above the edge, in three stretches along the limb.
-- Each stretch's angle round from the sun's direction comes from the lit crescent inside it. The sun
-  sets on the disk the nearer the edge the further the stretch is from the sun's direction, so
-  Minnaert's law, with the texture's exponent for the filter, a brightness and a floor of stray
-  light, fitted to the stretch's light from 150 km inside the edge to 3,000 km, gives the angle. The
-  frames at 152 degrees see stretches 24 to 42 degrees round from the sun's direction, where the sun
-  sets a few hundred km inside the edge, and those at 136 degrees 37 to 63. The haze's light alone
-  hardly tells the angle: while the sun stands well above the haze, its light falls off with height
-  alike. The model takes each stretch's edge as a view from afar would show it, at the phase angle
-  there and with the sun as high above it.
-- The model: one haze whose extinction falls exponentially with height, the same all round Neptune,
-  which stands for the gas and the haze together, without a detached layer. Its phase function is a
-  Henyey-Greenstein lobe, with Rayleigh's for the rest of the light. The light it scatters more than
-  once is estimated as for Titan's ([Light scattered more than once](#light-scattered-more-than-once)).
-- The fit, by least squares from 10 km below the edge to 250 km above it, each bin weighted by 5% of
-  its I/F plus 0.001: each filter has its own extinction, scale height and single-scattering albedo,
-  and the clear frames, the only ones at both phases, set the lobe's asymmetry and share for all of
-  them. Each frame has its own stray light, as for Titan. The camera's blur is a Gaussian of 0.7
-  pixels. The edges of the frames at 152 degrees are the game's sphere, and those at 136 degrees
-  come out 15 to 19 km lower. The fit runs in three rounds, with a Monte Carlo of the fitted haze
-  between them, as Titan's does.
-- The fit:
-
-  | | Blue, 479 nm | Green, 566 nm | Orange, 591 nm |
-  |---|---|---|---|
-  | Extinction at the edge | 0.00013 per km | 0.00017 per km | 0.00017 per km |
-  | Scale height | 17.1 km | 13.4 km | 13.6 km |
-  | Single-scattering albedo | 1.00 | 0.99 | 1.00 |
-
-  The phase function comes out as the lobe all but alone, with an asymmetry of 0.59, and Rayleigh's
-  taking a thousandth of the light: light scattered by 20 degrees, as at the edge in the frames at
-  152 degrees, is about 34 times as bright as light scattered by 165 degrees, as at the texture's
-  15.
-- In each filter, the edge lies where a line of sight grazing it crosses about 0.21 to 0.25 of an
-  optical depth of haze, and a line straight down from it about 0.0022. The scale heights are close
-  to the gas's own near Neptune's tropopause, about 15 km at 52 K (Lindal, 1992). The albedo comes
-  out at or just under 1 in each filter: where the haze is thin, the fit can't tell more haze from
-  brighter haze. Being thin, the haze scatters little light more than once, and with it the fit
-  moves by a few per cent. With two phases, the phase function is pinned between 18 and 43 degrees
-  of scattering, and elsewhere it's the lobe's shape.
-- The colour and the haze over the disk work as Titan's: `compose.py` writes the matrix that turns
-  the three filters' I/F into the texture's colours to `data/colour.json`, and over the disk the haze
-  adds only what its phase function gives beyond what it gives at the texture's 15 degrees. Neptune's
-  haze is far thinner than Titan's, so over the disk it shows only right at the limb. It's cut off
-  300 km above the edge, where its extinction has fallen to a hundred-millionth of the edge's or
-  less, and `records.luau` gives Neptune a ring out to 1.013 of its radius for it. A quarter of its
-  light blooms, as Titan's does.
-- The check: drawn in the game without its bloom from where Voyager took the close frames, 4.8 of
-  Neptune's radii from its middle at 153 degrees of phase, looking at the stretch they show, at 10
-  km a pixel, the haze beyond the edge follows the model within 10% from the edge to 40 km above it,
-  and Voyager's close frames, less their stray light, within 15% from the edge to 30 km above it.
-  Further out, the frames' stray light, which the fit models only roughly, outweighs the haze.
-  Looking at the limb on the sun's side, at 152.5 degrees of phase there and 5 km a pixel, the haze
-  follows the model within 7% from the edge to 40 km above it. Beyond the edge, OpenReliant adds the
-  ring's light to the sky in linear light, so the haze keeps its colour over the sun's glow.
-- What it leaves out: over the disk, the crescent at high phase is too faint, as the haze above the
-  edge is thin, and the disk's law, fitted at 15 degrees of phase, has no forward scattering. Seen
-  from where the close frames were taken, it's a quarter to a half of Voyager's from 20 to 300 km
-  inside the edge, in every colour; across the whole crescent at 133 degrees it holds about 0.56 of
-  Voyager's light in red, 0.75 in green and 0.79 in blue
-  ([#50](https://github.com/OpenReliant/openreliant-mods/issues/50)).
-
 ## Jupiter
 
 Jupiter's map is Cassini's global map from its flyby in December 2000, with its contrast measured
@@ -435,43 +351,6 @@ Neptune's: close to Cassini's look, with each channel in Jupiter's own proportio
 
 The game turns Jupiter westward. The mod turns it eastward, as it really turns
 ([Turning and leaning](#turning-and-leaning)).
-
-### Jupiter's haze
-
-`jupiter.glsl` adds Jupiter's stratospheric haze over the disk and beyond it, with the model of the
-other bodies' haze from `haze.glsl`. Cassini saw Jupiter at high phase only from 18 million km, at
-about 110 km a pixel, and Galileo's frames of its limb at high phase are kept raw and compressed with
-loss, so the haze isn't fitted to frames of the limb. `jupiter/haze.py` builds it from what was
-measured of it, as Venus's is.
-
-- From the equator to the middle latitudes, the stratospheric haze is a layer near 50 mbar of compact
-  particles with radii of 0.2 to 0.5 micrometres (Zhang and others, 2013), whose optical depth is
-  about a tenth in the near infrared (Banfield and others, 1998). The particles here have an
-  effective radius of 0.3 micrometres, spread as a log-normal of effective variance 0.1, and the
-  refractive index of a hydrocarbon haze, about 1.5, absorbing next to no visible light: these three
-  are chosen within what's known, not measured.
-- Mie theory gives the particles' cross-section and phase function at 756 nm, where the optical depth
-  is taken as given, and at 450, 550 and 650 nm. The haze mixes with the gas, so its extinction falls
-  with the gas's scale height near 50 mbar, about 19 km at 125 K. Followed down to the 1-bar level,
-  the same haze reaches an optical depth of about 3, as the upper troposphere's haze does.
-- The model's phase function is fitted to Mie's as for Venus: the particles' come out as one lobe
-  with an asymmetry of 0.66 to 0.72, and almost nothing else:
-
-  | | Blue, 450 nm | Green, 550 nm | Red, 650 nm |
-  |---|---|---|---|
-  | Extinction near 50 mbar | 0.0077 per km | 0.0072 per km | 0.0063 per km |
-  | Lobe's asymmetry | 0.72 | 0.69 | 0.66 |
-
-- The game's spheroid is Jupiter's 1-bar level, flattened along its pole, as Saturn's is. The haze is
-  cut off 420 km above it, and `records.luau` gives Jupiter a ring from 0.92 of its radius, inside its
-  polar edge, to 1.008.
-- The colour works as Venus's: `compose.py` writes the matrix that turns the haze's I/F into the
-  texture's colours, from Jupiter's spectrum, to `data/colour.json`. Over the disk the haze adds what
-  its phase function gives beyond what it gives toward the sun, where the maps see Jupiter from, so
-  that at 60 degrees of phase the disk is a little paler toward the limb, at 120 its crescent is paler
-  and its bands softer, and at 150 the lit limb is a bright thin ring. Drawn in mission 28.
-- What it leaves out: the polar haze, of larger aggregates and higher up, near 10 to 20 mbar (Zhang
-  and others, 2013); the haze's change with latitude; and the light scattered more than once.
 
 ## Uranus
 
@@ -633,77 +512,6 @@ the middle of the disk shows about 116 km a pixel at 1080p, against the map's 16
 map would take a mosaic of Cassini's own frames, taken on many days
 ([#34](https://github.com/OpenReliant/openreliant-mods/issues/34)).
 
-### Saturn's haze
-
-`saturn.glsl` adds Saturn's haze over the disk and beyond it, with the model of Titan's and
-Neptune's haze from `haze.glsl`, and `saturn/haze.py` fits its numbers to Cassini's frames at high
-phase.
-
-- The frames (`saturn/haze.json`), from Cassini's wide-angle camera in its blue, green and red
-  filters: two sets of 5 January 2009, an hour and a half apart, at 151 and 153 degrees of phase,
-  about 33 km a pixel, each a long stretch of the lit crescent's limb; and one set of 4 January 2013,
-  backlit at 176 degrees, about 35 km a pixel, where the haze shows as a thin bright arc round the
-  dark disk.
-- Cassini stood about 9.3 of Saturn's radii from its middle, so each stretch's own phase angle, and
-  the sun's height above it, are worked out from where it stood, as for Neptune: 154 to 158 degrees
-  in 2009, and about 178 in 2013. The sun's direction in each frame comes from the frame's
-  geometry.
-- Saturn is flattened, and its outline in a frame is an ellipse whose shape the camera's latitude
-  sets: seen from 15 to 21 degrees south, its polar half-axis is about 0.91 of its equatorial one.
-  Fitted with that shape, the edges of 2009 stand 58,900 to 59,400 km from the middle along the
-  equator, where a circle would put them about 65,000 km out. Heights are measured across the
-  outline.
-- The exposures of 2013 were long, 90 to 560 seconds, and the arc's brightest pixels are saturated,
-  as is the crescent in the first set of 2009: they pile up at one level, and are left out of the
-  measurements. In 2013 the arc is the haze itself, so where saturated pixels fill a bin, the fit
-  holds the model at least as bright as the pile. Below the arc, where light scattered more than
-  once and the rings' light on the night side add to the haze's own, it holds the model at most as
-  bright as the frame.
-- The camera's stray light differs along the limb, so each stretch's sky, its median from 600 to
-  1,500 km above the edge, is taken off.
-- The model: one haze whose extinction falls exponentially with height, the same all round Saturn,
-  which stands for the gas and the haze together, with a Henyey-Greenstein lobe and Rayleigh's for
-  the rest of the light. The light scattered more than once isn't estimated for Saturn: the fit
-  takes single scattering alone, and the game draws it so.
-- The fit, by least squares, each bin weighted by 5% of its I/F plus 0.0003: in 2009 from 90 to 400
-  km above the edge, where the crescent's light, which the camera's blur spreads past the edge, has
-  faded; in 2013 from the edge to 400 km above it, on the arc's outer side. Each filter has its own
-  extinction, scale height and single-scattering albedo, and all of them share the lobe and its
-  share. Each frame has its own stray light, as for Titan, and the camera's blur is a Gaussian of
-  0.6 pixels. The edges of 2009 are the game's spheroid; the edge of 2013, on the arc's outer side,
-  comes out 230 to 270 km above it.
-- The fit:
-
-  | | Blue, 463 nm | Green, 568 nm | Red, 647 nm |
-  |---|---|---|---|
-  | Extinction 100 km above the edge | 0.00011 per km | 0.000054 per km | 0.000078 per km |
-  | Scale height | 40 km | 29 km | 30 km |
-  | Single-scattering albedo | 0.38 | 1.00 | 0.91 |
-
-  The phase function comes out as a narrow forward peak, a lobe with an asymmetry of 0.96 taking a
-  ninth of the light, and Rayleigh's with the rest. The haze is darkest in blue, as Saturn's
-  yellowish haze is. The arc's peak in 2013 is saturated, so its brightness comes from the model,
-  held between the saturated level and the frame's light below the arc: about an I/F of 1 to 2,
-  where Cassini saw it, 2 degrees from the sun.
-- The colour and the haze over the disk work as Titan's and Neptune's: `compose.py` writes the
-  matrix that turns the three filters' I/F into the texture's colours to `data/colour.json`, and
-  over the disk the haze adds only what its phase function gives beyond what it gives at the
-  texture's phase, near the sun's direction. It's cut off 1,000 km above the edge, and a quarter of
-  its light blooms.
-- `haze.glsl` works a flattened body out in a frame stretched along its pole, where it's round.
-  OpenReliant takes half the widest span of a planet's model as its radius, which for Saturn is its
-  rings' outer edge, 141,000 km, so `records.luau` gives Saturn a ring from 0.378 to 0.435 of that,
-  from just inside its polar edge to the haze's top, and `saturn.glsl` gives the haze that unit. The
-  ring's shadow dims the haze as it dims the disk.
-- The check: drawn in the game without its bloom from where Cassini took the second set of 2009, at
-  50 km a pixel, the haze beyond the edge shows a pixel or two of glow, as Cassini's frames do.
-- What it leaves out: the haze is the same all round Saturn, where the frames see southern middle
-  latitudes in 2009 and low northern ones in 2013. The disk's crescent at high phase is about an
-  eighth of Cassini's at its peak, and grey-blue where Cassini's is cream
-  ([#56](https://github.com/OpenReliant/openreliant-mods/issues/56)). The rings, which OpenReliant
-  draws over the haze's ring, hide it where their far side passes behind the limb
-  ([OpenReliant/openreliant#1120](https://github.com/OpenReliant/openreliant/issues/1120)).
-
 ## Venus
 
 Venus's map shows the markings of its cloud tops in ultraviolet, from Akatsuki's maps of June 2022,
@@ -768,50 +576,6 @@ the blue, and hardly at all in green and red.
   limb about as a plain ball does (see below), so the texture's mean luminance is 0.41, 1.36 times
   Jupiter's 0.3.
 
-### Venus's haze
-
-`venus.glsl` adds Venus's upper haze over the disk and beyond it, with the model of the other bodies'
-haze from `haze.glsl`. The open archives hold no frames of Venus's limb sharp enough to fit the haze
-to, as Titan's, Neptune's and Saturn's are: Venus Express's camera saw the limb from its apocentre at
-about 40 km a pixel, and the haze's scale height is a few km. So `venus/haze.py` builds the haze from
-what Venus Express measured of it.
-
-- SPICAV IR measured the upper haze, 70 to 95 km up, in 222 solar occultations from 2006 to 2014
-  (Luginin and others, 2016): droplets of two sizes, with effective radii of 0.12 and 0.84
-  micrometres, about 500 and 1 in a cubic centimetre at 75 km, and an aerosol scale height of 3.3
-  km.
-- The droplets are sulphuric acid, with the refractive index and the spread of sizes that the
-  polarisation of Venus's clouds shows (Hansen and Hovenier, 1974): about 1.44 in visible light, a
-  little more in blue and less in red, and a log-normal of effective variance 0.07.
-- Mie theory gives the droplets' extinction and phase function at 450, 550 and 650 nm. The haze's
-  extinction is their number times their cross-section, and it falls above 75 km with the measured
-  scale height. The small droplets scatter blue best, and give 80% of the extinction in blue and 55%
-  in red. The droplets absorb next to no visible light, so the haze's single-scattering albedo is 1.
-- The model's phase function, two Henyey-Greenstein lobes and Rayleigh's, is fitted to Mie's on its
-  logarithm at every degree, with the 30 degrees round the forward direction, where a backlit haze's
-  light comes from, counted three times. It follows Mie's within about 10% there, and within 20 to
-  30% elsewhere, short of the glory near the backward direction:
-
-  | | Blue, 450 nm | Green, 550 nm | Red, 650 nm |
-  |---|---|---|---|
-  | Extinction 5 km above the cloud tops | 0.022 per km | 0.014 per km | 0.010 per km |
-  | First lobe: asymmetry, share | 0.90, 0.10 | 0.87, 0.18 | 0.84, 0.28 |
-  | Second lobe: asymmetry, share | 0.56, 0.88 | 0.49, 0.74 | 0.47, 0.56 |
-  | Rayleigh's share | 0.02 | 0.08 | 0.16 |
-
-- The game's sphere is the cloud tops, about 70 km up, which Akatsuki's maps show. Seen edge on,
-  the haze is about one optical depth thick about 10 km above them. It's cut off 60 km above them,
-  and `records.luau` gives Venus a ring out to 1.012 of its radius.
-- The colour: `compose.py` writes the matrix that turns the haze's I/F at the three wavelengths into
-  the texture's colours to `data/colour.json`, from Venus's spectrum, as the texture takes it. Over
-  the disk the haze adds only what its phase function gives beyond what it gives at the texture's 45
-  degrees, so at 60 degrees of phase Venus looks as before, and at high phase its crescent is
-  brighter and paler. Seen backlit, the haze is a line a few km thick along the lit limb.
-- What it leaves out: the light scattered more than once, as for Saturn's; the gas's own Rayleigh
-  scattering, a few per cent of the extinction in blue; the haze's change with latitude, whose scale
-  height runs from 2 to 5.5 km north of 60 degrees (Luginin and others, 2018); and the detached
-  layers at 80 to 90 km. No frames check it.
-
 ## Titan
 
 Titan's map shows its haze as Cassini saw it in visible light, with the surface underneath showing
@@ -863,131 +627,6 @@ blue fringe from the front, and with the sun behind Titan, a bright ring round t
 - At its true normal albedo, 1.39 times the spectrum's geometric albedo by Minnaert's law in green,
   Titan's mean luminance is about 0.31. The texture's is 0.12, the same share of its true brightness
   as Jupiter's 0.3 is of Jupiter's.
-
-### The haze over and beyond the disk
-
-A surface function, `titan.glsl`, lights Titan's disk by Minnaert's law as `minnaert.glsl` lights the
-other bodies, and adds the haze in front of the disk. It also draws the haze beyond the disk, on the
-ring that OpenReliant draws behind a planet whose records name one (`records.luau`). For each pixel
-it works out the sunlight that a model of the haze scatters toward the camera, with the model's
-numbers fitted to Cassini's frames by `titan/haze.py`. The model is in `haze.glsl`, which Neptune's
-haze shares ([The haze at high phase](#the-haze-at-high-phase)), and the fits work it out in the
-same way in `scattering.py`.
-
-- The frames: the twelve at 28 to 50 degrees of phase that the texture comes from, and 33 more,
-  eleven sets in the blue, green and red filters from February 2009 to August 2010, around Titan's
-  equinox, at 140 to 164 degrees, about 7 to 12 km a pixel. With the sun behind Titan, the haze
-  scatters the sunlight toward the camera, and shows as a ring round the dark disk, with the
-  detached haze layer above it as a fainter one.
-- The sun's direction in each frame comes from its geometry. A low-phase frame's disk is fitted to
-  its lit limb as the texture's are, so that heights match the texture's edges. A high-phase frame
-  has no lit disk: its centre is fitted to the outer edge of the ring on the sun's side, and the fit
-  below moves it further where the model needs, by about 40 km on average. Each frame's sky is taken
-  off, and its I/F is averaged in bins of 8 km of height above 2,710 km and 10 degrees round the limb
-  from the sun's direction.
-- The model: in each filter, the haze is a main haze whose extinction falls exponentially with
-  height and a detached layer, a Gaussian in height, both the same all round Titan. A line of
-  sight's I/F is the sunlight its haze scatters toward the camera once: the single-scattering albedo
-  times the phase function, over 4, times the integral along the line of the extinction, weighted by
-  the share of the sunlight that reaches each point and the share of its scattered light that gets
-  out toward the camera. The phase function is the sum of two Henyey-Greenstein lobes (Henyey and
-  Greenstein, 1941). The sunlight reaching a point is dimmed by the main haze on its way, Chapman's
-  grazing-incidence integral (Chapman, 1931), so that on the night side only the haze high enough to
-  see the sun past Titan's edge is lit. The detached layer is optically thin, and is left out of
-  that integral. The light scattered more than once is an estimate, fitted to a Monte Carlo of the
-  same haze ([Light scattered more than once](#light-scattered-more-than-once)).
-- The camera's blur, a Gaussian of 0.6 pixels, and its stray light, which lifts the sky round the
-  bright disk and ring, are fitted along with the haze: the stray light as an exponential tail with
-  its own length, and a constant, in each frame. Each filter is fitted on its own, by least squares,
-  to the heights where the haze stands out from the stray light: 40 to 380 km above 2,710 km at high
-  phase, and 60 to 260 km at low phase, each bin weighted by 5% of its I/F plus 0.0003. The fit
-  runs in three rounds: the first fits the haze alone, and each after it with the estimate that a
-  Monte Carlo of the last round's haze gives.
-- The fit:
-
-  | | Blue, 463 nm | Green, 568 nm | Red, 647 nm |
-  |---|---|---|---|
-  | Main haze's extinction 100 km above 2,710 km | 0.00741 per km | 0.00252 per km | 0.00152 per km |
-  | Its scale height | 24.6 km | 27.8 km | 30.6 km |
-  | Detached layer's peak extinction | 0.0000286 per km | 0.0000137 per km | 0.0000099 per km |
-  | Its height above 2,710 km, and width | 319 km, 44 km | 318 km, 52 km | 321 km, 54 km |
-  | Single-scattering albedo | 0.74 | 0.67 | 0.69 |
-  | Phase function's lobes: asymmetry, and share | 0.76, 0.62; 0.25, 0.38 | 0.72, all | 0.73, all |
-
-- The blue haze is thicker and its edge higher, which makes the blue fringe. The detached layer
-  stands about 455 km above Titan's surface, where West and others (2011) found it in those years,
-  sinking from above 500 km in 2007 to about 380 km in 2010. Light scattered by 20 degrees is about
-  70 times as bright as light scattered by 150 degrees in red and green, and 21 times in blue.
-- The colour: the three filters' I/F becomes the game's colour as the texture's does, Karkoschka's
-  spectrum of Titan bent through each filter's brightness over the frames' mean, at the texture's
-  scale. `compose.py` writes that matrix to `data/colour.json`.
-- Over the disk: the texture is Titan as Cassini saw it at a mean of 35 degrees of phase, its haze
-  included. So the haze in front of the disk adds only what its phase function gives beyond what it
-  gives at 35 degrees: nothing at low phase, and with the sun behind Titan the crescent that its
-  forward scattering lights. The line of sight is followed from the top of the haze down to the
-  disk. The haze is added in linear light and lit by the sun as the disk is (OpenReliant's
-  `scattered`), so that it adds the same light over the lit crescent as beyond the edge, where
-  OpenReliant adds the ring's light to the sky in linear light too.
-- The shader follows each pixel's line of sight in 32 steps, closest where it passes nearest Titan,
-  or where it meets the disk, within 3% of the model's 96. A pixel that spans more than half the
-  thinnest scale height takes up to 4 lines of sight across it, so that the haze doesn't shimmer as
-  Titan grows small. At the disk's edge, each pixel shows the disk and the sky round it: the disk
-  takes the lines of sight that meet it, and the ring those that pass beyond.
-- A quarter of the haze's light blooms, beyond the disk and over it, as the game's bloom would spread
-  the bright ring of a backlit Titan well past what Cassini saw. Titan's own lit disk blooms in
-  full, as the other bodies do.
-- The check: drawn in the game without its bloom, from 20 of Titan's radii at the phases of three of
-  the sets, 28, 141 and 160 degrees, the haze beyond the disk matches Cassini's frames composed in
-  the same colours along the sun's direction, within about a tenth in brightness, and in its
-  thickness, the detached layer included. At right angles to the sun, the ring's brightest part
-  comes out a quarter to a third darker than Cassini's at 141 and 160 degrees. Over the disk, along
-  the sun's direction, the crescent at 141 degrees holds 0.7 to 1 of Cassini's light from 180 km
-  inside the edge out to it. Drawn with the bloom, it all matches as closely. From nearer, the
-  ring's sunward side grows brighter and broader, as the lines of sight from close by scatter the
-  light by smaller angles.
-- What it leaves out: the haze's differences round Titan, such as its brighter south in blue and
-  the polar hoods, which darken the ring at right angles to the sun
-  ([#52](https://github.com/OpenReliant/openreliant-mods/issues/52)); and at very high phase, the
-  crescent over the disk, which at 160 degrees holds 0.3 to 0.6 of Cassini's light
-  ([#53](https://github.com/OpenReliant/openreliant-mods/issues/53)). The haze takes the texture's
-  colours, which keep only about three quarters of Titan's blue in the game
-  ([#48](https://github.com/OpenReliant/openreliant-mods/issues/48)).
-
-### Light scattered more than once
-
-With the sun behind Titan, much of its haze's light has been scattered twice or more on its way to
-the camera, and a model of single scattering, fitted to Cassini's frames, makes up for that light
-with more haze and brighter haze than there is. `multiple.py` works it out with a Monte Carlo of
-every order of scattering in the fitted haze, and fits a cheap estimate of it for the shader.
-
-- The Monte Carlo follows each line of sight backward from the camera into the haze. At each
-  scattering it adds the sunlight that reaches the point, Chapman's integral as the model has it,
-  scattered toward the path by the phase function. Then the path scatters on, in a direction drawn
-  from the phase function, its weight times the albedo. Its first order is the model's single
-  scattering, which it matches within 0.3%, a check on it.
-- In Titan's haze as single scattering fits it, the rest is large: near the ring's brightest part at
-  141 degrees of phase, about as much again as the first order, and inside the planet's shadow,
-  where no sunlight reaches, all of the light.
-- The estimate, in `scattering.py` and `haze.glsl` alike, has two parts. A beam: sunlight scattered
-  forward again on its way to the camera, with n scatterings in all, n = 2 and 3, as often as a
-  Poisson count in the optical depth along its path toward the sun and toward the camera, its phase
-  function the lobes convolved n times, which for Henyey-Greenstein lobes raises their asymmetries
-  to the n-th power. And a glow: light scattered many times, the same in every direction, falling
-  with height and fading through the terminator. Its five numbers in each filter are fitted to the
-  Monte Carlo's lines at 30 to 160 degrees of phase, on the sun's side, at right angles to it and
-  opposite it, from just above the edge to about 300 km above it. For the fitted haze, the estimate
-  follows the Monte Carlo within about 10% rms, and falls furthest short, by up to a third, deep in
-  the shadow, where the light is faint.
-- With it, Titan's fit comes out with more haze and darker haze: about a fifth more extinction, and
-  single-scattering albedos of 0.74 in blue, 0.67 in green and 0.69 in red, against 1.00, 0.85 and
-  0.92 before. Its misfit to the frames hardly changes, by about 1% in each filter: half of it comes
-  from the sides of the limb, where Titan's haze differs with latitude, which a haze the same all
-  round can't follow ([#52](https://github.com/OpenReliant/openreliant-mods/issues/52)). In green
-  and red the albedo is below what Huygens measured in the haze (Tomasko and others, 2008), which
-  may be that difference made up for. In the game, the ring's sunward side matches Cassini's colour
-  and shape more closely.
-- Neptune's haze is thin and scatters little light more than once: its fit moves by a few per cent,
-  and in the game it looks the same.
 
 ## Jupiter's moons
 
@@ -1199,10 +838,9 @@ planet, and its night side shows its city lights, from NASA's Black Marble
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
 The mod's player script, `planets.luau`, draws this with a surface function on each body's
-texture: `minnaert.glsl`, or for Saturn `saturn.glsl`, which adds the ring's shadow and the haze,
-for Earth `earth.glsl`, which adds the city lights, and for Neptune, Jupiter, Venus and Titan
-`neptune.glsl`, `jupiter.glsl`, `venus.glsl` and `titan.glsl`, which add the haze.
-Each takes the law from `limb.glsl`. It needs PER-PIXEL LIGHTING; without it, the planets are drawn
+texture: `minnaert.glsl` for the moons, and for each planet and Titan its own shader, such as
+`neptune.glsl`, which adds its haze ([The haze](#the-haze)); Saturn's adds the ring's shadow, and
+Earth's its city lights. Each takes the law from `limb.glsl`. It needs PER-PIXEL LIGHTING; without it, the planets are drawn
 as before.
 
 - The function applies Minnaert's law in full. The part that depends on the sun, mu0^k, sets how
@@ -1257,20 +895,59 @@ as before.
   unchanged.
 - With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
   terminator is soft, as a hazy planet's is, and it stands where the sun sets.
-- A surface function on the planet only draws on its disk. Neptune's, Jupiter's, Saturn's, Venus's
-  and Titan's add their haze in front of the disk, and draw their haze beyond the disk on a ring of
-  their own ([The haze at high phase](#the-haze-at-high-phase), [Jupiter's haze](#jupiters-haze),
-  [Saturn's haze](#saturns-haze), [Venus's haze](#venuss-haze),
-  [The haze over and beyond the disk](#the-haze-over-and-beyond-the-disk)). The other bodies' haze
-  beyond the disk, such as Earth's thin blue limb, is
-  [#45](https://github.com/OpenReliant/openreliant-mods/issues/45).
+- A surface function on the planet only draws on its disk. Each planet's and Titan's adds its haze
+  in front of the disk, and draws its haze beyond the disk on a ring of its own
+  ([The haze](#the-haze)).
+
+## The haze
+
+Every planet and Titan has a haze, or for Earth its air, drawn by one model, `haze.glsl`, which
+each body's shader includes with its own numbers. Each number is physical, so it can be tuned by hand,
+and each comes from spacecraft frames or published measurements:
+
+- How much haze there is: its optical depth straight down to the body's sphere, and its scale
+  height, the height over which it thins by e. It's cut off 20 scale heights up.
+- A detached layer above it, where the body has one, as Titan does: its peak's extinction, its
+  height and its width.
+- Its colour: its single-scattering albedo, the share of the light it scatters rather than absorbs.
+- How it scatters: two Henyey-Greenstein lobes for its particles, each with an asymmetry, from -1
+  backward to 1 forward, and a share of the light, and Rayleigh's phase function, the gas's, with the
+  rest.
+- The phase angle the texture shows the body at, and a matrix that turns the haze's three bands into
+  the game's colours, as the texture takes the body's colours and brightness. The bands are a
+  camera's filters or three wavelengths, from blue to red; for a body given in red, green and blue,
+  the matrix holds just the texture's brightness.
+
+Each pixel's line of sight is followed through the haze, and the sunlight it scatters toward the eye
+once is added up, dimmed on its way in by Chapman's integral, so the haze on the night side is lit
+only high up, where the sun still reaches it. Beyond the disk the haze is drawn on the ring that
+OpenReliant draws behind a planet for its atmosphere (`records.luau`). Over the disk the texture
+already holds the body as seen at its own phase angle, haze included, so the haze adds only what its
+phase function gives beyond what it gives there: with the sun behind the body, the crescent its
+forward scattering lights.
+
+| Body | Optical depth, blue to red | Scale height, km | Albedo | Scattering | Where the numbers come from |
+|---|---|---|---|---|---|
+| Neptune | 0.0022, 0.0022, 0.0024 | 17, 13, 14 | about 1 | one forward lobe, 0.59 | Voyager 2's frames of the limb at 136 and 152 degrees of phase, in its blue, green and orange filters; the scale height is close to the gas's at the tropopause (Lindal, 1992) |
+| Uranus | 0.0046 | 22 | 1 | as Neptune's | Neptune's haze, twice as much of it, as Uranus is hazier (Irwin and others, 2022), with the scale height of its colder, lighter air at the tropopause (Lindal and others, 1987) |
+| Saturn | 0.055, 0.050, 0.064 | 40, 29, 30 | 0.38, 1, 0.91 | Rayleigh's, with a narrow forward lobe, 0.96, taking a ninth of the light | Cassini's frames of the limb at 151 to 176 degrees of phase, in its blue, green and red filters |
+| Jupiter | 5.8, 5.5, 4.8, down to 1 bar | 19 | 1 | a forward lobe, 0.67 to 0.72, and a faint backward one | a haze near 50 mbar of particles about 0.3 micrometres across, with an optical depth of about a tenth (Zhang and others, 2013; Banfield and others, 1998), thinning with the gas; the lobes from Mie theory |
+| Venus | 0.32, 0.21, 0.16 | 3.3 | 1 | two forward lobes, one for each size of droplet, with a little of Rayleigh's | SPICAV IR's occultations: sulphuric acid droplets of 0.12 and 0.84 micrometres, about 500 and 1 per cubic centimetre at 75 km, and the scale height (Luginin and others, 2016); their refractive index (Hansen and Hovenier, 1974); the lobes from Mie theory |
+| Titan | 2.55, 0.72, 0.37 | 24, 27, 30 | 1, 0.85, 0.92 | two forward lobes | Cassini's frames from 28 to 164 degrees of phase, in its blue, green and red filters, with a detached layer 288 km above the sphere, about 450 km above the ground (West and others, 2011) |
+| Earth | 0.219, 0.107, 0.069 | 8 | 1 | Rayleigh's alone | the air's Rayleigh scattering at the channels' wavelengths (Bucholtz, 1995); the texture holds the haze of dust and droplets low down |
+
+On the giant planets the haze is thin: tens of km on bodies tens of thousands of km across. Beyond the
+disk it shows as a fine line along the limb, brightest with the sun behind the planet, as in the
+spacecraft's pictures. Titan's haze reaches a fifth of its radius, and is blue at the top, where its
+smallest particles scatter blue light the most, and orange below. Earth's air shows as a blue rim,
+and as a ring of light round its night side with the sun behind it.
 
 ## Making it again
 
 The scripts and the steps to run them are in the collection's
 [`sources/realistic-planets`](https://github.com/OpenReliant/openreliant-mods/tree/main/sources/realistic-planets)
-folder. A build downloads what each texture is made from, about 150 MB for Neptune, 93 MB for
-Jupiter, 3 MB for Uranus, 220 MB for Saturn, 270 MB for Venus, 200 MB for Titan, 1.4 GB for Jupiter's
+folder. A build downloads what each texture is made from, about 80 MB for Neptune, 93 MB for
+Jupiter, 3 MB for Uranus, 190 MB for Saturn, 270 MB for Venus, 60 MB for Titan, 1.4 GB for Jupiter's
 moons and Triton, and 740 MB for Earth, and makes the same textures again.
 
 ## Credits and licences
@@ -1293,16 +970,19 @@ moons and Triton, and 740 MB for Earth, and makes the same textures again.
   (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2053 to
   COISS_2064 volumes and Saturn's from its COISS_2052 and COISS_2080 volumes, calibrated with
   CISSCAL.
-- Neptune's, Saturn's and Titan's haze: S. Chapman, "The absorption and ionising effect of monochromatic
+- The haze: S. Chapman, "The absorption and ionising effect of monochromatic
   radiation in an atmosphere on a rotating earth, part II: grazing incidence", Proceedings of the
   Physical Society 43 (1931); L. G. Henyey and J. L. Greenstein, "Diffuse radiation in the Galaxy",
   The Astrophysical Journal 93 (1941); for Neptune's tropopause, G. F. Lindal, "The atmosphere of
   Neptune: an analysis of radio occultation data acquired with Voyager 2", The Astronomical Journal
   103 (1992); for Titan's detached layer's height, R. A. West and others, "The evolution of Titan's
   detached haze layer near equinox in 2009", Geophysical Research Letters 38, L06204 (2011),
-  [doi:10.1029/2011GL046843](https://doi.org/10.1029/2011GL046843); and for its haze's albedo at
-  Huygens's descent, M. G. Tomasko and others, "A model of Titan's aerosols based on measurements
-  made inside the atmosphere", Planetary and Space Science 56 (2008).
+  [doi:10.1029/2011GL046843](https://doi.org/10.1029/2011GL046843); for Uranus's tropopause, G. F.
+  Lindal and others, "The atmosphere of Uranus: results of radio occultation measurements with
+  Voyager 2", Journal of Geophysical Research 92 (1987); for Uranus's and Neptune's hazes, P. G. J.
+  Irwin and others, "Hazy blue worlds: a holistic aerosol model for Uranus and Neptune, including
+  Dark Spots", Journal of Geophysical Research: Planets 127 (2022); and for Earth's air, A. Bucholtz,
+  "Rayleigh-scattering calculations for the terrestrial atmosphere", Applied Optics 34 (1995).
 - Cassini's map of Titan's surface at 938 nm: NASA/JPL-Caltech/University of Arizona, from NASA's
   Photojournal (PIA22770), free to use with this credit under JPL's image use policy.
 - Cassini's global maps of Saturn: L. Li, R. West, X. Jiang and B. Knowles, "Cassini ISS Global Maps

@@ -15,7 +15,7 @@ The haze:
 - Each frame's disk is fitted to its lit limb, where the brightness falls to half of that just
   inside it. That's the haze's edge in the filter, at 28 to 33 degrees of phase about 2,710 km from
   the centre in red, 2,730 km in green and 2,840 km in blue, and about 30 km higher at 50 degrees.
-  The game's sphere stands for green's, 2,741 km over the four sets (`haze.py`).
+  The game's sphere stands for green's, 2,741 km over the four sets.
 - Each pixel's latitude and the cosines of its angles of light and view come from the disk, the
   frame's sub-spacecraft and sub-solar points, and the clock angle of Titan's pole in the frame.
 - Minnaert's law is fitted to each frame where the sun is more than `LEAST_HEIGHT` degrees up and
@@ -159,12 +159,3 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
-
-# For haze.py: what the I/F in each filter becomes in the texture's linear sRGB, as a band's
-# brightness over the frames' mean bends the spectrum.
-colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name]))).tolist() for name, wavelength in cassini.FILTERS.items()}
-with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB: a row for each "
-                        "filter.", 'colours': colours}, f, indent=1)
-print('the texture\'s linear sRGB for an I/F of 1 in each filter:',
-      {name: np.round(c, 5).tolist() for name, c in colours.items()})

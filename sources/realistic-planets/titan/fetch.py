@@ -1,9 +1,9 @@
-"""Downloads what Titan's texture and its haze are made from into a folder of its own: the calibrated
-Cassini frames that the listings name, from the PDS Ring-Moon Systems Node, Cassini's map of Titan's
-surface at 938 nm (PIA22770), from NASA's Photojournal, and Karkoschka's 1993 albedo spectra, from
-the PDS Atmospheres Node.
+"""Downloads what Titan's texture is made from into a folder of its own: the calibrated Cassini frames
+that the listing names, from the PDS Ring-Moon Systems Node, Cassini's map of Titan's surface at 938
+nm (PIA22770), from NASA's Photojournal, and Karkoschka's 1993 albedo spectra, from the PDS
+Atmospheres Node.
 
-    python3 fetch.py frames.json haze.json data
+    python3 fetch.py frames.json data
 """
 import os
 import sys

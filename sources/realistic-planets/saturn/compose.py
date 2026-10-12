@@ -63,10 +63,7 @@ The texture:
 - The texture holds the body's own colour, as the mod lights the planets with white light
   (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
   down until all but `CLIPPED` of them fit.
-- For `haze.py`, it writes what an I/F of 1 in each of Cassini's filters becomes in the texture's
-  linear sRGB, as the texture takes a place's albedo in them, to `data/colour.json`.
 """
-import json
 import os
 import subprocess
 import sys
@@ -549,12 +546,3 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
-
-# For haze.py: an I/F of 1 in each filter in the texture's linear sRGB, as a place whose albedo in a
-# filter is the spectrum's there adds that filter's share of the spectrum, at the texture's scale.
-colours = {name: (scale / fit * each).tolist()
-           for name, each in zip(cassini.FILTERS, tc.filter_colours(lam, albedo, M, list(cassini.FILTERS.values())))}
-with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Saturn's I/F in each of Cassini's filters as the texture's linear sRGB: a row for each "
-                        "filter.", 'colours': colours}, f, indent=1)
-print("the texture's linear sRGB for an I/F of 1 in each filter:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

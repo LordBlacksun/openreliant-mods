@@ -1,8 +1,7 @@
 // Saturn (Realistic Planets, planets.luau): lit by Minnaert's law (limb.glsl), as the other planets
 // are, with its haze (haze.glsl), as Cassini's frames show it at 151 to 176 degrees of phase, and
-// shaded by its ring. sources/realistic-planets/saturn/haze.py fits the haze's numbers below, in
-// Cassini's blue, green and red filters, and prints them. The haze stands for the gas and the haze
-// together.
+// shaded by its ring. The haze is yellow, absorbing in the blue, about 30 to 40 km a scale height,
+// mostly Rayleigh's scattering with a narrow forward lobe. The mod's README gives the numbers' sources.
 //
 // The ring's shadow: the sun's ray from each pixel, in Saturn's own frame, where the ring lies in
 // the plane of the equator, crosses that plane at some radius; where the ring is there, it lets
@@ -15,42 +14,22 @@
 #include "haze.glsl"
 
 const RealisticPlanetsHaze saturnHaze = RealisticPlanetsHaze(
-    // The spheroid's equatorial radius in the game, Saturn's at 1 bar: the edge of the lit limb in
-    // each filter, where the texture's disk ends; its polar radius's share of it; and the unit of
-    // the ring the haze beyond the disk is drawn on, the rings' outer edge, which is half the
-    // widest span of Saturn's model.
-    60268.0,
-    0.9020,
-    141000.0,
-    // The radius the haze's extinction is given at, 100 km above the edge, and the radius it is cut
-    // off at, 1,000 km above it.
-    60368.0,
-    61268.0,
-    // The haze's extinction and scale height.
-    vec3(0.0001147, 5.443e-05, 7.78e-05),
-    vec3(40.35, 29.03, 30.37),
+    // Saturn's equatorial radius at 1 bar, km, its polar radius's share of it, and the unit of the
+    // ring the haze beyond the disk is drawn on: the rings' outer edge, which OpenReliant takes as
+    // the planet's radius.
+    60268.0, 0.902, 141000.0,
+    // The haze's optical depth and scale heights, in Cassini's blue, green and red filters.
+    vec3(0.055, 0.050, 0.064),
+    vec3(40.4, 29.0, 30.4),
     // No detached layer.
-    vec3(0, 0, 0),
-    vec3(60268, 60268, 60268),
-    vec3(1, 1, 1),
-    // The phase angle the texture shows Saturn at: Hubble's maps, from near the sun's direction.
-    -1.000,
-    // The albedo, and the phase function: one Henyey-Greenstein lobe, a narrow forward peak with a
-    // ninth of the light, and Rayleigh's with the rest.
-    vec3(0.38, 1, 0.908),
-    vec3(0.964, 0.964, 0.964),
-    vec3(0, 0, 0),
-    vec3(0.112, 0.112, 0.112),
-    vec3(0, 0, 0),
-    // The light scattered more than once isn't estimated for Saturn: no beam and no glow.
-    vec3(0, 0, 0),
-    vec3(0, 0, 0),
-    vec3(1, 1, 1),
-    vec3(0, 0, 0),
-    vec3(1, 1, 1),
-    // Cassini's blue, green and red filters' I/F to the game's colours.
+    vec3(0.0), 0.0, 1.0,
+    // Its albedo, and a narrow forward lobe with a ninth of the light, Rayleigh's with the rest.
+    vec3(0.38, 1.0, 0.91),
+    vec3(0.964), vec3(0.0), vec3(0.112), vec3(0.0),
+    // The texture shows Saturn as from the sun; the filters to the texture's colours, and a quarter
+    // of the haze's light blooming.
+    0.0,
     mat3(-0.10745, 0.14639, 0.44356, 0.22973, 0.33104, -0.02183, 0.31752, -0.00177, -0.00611),
-    // A quarter of the haze's light blooms, as for Titan's and Neptune's.
     0.25);
 
 // The ring's inner and outer radius in the model's units, as `sphere.py` makes it, and its optical
