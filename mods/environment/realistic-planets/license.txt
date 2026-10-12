@@ -12,8 +12,8 @@ that credit, Io's, Europa's, Ganymede's and Callisto's from the USGS Astrogeolog
 maps and NASA/JPL's Voyager pictures, in the public domain, Triton's from NASA/JPL's Voyager 2
 pictures and the global mosaic of NASA/JPL and Paul Schenk of the Lunar and Planetary Institute,
 from the USGS Astrogeology Science Center, in the public domain, and Earth's from NASA Goddard Space
-Flight Center's Blue Marble (Reto Stöckli, Robert Simmon) and NOAA's GOES-18 and GOES-19 pictures,
-in the public domain.
+Flight Center's Blue Marble (Reto Stöckli, Robert Simmon), NASA Earth Observatory's Black Marble
+(Joshua Stevens, Miguel Román) and NOAA's GOES-18 and GOES-19 pictures, in the public domain.
 They, and the note on how Neptune's is made (neptune-voyager-map.pdf), are shared under CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/): you may share and adapt them for any purpose,
 crediting "OpenReliant, from NASA/JPL Voyager 2 data" for Neptune, "OpenReliant, from NASA/JPL/Space
@@ -24,7 +24,7 @@ data, NASA/ESA Hubble OPAL data and NASA/JPL Voyager 2 data" for Saturn and its 
 Science Institute Cassini data and NASA/JPL-Caltech/University of Arizona's map" for Titan, and
 "OpenReliant, from USGS maps and NASA/JPL Voyager data" for Jupiter's moons, "OpenReliant, from
 NASA/JPL Voyager 2 data and the NASA/JPL/LPI map" for Triton, and "OpenReliant, from NASA's Blue
-Marble and NOAA GOES data" for Earth.
+Marble and Black Marble and NOAA GOES data" for Earth.
 
 The spheres (*.shp), mod.ini and the scripts that make the mod's files are OpenReliant's, under the
 Mozilla Public License 2.0.

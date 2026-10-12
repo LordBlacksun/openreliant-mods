@@ -36,8 +36,9 @@ spheres callisto calist 1280625 1280625
 spheres triton triton 288141 288141
 
 # Earth's model has one level, and its sphere stands 1.25 million units from the model's origin, as
-# the game's does, centred where `sltool shp obj` puts the middle of the game's sphere. The game
-# doesn't make Earth a planet, so unlike the planets it isn't moved to stand on its origin.
+# the game's does, centred where `sltool shp obj` puts the middle of the game's sphere. The mod makes
+# Earth a planet, so the engine moves the sphere back to stand on its origin, as it does every
+# planet's.
 python3 sphere.py "$work/earth.obj" --radius 1048542 --centre -752661.5 5579.5 -993744.7 --texture realistic_planets_earth \
     --name earth
 "$sltool" shp from-obj "$work/earth.obj" "$mod/earth.shp"

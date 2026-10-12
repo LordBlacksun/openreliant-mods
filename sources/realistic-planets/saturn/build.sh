@@ -11,3 +11,5 @@ python3 fetch.py data
 python3 compose.py data data/1993.tab "$mod/realistic_planets_saturn.png" 3 0.22 0.8
 # The ring, its B ring at its brightest as bright as the planet's equatorial zone.
 python3 rings.py data "$mod/realistic_planets_saturn.png" "$mod/realistic_planets_saturn_rings.png" 0.8
+# The ring's optical depth for saturn.glsl, which shades the planet by the ring.
+python3 ringdepth.py "$mod/realistic_planets_saturn_rings.png" 128

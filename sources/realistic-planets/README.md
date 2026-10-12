@@ -32,8 +32,9 @@ Run each script from its own folder, in this order:
    into `uranus/data`, and makes `realistic_planets_uranus.png`.
 4. `saturn/build.sh` downloads Cassini's global maps of Saturn, Hubble's OPAL maps, Karkoschka's
    spectrum, Voyager 2's profiles of the rings and Cassini's mosaic across them, about 180 MB, into
-   `saturn/data`, and makes `realistic_planets_saturn.png` and the ring's,
-   `realistic_planets_saturn_rings.png`. It takes about 15 seconds.
+   `saturn/data`, makes `realistic_planets_saturn.png` and the ring's,
+   `realistic_planets_saturn_rings.png`, and prints the ring's optical depth for `saturn.glsl`. It
+   takes about 15 seconds.
 5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
    into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
    `planets.luau`. It takes about a minute.
@@ -46,9 +47,10 @@ Run each script from its own folder, in this order:
    `realistic_planets_ganymede.png`, `realistic_planets_callisto.png` and
    `realistic_planets_triton.png`, and prints their limbs' exponents for `planets.luau`. The fit
    takes about 50 minutes.
-8. `earth/build.sh` downloads NASA's Blue Marble and GOES-18's and GOES-19's pictures, about 730 MB,
-   into `earth/data`, prints the limb's exponents for `planets.luau`, and makes
-   `realistic_planets_earth.png`. It takes about a minute.
+8. `earth/build.sh` downloads NASA's Blue Marble and Black Marble and GOES-18's and GOES-19's
+   pictures, about 740 MB, into `earth/data`, prints the limb's exponents for `planets.luau`, and
+   makes `realistic_planets_earth.png` and its city lights, `realistic_planets_earth_emissive.png`.
+   It takes about a minute.
 9. `build.sh` builds the spheres, Saturn's with its ring, with `sphere.py` and `sltool shp
    from-obj`, and the thumbnail, `mod.png`, with `render.py`. Set `SLTOOL` if `sltool` isn't on your
    `PATH`.
@@ -83,6 +85,7 @@ Run each script from its own folder, in this order:
 | `saturn/fetch.py` | Downloads Cassini's and Hubble's maps, the spectrum, Voyager's ring profiles and Cassini's mosaic of the rings |
 | `saturn/compose.py` | Composes the planet's texture from Cassini's maps, calibrated with Hubble's, and the spectrum |
 | `saturn/rings.py` | Composes the ring's texture from Voyager's profiles and Cassini's mosaic |
+| `saturn/ringdepth.py` | Prints the ring's optical depth for `saturn.glsl`, from the ring's texture |
 | `venus/fetch.py` | Downloads Akatsuki's ultraviolet maps and Venus Express's pictures with their geometry |
 | `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
 | `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
@@ -95,10 +98,11 @@ Run each script from its own folder, in this order:
 | `moons/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
 | `moons/compose.py` | Composes a moon's texture from its map and the frames' colour |
 | `moons/moons.py` | The moons' maps, shapes and frames, and the guess for Triton's unseen north, shared by `fit.py` and `compose.py` |
-| `earth/fetch.py` | Downloads the Blue Marble and the GOES pictures |
+| `earth/fetch.py` | Downloads the Blue Marble, the Black Marble and the GOES pictures |
 | `earth/goes.py` | Reads the GOES pictures onto latitude and longitude, with each place's angles of view and light, shared by `limb.py` and `compose.py` |
 | `earth/limb.py` | Measures the limb's exponents from the two satellites' pictures of the same moment |
 | `earth/compose.py` | Composes the texture from the Blue Marble, with the haze GOES-18 sees added back |
+| `earth/nightlights.py` | Makes the city lights, the texture's emissive map, from the Black Marble |
 | `paper/neptune.tex` | The note |
 | `paper/figures.py` | The note's figures and numbers |
 
