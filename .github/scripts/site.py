@@ -538,13 +538,14 @@ def mod_page(mod, by_path: dict[str, Category], release: dict | None, releases: 
     text = html.escape
     base = "../../"
     listing = mod.artist.listing(mod.files) if mod.artist else None
-    # Its pictures: its screenshots, or for an artist's pack the in-game picture its catalogue
-    # gives, from the artist's own site, then its thumbnail.
-    pictures = [(path.name, f"{mod.name} in OpenReliant") for path in mod.screenshots()]
+    # Its pictures: for an artist's pack the in-game picture its catalogue gives, from the
+    # artist's own site; its thumbnail; then its screenshots.
+    pictures = []
     if listing and mod.artist.url and listing.get("preview"):
-        pictures.insert(0, (mod.artist.url + str(listing["preview"]), f"{mod.name} in OpenReliant"))
+        pictures.append((mod.artist.url + str(listing["preview"]), f"{mod.name} in OpenReliant"))
     if mod.thumbnail:
         pictures.append((f"{base}thumbs/{mod.id}.png", mod.name))
+    pictures += [(path.name, f"{mod.name} in OpenReliant") for path in mod.screenshots()]
     first = pictures[0] if pictures else ("", "")
     gallery = ""
     if len(pictures) > 1:

@@ -28,6 +28,7 @@ import numpy as np
 from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nepgeo  # noqa: E402
 import voyager  # noqa: E402
 

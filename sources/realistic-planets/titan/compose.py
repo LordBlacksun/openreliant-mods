@@ -12,10 +12,11 @@ The haze:
   in January and February 2010, months after Titan's equinox, with the sun over its equator and both
   poles lit. `frames.json` lists them, calibrated to I/F, with their geometry. Titan is about 800
   pixels across in them, at phase angles of 28 to 50 degrees.
-- Each frame's disc is fitted to its lit limb, where the brightness falls to half of that just
-  inside it. That's the haze's edge in the filter, about 2,710 km from the centre in red and green
-  and 2,840 km in blue, and it's the sphere the game draws.
-- Each pixel's latitude and the cosines of its angles of light and view come from the disc, the
+- Each frame's disk is fitted to its lit limb, where the brightness falls to half of that just
+  inside it. That's the haze's edge in the filter, at 28 to 33 degrees of phase about 2,710 km from
+  the centre in red, 2,730 km in green and 2,840 km in blue, and about 30 km higher at 50 degrees.
+  The game's sphere stands for green's, 2,741 km over the four sets (`haze.py`).
+- Each pixel's latitude and the cosines of its angles of light and view come from the disk, the
   frame's sub-spacecraft and sub-solar points, and the clock angle of Titan's pole in the frame.
 - Minnaert's law is fitted to each frame where the sun is more than `LEAST_HEIGHT` degrees up and
   the view more than that above the limb, each band of `BAND` degrees of latitude with its own
@@ -41,7 +42,6 @@ The colour, the surface and the brightness:
 """
 import json
 import os
-import re
 import subprocess
 import sys
 
@@ -49,6 +49,8 @@ import numpy as np
 from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cassini  # noqa: E402
 import globe  # noqa: E402
 import minnaert  # noqa: E402
 import truecolour as tc  # noqa: E402
@@ -56,31 +58,12 @@ import truecolour as tc  # noqa: E402
 data, listing, spectrum, out = sys.argv[1:5]
 surface, brightness, key_blue = float(sys.argv[5]), float(sys.argv[6]), float(sys.argv[7])
 
-# Cassini's blue, green and red filters' effective wavelengths, nm, as for Saturn's maps (Wang and
-# others, 2025).
-FILTERS = {'BL1': 463.0, 'GRN': 568.0, 'RED': 647.0}
-# The highest I/F a frame's pixel can hold and be trusted: a higher one is a hot pixel or a cosmic ray.
-MOST_IF = 5.0
 # The least height of the sun, and of the view above the limb, where a frame is used, degrees; the
 # bands of latitude the haze is measured in, degrees; and the latitudes each frame's mean is taken
 # within.
 LEAST_HEIGHT = 15.0
 BAND = 5.0
 MEAN_LATITUDE = 60.0
-# The limb fit. The first guess at the disc is the pixels brighter than `FIRST_GUESS` of the 99th
-# percentile. Rays `RAY_STEP` degrees apart run from the centre over `RAY_REACH` of the radius, in
-# `RAY_SAMPLES` steps, and the edge is where a ray's brightness falls to `EDGE` of its median between
-# `PLATEAU` of the radius. A ray counts where the sun's cosine at `LIT_AT` of the radius is at least
-# `LIT_LIMB`. The fit is repeated `FITS` times from the last disc.
-FIRST_GUESS = 0.4
-RAY_STEP = 0.5
-RAY_REACH = (0.6, 1.4)
-RAY_SAMPLES = 401
-EDGE = 0.5
-PLATEAU = (0.8, 0.9)
-LIT_AT = 0.98
-LIT_LIMB = 0.3
-FITS = 4
 # The surface map's degrees a pixel, and the columns wrapped round either side of it for the cubic
 # interpolation across its edges.
 SURFACE_STEP = 1 / 16
@@ -92,99 +75,32 @@ SIZE = (8192, 4096)
 STRIP = 512
 
 
-def frame(label):
-    """A calibrated frame's I/F, from its detached PDS3 label, and its filter's name."""
-    with open(label, encoding='latin-1') as f:
-        text = f.read()
-    record = int(re.search(r'^\s*RECORD_BYTES\s*=\s*(\d+)', text, re.M).group(1))
-    start = int(re.search(r'\^IMAGE\s*=\s*\("[^"]+",\s*(\d+)\)', text).group(1))
-    image = text[re.search(r'OBJECT\s*=\s*IMAGE\s', text).start():]
-    lines = int(re.search(r'\bLINES\s*=\s*(\d+)', image).group(1))
-    samples = int(re.search(r'\bLINE_SAMPLES\s*=\s*(\d+)', image).group(1))
-    data = np.fromfile(label[:-4] + '.IMG', dtype='<f4', count=lines * samples, offset=(start - 1) * record)
-    return data.reshape(lines, samples).astype(np.float64)
-
-
-def unit(lat, lon):
-    """The unit vector toward a planetocentric latitude and east longitude, degrees."""
-    lat, lon = np.radians(lat), np.radians(lon)
-    return np.array([np.cos(lat) * np.cos(lon), np.cos(lat) * np.sin(lon), np.sin(lat)])
-
-
-def geometry(shape, cx, cy, radius, f):
-    """Each pixel's latitude and the cosines of its angles of view and light, on a sphere of `radius`
-    pixels about (`cx`, `cy`), seen from afar; and where the sphere is."""
-    observer, sun = unit(f['observer_lat'], f['observer_east_lon']), unit(f['sun_lat'], f['sun_east_lon'])
-    north = np.array([0.0, 0.0, 1.0]) - observer[2] * observer
-    north /= np.linalg.norm(north)
-    across = np.cross(observer, north)
-    t = np.radians(f['north_clock_angle'])
-    right, up = np.sin(t) * north - np.cos(t) * across, np.cos(t) * north + np.sin(t) * across
-    lines, samples = np.indices(shape).astype(np.float64)
-    x, y = (samples - cx) / radius, (cy - lines) / radius
-    disc = x ** 2 + y ** 2 < 1
-    mu = np.sqrt(np.clip(1 - x ** 2 - y ** 2, 0, None))
-    point = x[..., None] * right + y[..., None] * up + mu[..., None] * observer
-    return np.degrees(np.arcsin(np.clip(point[..., 2], -1, 1))), mu, point @ sun, disc
-
-
-def limb(image, f):
-    """The disc's centre and radius, pixels, fitted to the lit limb: along rays from the centre, where
-    the brightness falls to `EDGE` of that just inside, and a circle through those points."""
-    bright = image > FIRST_GUESS * np.percentile(image, 99)
-    cy, cx = np.argwhere(bright).mean(axis=0)
-    radius = np.sqrt(bright.sum() / np.pi)
-    angles = np.radians(np.arange(0, 360, RAY_STEP))
-    for _ in range(FITS):
-        _, _, mu0, _ = geometry(image.shape, cx, cy, radius, f)
-        r = np.linspace(*RAY_REACH, RAY_SAMPLES) * radius
-        xs, ys = cx + np.outer(np.cos(angles), r), cy - np.outer(np.sin(angles), r)
-        rays = ndimage.map_coordinates(image, [ys, xs], order=1, mode='constant', cval=0)
-        edges = []
-        for angle, ray in zip(angles, rays):
-            at = (int(round(cy - np.sin(angle) * LIT_AT * radius)), int(round(cx + np.cos(angle) * LIT_AT * radius)))
-            if not (0 <= at[0] < image.shape[0] and 0 <= at[1] < image.shape[1]) or mu0[at] < LIT_LIMB:
-                continue
-            level = EDGE * np.median(ray[(r > PLATEAU[0] * radius) & (r < PLATEAU[1] * radius)])
-            above = np.nonzero(ray > level)[0]
-            if len(above) == 0 or above[-1] + 1 >= len(r):
-                continue
-            i = above[-1]
-            edge = r[i] + (ray[i] - level) / (ray[i] - ray[i + 1]) * (r[i + 1] - r[i])
-            x, y = cx + np.cos(angle) * edge, cy - np.sin(angle) * edge
-            if 0 <= x < image.shape[1] - 1 and 0 <= y < image.shape[0] - 1:
-                edges.append((x, y))
-        edges = np.array(edges)
-        (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * edges, np.ones(len(edges))], (edges ** 2).sum(axis=1), rcond=None)
-        radius = np.sqrt(c + cx ** 2 + cy ** 2)
-    return cx, cy, radius
-
-
 # Each frame's limb, exponent and profile.
 with open(listing) as f:
     frames = json.load(f)['frames']
 centres = np.arange(-90 + BAND / 2, 90, BAND)
 weights = np.cos(np.radians(centres))
-exponents, profiles = {f: [] for f in FILTERS}, {f: [] for f in FILTERS}
+exponents, profiles, means = ({f: [] for f in cassini.FILTERS} for _ in range(3))
 least = np.sin(np.radians(LEAST_HEIGHT))
 for f in frames:
-    image = frame(os.path.join(data, os.path.basename(f['urls'][1])))
-    image = np.where(np.isfinite(image) & (image > 0) & (image < MOST_IF), image, 0)
-    cx, cy, radius = limb(image, f)
-    lat, mu, mu0, disc = geometry(image.shape, cx, cy, radius, f)
-    good = disc & (image > 0) & (mu > least) & (mu0 > least)
+    image = cassini.trusted(cassini.frame(os.path.join(data, os.path.basename(f['urls'][1]))))
+    cx, cy, radius = cassini.limb(image, f)
+    lat, mu, mu0, disk = cassini.geometry(image.shape, cx, cy, radius, f)
+    good = disk & (image > 0) & (mu > least) & (mu0 > least)
     bands = np.clip(((lat + 90) // BAND).astype(int), 0, len(centres) - 1)
     k, b = minnaert.fit(image, np.where(good, mu0, 1), np.where(good, mu, 1), good, bands)
     b = np.append(b, [np.nan] * (len(centres) - len(b)))
     seen = np.isfinite(b) & (np.abs(centres) <= MEAN_LATITUDE)
+    mean_log = np.sum(np.log(b[seen]) * weights[seen]) / weights[seen].sum()
     exponents[f['filter']].append(k)
-    profiles[f['filter']].append(np.log(b) - np.sum(np.log(b[seen]) * weights[seen]) / weights[seen].sum())
+    profiles[f['filter']].append(np.log(b) - mean_log)
+    means[f['filter']].append(mean_log)
     print(f"{f['name']} ({f['filter']}, {f['time'][:10]}, phase {f['phase']:.0f} degrees): the haze's edge {radius * f['resolution_km']:.0f} km "
           f"from the centre, Minnaert's exponent {k:.3f}, the bands seen from {centres[np.isfinite(b)].min():+.1f} to {centres[np.isfinite(b)].max():+.1f}")
 
 # Each filter's profile, and its exponent.
 profile = {}
-for name, wavelength in FILTERS.items():
+for name, wavelength in cassini.FILTERS.items():
     logs = np.array(profiles[name])
     seen = np.isfinite(logs).any(axis=0)
     mean = np.nanmean(np.where(np.isfinite(logs), logs, np.nan)[:, seen], axis=0)
@@ -202,8 +118,8 @@ geometric = sum(K.values())
 
 # The limb's exponents at each channel's wavelength for Titan's spectrum.
 channels = tc.channels(lam, albedo, M)
-limb_exponents = np.interp(channels, [FILTERS[n] for n in sorted(FILTERS, key=FILTERS.get)],
-                           [np.mean(exponents[n]) for n in sorted(FILTERS, key=FILTERS.get)])
+by_wavelength = sorted(cassini.FILTERS, key=cassini.FILTERS.get)
+limb_exponents = np.interp(channels, [cassini.FILTERS[n] for n in by_wavelength], [np.mean(exponents[n]) for n in by_wavelength])
 print(f"the channels' wavelengths for Titan's spectrum: {np.round(channels).astype(int)} nm; their exponents, for planets.luau: "
       f"{np.round(limb_exponents, 3)}")
 
@@ -230,7 +146,8 @@ for start in range(0, h, STRIP):
 
 # At the brightness asked for; the true normal albedo, for reference, from the geometric with Minnaert's
 # law, by which the normal albedo is (2k + 1) / 2 times the geometric.
-texture *= brightness / globe.area_mean(tc.luminance(texture), np.ones(h, dtype=bool), lats)
+scale = brightness / globe.area_mean(tc.luminance(texture), np.ones(h, dtype=bool), lats)
+texture *= scale
 normal_over_geometric = (2 * limb_exponents[1] + 1) / 2
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric by Minnaert's law in green: "
@@ -244,3 +161,14 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
+
+# For haze.py: what the I/F in each filter becomes in the texture's linear sRGB, as a band's
+# brightness over the frames' mean bends the spectrum, with its blue divided by the key light's as the
+# texture's is, since the sun lights the haze as it lights the disk.
+key_light = np.array([1.0, 1.0, 1.0 / key_blue])
+colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name])) * key_light).tolist() for name, wavelength in cassini.FILTERS.items()}
+with open(os.path.join(data, 'colour.json'), 'w') as f:
+    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
+                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+print('the texture\'s linear sRGB for an I/F of 1 in each filter:',
+      {name: np.round(c, 5).tolist() for name, c in colours.items()})

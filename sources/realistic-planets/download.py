@@ -1,4 +1,5 @@
 """Downloads files into a folder, each once, for the bodies' fetch scripts."""
+import json
 import os
 import urllib.request
 
@@ -6,6 +7,16 @@ import urllib.request
 # Atmospheres Node.
 KARKOSCHKA = ['https://atmos.nmsu.edu/pdsd/archive/data/eso-jsnu-spectrophotometer-4-v20/gbat_0001/data/' + name
               for name in ('1993.tab', '1993.lbl')]
+
+
+def listed(listings):
+    """The download links of every frame that the frame listings, JSON files, name, in their
+    order."""
+    urls = []
+    for listing in listings:
+        with open(listing) as f:
+            urls += [url for frame in json.load(f)['frames'] for url in frame['urls']]
+    return urls
 
 
 def fetch(urls, out):

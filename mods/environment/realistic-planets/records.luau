@@ -1,6 +1,6 @@
 -- Realistic Planets: how each body turns and leans, in OpenReliant's table of planets
--- (records.planets), and Earth made a planet, so that the sun alone lights it, as it lights the
--- others. This is a load script: it runs once, as OpenReliant starts.
+-- (records.planets), Titan's haze beyond its disk, and Earth made a planet, so that the sun alone
+-- lights it, as it lights the others. This is a load script: it runs once, as OpenReliant starts.
 
 local records = require("openreliant.records")
 
@@ -22,7 +22,7 @@ local BODIES = {
     triton = { day = -141.04, tilt = 30 },
     uranus = { day = -17.24, tilt = 82.23 },
     saturn = { day = 10.656, tilt = 26.73 },
-    titan = { day = 382.69, tilt = 26.73 },
+    titan = { day = 382.69, tilt = 26.73, haze = { surface = "titan_haze", inner = 0.98, outer = 1.25 } },
     jupiter = { day = 9.925, tilt = 3.13 },
     europa = { day = 85.23, tilt = 3.13 },
     ganymede = { day = 171.71, tilt = 3.13 },
@@ -39,12 +39,19 @@ local TILT_TOWARD = -math.pi / 2
 
 -- Sets a planet's spin and lean from its body. The band the game draws over the rim of Neptune,
 -- Uranus, Jupiter and Venus is left out, as each body's limb law, fitted to its measured photometry,
--- already gives the rim its light.
+-- already gives the rim its light. A body with a haze beyond its disk has it drawn by its surface
+-- function (planets.luau) on a ring from `inner` to `outer` times its radius: Titan's haze reaches
+-- about 700 km above its edge, a quarter of its radius.
 local function apply(planet, body)
     planet.spin = 2 * math.pi * TIME_SCALE / (body.day * 3600)
     planet.tilt = math.rad(body.tilt)
     planet.tilt_toward = TILT_TOWARD
     planet.atmosphere_color = nil
+    if body.haze then
+        planet.atmosphere_surface = body.haze.surface
+        planet.atmosphere_inner = body.haze.inner
+        planet.atmosphere_outer = body.haze.outer
+    end
 end
 
 local planets = records.planets

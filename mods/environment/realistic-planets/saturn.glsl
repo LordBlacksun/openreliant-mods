@@ -1,8 +1,8 @@
-// Saturn (Realistic Planets, planets.luau): lit by Minnaert's law, as `minnaert.glsl` lights the
-// other planets, and shaded by its ring. The sun's ray from each pixel, in Saturn's own frame, where
-// the ring lies in the plane of the equator, crosses that plane at some radius; where the ring is
-// there, it lets through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and
-// mu0 the cosine of the sun's angle from the ring's pole.
+// Saturn (Realistic Planets, planets.luau): lit by Minnaert's law (limb.glsl), as the other planets
+// are, and shaded by its ring. The sun's ray from each pixel, in Saturn's own frame, where the ring
+// lies in the plane of the equator, crosses that plane at some radius; where the ring is there, it
+// lets through exp(-tau / mu0) of the sunlight, tau its optical depth seen face on and mu0 the
+// cosine of the sun's angle from the ring's pole.
 //
 // parameters.xyz: k for red, green and blue.
 // parameters.w: the least cosine of the view the law was fitted at.
@@ -23,11 +23,7 @@ const float saturnRingTau[saturnRingBins] = float[](
     0.63, 0.531, 0.531, 0.506, 0.482, 0.471, 0.457, 0.437, 0.434, 0.425, 0.42, 0.43, 0.488, 0.422, 0.496, 0.488,
     0.432, 0.229, 0.419, 0.58, 0.492, 0.513, 0.514, 0.482, 0.009, 0.005, 0.004, 0.004, 0.003, 0.004, 0.009, 0.002);
 
-// A colour in linear light encoded in sRGB, not clipped at 1, as `minnaert.glsl` has it.
-vec3 saturnEncoded(vec3 c) {
-    c = max(c, 0.0);
-    return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, greaterThan(c, vec3(0.0031308)));
-}
+#include "limb.glsl"
 
 // The share of the sun the ring lets through to a point of Saturn's frame, `local`, the sun along
 // `sun` in that frame.
@@ -45,9 +41,5 @@ float saturnRingShade(vec3 local, vec3 sun) {
 }
 
 void surface(inout Surface s, vec4 parameters, float time) {
-    if (dot(s.normal, s.normal) < 0.5) return;
-    float mu = max(dot(s.normal, s.toEye), parameters.w);
-    float mu0 = max(dot(s.normal, s.toSun), 0.0);
-    s.color = saturnEncoded(decoded(s.color) * pow(vec3(mu), parameters.xyz - 1.0));
-    s.sunlight = pow(vec3(mu0), parameters.xyz) * saturnRingShade(s.local, objectDirection(s.toSun));
+    if (realisticPlanetsLimb(s, parameters)) s.sunlight *= saturnRingShade(s.local, objectDirection(s.toSun));
 }

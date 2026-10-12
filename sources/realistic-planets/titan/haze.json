@@ -1,0 +1,599 @@
+{
+ "about": "The Cassini narrow-angle frames of Titan at high phase, calibrated to I/F with CISSCAL, from the PDS Ring-Moon Systems Node (OPUS): eleven sets in its blue, green and red filters, taken from February 2009 to August 2010, around Titan's equinox, at phase angles of 140 to 164 degrees. The geometry is from OPUS and the north clock angle from the volumes' index tables, as frames.json has them.",
+ "frames": [
+  {
+   "name": "N1614174337_1",
+   "opus_id": "co-iss-n1614174337",
+   "filter": "BL1",
+   "time": "2009-02-24T13:05:10.984",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174337_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174337_1_CALIB.LBL"
+   ],
+   "distance_km": 1777656.215,
+   "observer_lat": 19.403,
+   "observer_east_lon": 344.059,
+   "sun_lat": -2.419,
+   "sun_east_lon": 180.627,
+   "phase": 156.529,
+   "resolution_km": 10.65154,
+   "north_clock_angle": 225.59636
+  },
+  {
+   "name": "N1614174370_1",
+   "opus_id": "co-iss-n1614174370",
+   "filter": "GRN",
+   "time": "2009-02-24T13:05:44.624",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174370_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174370_1_CALIB.LBL"
+   ],
+   "distance_km": 1777688.647,
+   "observer_lat": 19.397,
+   "observer_east_lon": 344.058,
+   "sun_lat": -2.419,
+   "sun_east_lon": 180.618,
+   "phase": 156.538,
+   "resolution_km": 10.65174,
+   "north_clock_angle": 225.5914
+  },
+  {
+   "name": "N1614174403_1",
+   "opus_id": "co-iss-n1614174403",
+   "filter": "RED",
+   "time": "2009-02-24T13:06:17.684",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174403_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2053/data/1613978103_1614202683/N1614174403_1_CALIB.LBL"
+   ],
+   "distance_km": 1777720.778,
+   "observer_lat": 19.391,
+   "observer_east_lon": 344.057,
+   "sun_lat": -2.419,
+   "sun_east_lon": 180.609,
+   "phase": 156.548,
+   "resolution_km": 10.65193,
+   "north_clock_angle": 225.58489
+  },
+  {
+   "name": "N1624142525_1",
+   "opus_id": "co-iss-n1624142525",
+   "filter": "BL1",
+   "time": "2009-06-19T22:00:27.475",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142525_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142525_1_CALIB.LBL"
+   ],
+   "distance_km": 1301932.57,
+   "observer_lat": 39.893,
+   "observer_east_lon": 278.729,
+   "sun_lat": -0.638,
+   "sun_east_lon": 99.379,
+   "phase": 140.74,
+   "resolution_km": 7.80105,
+   "north_clock_angle": 179.44868
+  },
+  {
+   "name": "N1624142558_1",
+   "opus_id": "co-iss-n1624142558",
+   "filter": "GRN",
+   "time": "2009-06-19T22:01:01.659",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142558_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142558_1_CALIB.LBL"
+   ],
+   "distance_km": 1301776.137,
+   "observer_lat": 39.894,
+   "observer_east_lon": 278.723,
+   "sun_lat": -0.638,
+   "sun_east_lon": 99.37,
+   "phase": 140.74,
+   "resolution_km": 7.80012,
+   "north_clock_angle": 179.45041
+  },
+  {
+   "name": "N1624142591_1",
+   "opus_id": "co-iss-n1624142591",
+   "filter": "RED",
+   "time": "2009-06-19T22:01:34.718",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142591_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2055/data/1624039158_1624239287/N1624142591_1_CALIB.LBL"
+   ],
+   "distance_km": 1301622.326,
+   "observer_lat": 39.894,
+   "observer_east_lon": 278.717,
+   "sun_lat": -0.638,
+   "sun_east_lon": 99.361,
+   "phase": 140.74,
+   "resolution_km": 7.79919,
+   "north_clock_angle": 179.44759
+  },
+  {
+   "name": "N1625521070_1",
+   "opus_id": "co-iss-n1625521070",
+   "filter": "BL1",
+   "time": "2009-07-05T20:56:02.982",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521070_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521070_1_CALIB.LBL"
+   ],
+   "distance_km": 1344390.814,
+   "observer_lat": 32.052,
+   "observer_east_lon": 273.657,
+   "sun_lat": -0.392,
+   "sun_east_lon": 99.645,
+   "phase": 147.839,
+   "resolution_km": 8.05546,
+   "north_clock_angle": 191.24921
+  },
+  {
+   "name": "N1625521103_1",
+   "opus_id": "co-iss-n1625521103",
+   "filter": "GRN",
+   "time": "2009-07-05T20:56:36.922",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521103_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521103_1_CALIB.LBL"
+   ],
+   "distance_km": 1344218.408,
+   "observer_lat": 32.053,
+   "observer_east_lon": 273.651,
+   "sun_lat": -0.392,
+   "sun_east_lon": 99.636,
+   "phase": 147.839,
+   "resolution_km": 8.05443,
+   "north_clock_angle": 191.24435
+  },
+  {
+   "name": "N1625521136_1",
+   "opus_id": "co-iss-n1625521136",
+   "filter": "RED",
+   "time": "2009-07-05T20:57:10.002",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521136_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1625115008_1625673763/N1625521136_1_CALIB.LBL"
+   ],
+   "distance_km": 1344048.212,
+   "observer_lat": 32.053,
+   "observer_east_lon": 273.645,
+   "sun_lat": -0.392,
+   "sun_east_lon": 99.628,
+   "phase": 147.839,
+   "resolution_km": 8.05341,
+   "north_clock_angle": 191.23745
+  },
+  {
+   "name": "N1626899168_1",
+   "opus_id": "co-iss-n1626899168",
+   "filter": "BL1",
+   "time": "2009-07-21T19:44:11.556",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899168_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899168_1_CALIB.LBL"
+   ],
+   "distance_km": 1379641.517,
+   "observer_lat": 24.264,
+   "observer_east_lon": 270.383,
+   "sun_lat": -0.147,
+   "sun_east_lon": 100.027,
+   "phase": 154.135,
+   "resolution_km": 8.26668,
+   "north_clock_angle": 202.53956
+  },
+  {
+   "name": "N1626899201_1",
+   "opus_id": "co-iss-n1626899201",
+   "filter": "GRN",
+   "time": "2009-07-21T19:44:45.199",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899201_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899201_1_CALIB.LBL"
+   ],
+   "distance_km": 1379456.765,
+   "observer_lat": 24.265,
+   "observer_east_lon": 270.377,
+   "sun_lat": -0.147,
+   "sun_east_lon": 100.019,
+   "phase": 154.136,
+   "resolution_km": 8.26557,
+   "north_clock_angle": 202.53236
+  },
+  {
+   "name": "N1626899234_1",
+   "opus_id": "co-iss-n1626899234",
+   "filter": "RED",
+   "time": "2009-07-21T19:45:18.229",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899234_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1626845205_1627025208/N1626899234_1_CALIB.LBL"
+   ],
+   "distance_km": 1379273.717,
+   "observer_lat": 24.265,
+   "observer_east_lon": 270.371,
+   "sun_lat": -0.147,
+   "sun_east_lon": 100.01,
+   "phase": 154.137,
+   "resolution_km": 8.26447,
+   "north_clock_angle": 202.52583
+  },
+  {
+   "name": "N1628305014_1",
+   "opus_id": "co-iss-n1628305014",
+   "filter": "BL1",
+   "time": "2009-08-07T02:14:47.691",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305014_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305014_1_CALIB.LBL"
+   ],
+   "distance_km": 1241766.112,
+   "observer_lat": 16.774,
+   "observer_east_lon": 262.997,
+   "sun_lat": 0.103,
+   "sun_east_lon": 93.168,
+   "phase": 160.37,
+   "resolution_km": 7.44054,
+   "north_clock_angle": 211.68749
+  },
+  {
+   "name": "N1628305047_1",
+   "opus_id": "co-iss-n1628305047",
+   "filter": "GRN",
+   "time": "2009-08-07T02:15:21.221",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305047_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305047_1_CALIB.LBL"
+   ],
+   "distance_km": 1241570.39,
+   "observer_lat": 16.775,
+   "observer_east_lon": 262.991,
+   "sun_lat": 0.103,
+   "sun_east_lon": 93.159,
+   "phase": 160.371,
+   "resolution_km": 7.43937,
+   "north_clock_angle": 211.68162
+  },
+  {
+   "name": "N1628305080_1",
+   "opus_id": "co-iss-n1628305080",
+   "filter": "RED",
+   "time": "2009-08-07T02:15:54.250",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305080_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2056/data/1628252687_1628427116/N1628305080_1_CALIB.LBL"
+   ],
+   "distance_km": 1241376.144,
+   "observer_lat": 16.775,
+   "observer_east_lon": 262.984,
+   "sun_lat": 0.103,
+   "sun_east_lon": 93.151,
+   "phase": 160.372,
+   "resolution_km": 7.4382,
+   "north_clock_angle": 211.67397
+  },
+  {
+   "name": "N1629620703_1",
+   "opus_id": "co-iss-n1629620703",
+   "filter": "BL1",
+   "time": "2009-08-22T07:42:47.327",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620703_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620703_1_CALIB.LBL"
+   ],
+   "distance_km": 1630518.67,
+   "observer_lat": 8.753,
+   "observer_east_lon": 273.413,
+   "sun_lat": 0.337,
+   "sun_east_lon": 109.838,
+   "phase": 161.283,
+   "resolution_km": 9.76991,
+   "north_clock_angle": 338.9034
+  },
+  {
+   "name": "N1629620736_1",
+   "opus_id": "co-iss-n1629620736",
+   "filter": "GRN",
+   "time": "2009-08-22T07:43:20.857",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620736_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620736_1_CALIB.LBL"
+   ],
+   "distance_km": 1630321.373,
+   "observer_lat": 8.754,
+   "observer_east_lon": 273.407,
+   "sun_lat": 0.337,
+   "sun_east_lon": 109.829,
+   "phase": 161.285,
+   "resolution_km": 9.76873,
+   "north_clock_angle": 338.90439
+  },
+  {
+   "name": "N1629620769_1",
+   "opus_id": "co-iss-n1629620769",
+   "filter": "RED",
+   "time": "2009-08-22T07:43:53.907",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620769_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2057/data/1629538820_1629635391/N1629620769_1_CALIB.LBL"
+   ],
+   "distance_km": 1630125.495,
+   "observer_lat": 8.754,
+   "observer_east_lon": 273.401,
+   "sun_lat": 0.337,
+   "sun_east_lon": 109.82,
+   "phase": 161.287,
+   "resolution_km": 9.76755,
+   "north_clock_angle": 338.90235
+  },
+  {
+   "name": "N1633794819_1",
+   "opus_id": "co-iss-n1633794819",
+   "filter": "BL1",
+   "time": "2009-10-09T15:10:53.987",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794819_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794819_1_CALIB.LBL"
+   ],
+   "distance_km": 1433087.461,
+   "observer_lat": 6.008,
+   "observer_east_lon": 258.421,
+   "sun_lat": 1.077,
+   "sun_east_lon": 100.585,
+   "phase": 156.764,
+   "resolution_km": 8.58692,
+   "north_clock_angle": 178.11806
+  },
+  {
+   "name": "N1633794852_1",
+   "opus_id": "co-iss-n1633794852",
+   "filter": "GRN",
+   "time": "2009-10-09T15:11:27.517",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794852_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794852_1_CALIB.LBL"
+   ],
+   "distance_km": 1432867.653,
+   "observer_lat": 6.008,
+   "observer_east_lon": 258.414,
+   "sun_lat": 1.077,
+   "sun_east_lon": 100.577,
+   "phase": 156.766,
+   "resolution_km": 8.5856,
+   "north_clock_angle": 178.11694
+  },
+  {
+   "name": "N1633794885_1",
+   "opus_id": "co-iss-n1633794885",
+   "filter": "RED",
+   "time": "2009-10-09T15:12:00.547",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794885_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2058/data/1633653092_1633809566/N1633794885_1_CALIB.LBL"
+   ],
+   "distance_km": 1432649.5,
+   "observer_lat": 6.008,
+   "observer_east_lon": 258.408,
+   "sun_lat": 1.077,
+   "sun_east_lon": 100.568,
+   "phase": 156.769,
+   "resolution_km": 8.5843,
+   "north_clock_angle": 178.11588
+  },
+  {
+   "name": "N1647460468_1",
+   "opus_id": "co-iss-n1647460468",
+   "filter": "BL1",
+   "time": "2010-03-16T19:10:05.625",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460468_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460468_1_CALIB.LBL"
+   ],
+   "distance_km": 1920777.248,
+   "observer_lat": 0.108,
+   "observer_east_lon": 292.336,
+   "sun_lat": 3.477,
+   "sun_east_lon": 134.475,
+   "phase": 157.587,
+   "resolution_km": 11.50911,
+   "north_clock_angle": 189.639
+  },
+  {
+   "name": "N1647460501_1",
+   "opus_id": "co-iss-n1647460501",
+   "filter": "GRN",
+   "time": "2010-03-16T19:10:39.154",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460501_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460501_1_CALIB.LBL"
+   ],
+   "distance_km": 1920566.785,
+   "observer_lat": 0.108,
+   "observer_east_lon": 292.332,
+   "sun_lat": 3.477,
+   "sun_east_lon": 134.466,
+   "phase": 157.591,
+   "resolution_km": 11.50785,
+   "north_clock_angle": 189.63712
+  },
+  {
+   "name": "N1647460534_1",
+   "opus_id": "co-iss-n1647460534",
+   "filter": "RED",
+   "time": "2010-03-16T19:11:12.204",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460534_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2061/data/1647019391_1648041857/N1647460534_1_CALIB.LBL"
+   ],
+   "distance_km": 1920357.83,
+   "observer_lat": 0.108,
+   "observer_east_lon": 292.328,
+   "sun_lat": 3.477,
+   "sun_east_lon": 134.457,
+   "phase": 157.596,
+   "resolution_km": 11.5066,
+   "north_clock_angle": 189.63916
+  },
+  {
+   "name": "N1648925046_1",
+   "opus_id": "co-iss-n1648925046",
+   "filter": "BL1",
+   "time": "2010-04-02T17:59:33.107",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925046_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925046_1_CALIB.LBL"
+   ],
+   "distance_km": 1498353.138,
+   "observer_lat": 0.091,
+   "observer_east_lon": 265.867,
+   "sun_lat": 3.73,
+   "sun_east_lon": 112.273,
+   "phase": 153.337,
+   "resolution_km": 8.97799,
+   "north_clock_angle": 179.64947
+  },
+  {
+   "name": "N1648925079_1",
+   "opus_id": "co-iss-n1648925079",
+   "filter": "GRN",
+   "time": "2010-04-02T18:00:06.746",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925079_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925079_1_CALIB.LBL"
+   ],
+   "distance_km": 1498144.585,
+   "observer_lat": 0.091,
+   "observer_east_lon": 265.861,
+   "sun_lat": 3.73,
+   "sun_east_lon": 112.265,
+   "phase": 153.34,
+   "resolution_km": 8.97674,
+   "north_clock_angle": 179.6475
+  },
+  {
+   "name": "N1648925112_1",
+   "opus_id": "co-iss-n1648925112",
+   "filter": "RED",
+   "time": "2010-04-02T18:00:39.776",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925112_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2062/data/1648877205_1649318589/N1648925112_1_CALIB.LBL"
+   ],
+   "distance_km": 1497937.935,
+   "observer_lat": 0.091,
+   "observer_east_lon": 265.855,
+   "sun_lat": 3.73,
+   "sun_east_lon": 112.256,
+   "phase": 153.342,
+   "resolution_km": 8.9755,
+   "north_clock_angle": 179.65098
+  },
+  {
+   "name": "N1658472202_1",
+   "opus_id": "co-iss-n1658472202",
+   "filter": "BL1",
+   "time": "2010-07-22T05:57:41.072",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472202_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472202_1_CALIB.LBL"
+   ],
+   "distance_km": 1842033.776,
+   "observer_lat": -3.845,
+   "observer_east_lon": 304.608,
+   "sun_lat": 5.377,
+   "sun_east_lon": 140.89,
+   "phase": 163.7,
+   "resolution_km": 11.03729,
+   "north_clock_angle": 207.64459
+  },
+  {
+   "name": "N1658472235_1",
+   "opus_id": "co-iss-n1658472235",
+   "filter": "GRN",
+   "time": "2010-07-22T05:58:14.512",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472235_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472235_1_CALIB.LBL"
+   ],
+   "distance_km": 1841828.194,
+   "observer_lat": -3.846,
+   "observer_east_lon": 304.606,
+   "sun_lat": 5.377,
+   "sun_east_lon": 140.881,
+   "phase": 163.707,
+   "resolution_km": 11.03605,
+   "north_clock_angle": 207.64527
+  },
+  {
+   "name": "N1658472268_1",
+   "opus_id": "co-iss-n1658472268",
+   "filter": "RED",
+   "time": "2010-07-22T05:58:47.532",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472268_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1658424923_1658479061/N1658472268_1_CALIB.LBL"
+   ],
+   "distance_km": 1841623.917,
+   "observer_lat": -3.846,
+   "observer_east_lon": 304.605,
+   "sun_lat": 5.377,
+   "sun_east_lon": 140.872,
+   "phase": 163.714,
+   "resolution_km": 11.03483,
+   "north_clock_angle": 207.64719
+  },
+  {
+   "name": "N1659989548_1",
+   "opus_id": "co-iss-n1659989548",
+   "filter": "BL1",
+   "time": "2010-08-08T19:26:34.933",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989548_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989548_1_CALIB.LBL"
+   ],
+   "distance_km": 1324686.168,
+   "observer_lat": -6.26,
+   "observer_east_lon": 244.788,
+   "sun_lat": 5.633,
+   "sun_east_lon": 104.911,
+   "phase": 140.097,
+   "resolution_km": 7.93739,
+   "north_clock_angle": 286.07118
+  },
+  {
+   "name": "N1659989581_1",
+   "opus_id": "co-iss-n1659989581",
+   "filter": "GRN",
+   "time": "2010-08-08T19:27:09.417",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989581_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989581_1_CALIB.LBL"
+   ],
+   "distance_km": 1324488.8,
+   "observer_lat": -6.261,
+   "observer_east_lon": 244.779,
+   "sun_lat": 5.633,
+   "sun_east_lon": 104.903,
+   "phase": 140.097,
+   "resolution_km": 7.93621,
+   "north_clock_angle": 286.06824
+  },
+  {
+   "name": "N1659989614_1",
+   "opus_id": "co-iss-n1659989614",
+   "filter": "RED",
+   "time": "2010-08-08T19:27:42.476",
+   "urls": [
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989614_1_CALIB.IMG",
+    "https://opus.pds-rings.seti.org/holdings/calibrated/COISS_2xxx/COISS_2064/data/1659806659_1660200780/N1659989614_1_CALIB.LBL"
+   ],
+   "distance_km": 1324295.621,
+   "observer_lat": -6.262,
+   "observer_east_lon": 244.77,
+   "sun_lat": 5.633,
+   "sun_east_lon": 104.894,
+   "phase": 140.097,
+   "resolution_km": 7.93505,
+   "north_clock_angle": 286.06817
+  }
+ ]
+}

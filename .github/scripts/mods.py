@@ -222,7 +222,7 @@ class Mod:
         return f"mods/{self.id}/"
 
     def screenshots(self) -> list[pathlib.Path]:
-        """The pictures its page shows besides its thumbnail: for a mod of the collection, those in
+        """The pictures its page shows after its thumbnail: for a mod of the collection, those in
         sources/<mod>/screenshots, in the order of their names."""
         if self.artist:
             return []

@@ -53,7 +53,7 @@ void surface(inout Surface s, vec4 parameters, float time) {
     vec3 behind = vec3(parameters.z);
     vec3 overPlanet = encoded(scattered + through * decoded(behind));
     // What's behind shows through by 1 - alpha: exact over the planet's brightness, for the luminance.
-    float kept = clamp(dot(overPlanet - overSky, vec3(0.2126, 0.7152, 0.0722)) / parameters.z, 0.0, 1.0);
+    float kept = clamp(luminance(overPlanet - overSky) / parameters.z, 0.0, 1.0);
     s.alpha = 1.0 - kept;
     s.glow = s.alpha > 1e-4 ? min(overSky / s.alpha, vec3(1.0)) : vec3(0.0);
     s.color = vec3(0.0);

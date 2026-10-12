@@ -19,9 +19,14 @@ equator's radii the picture reaches above and below the middle, and `--aspect` i
 height.
 """
 import argparse
+import os
 import subprocess
+import sys
 
 import numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import globe  # noqa: E402
 
 
 def load(path, alpha=False):
@@ -32,11 +37,6 @@ def load(path, alpha=False):
     return np.frombuffer(raw, dtype='<u2').reshape(h, w, len(channels)).astype(np.float64) / 65535.0
 
 
-def unit(lat, lon):
-    la, lo = np.deg2rad(lat), np.deg2rad(lon)
-    return np.array([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
-
-
 def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), polar=1.0, ring=None, extent=1.0, aspect=1.0, least=0.0):
     """The picture, `size` pixels high. `k` is Minnaert's exponent, or one for each channel. `ring`
     is the ring's texture and its inner and outer radius, or None. Nearer the limb than `least`, the
@@ -45,11 +45,11 @@ def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), pola
     The ring and the planet shade each other, as `saturn.glsl` and `rings.glsl` draw them in the
     game: the ring lets through exp(-tau / mu0) of the sunlight to the planet behind it, and gets
     none where the planet stands between it and the sun."""
-    view = unit(lat, lon)                       # from the planet's centre toward the viewer
+    view = globe.unit(lat, lon)                 # from the planet's centre toward the viewer
     north = np.array([0.0, 0.0, 1.0]) - view[2] * view
     north /= np.linalg.norm(north)
     east = np.cross(north, view)                # to the right on the screen, as seen from outside
-    sun = unit(sun_lat, sun_lon)
+    sun = globe.unit(sun_lat, sun_lon)
     width = int(round(size * aspect))
     ys, xs = np.mgrid[0:size, 0:width].astype(float)
     u = ((xs + 0.5) / width * 2 - 1) * extent * aspect

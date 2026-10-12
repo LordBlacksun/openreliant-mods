@@ -1,26 +1,11 @@
-// Realistic Planets (planets.luau): a planet lit as its photometry was measured, by Minnaert's law,
-// I/F = B mu0^k mu^(k-1), with an exponent k for each colour channel, where mu0 and mu are the
-// cosines of the sun's and the view's angles from the surface's normal, and the texture holds B. The
-// sun's part, mu0^k, sets how much of the sun lights the pixel; the view's part, mu^(k-1), goes into
-// the colour, in linear light. With k below 1, as on Neptune, it brightens the lit limb and makes it
-// paler, as the planet's haze does.
+// Realistic Planets (planets.luau): a planet lit as its photometry was measured, by Minnaert's law
+// (limb.glsl).
 //
 // parameters.xyz: k for red, green and blue.
-// parameters.w: the least cosine of the view the law was fitted at. Nearer the limb the law isn't
-// known, and the view's factor stays as it is there.
+// parameters.w: the least cosine of the view the law was fitted at.
 
-// A colour in linear light encoded in sRGB, as `encoded` does, but not clipped at 1, so that a bright
-// texel the view's factor lifts past 1 keeps its colour until the planet is lit, which dims it again.
-vec3 realisticPlanetsEncoded(vec3 c) {
-    c = max(c, 0.0);
-    return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, greaterThan(c, vec3(0.0031308)));
-}
+#include "limb.glsl"
 
 void surface(inout Surface s, vec4 parameters, float time) {
-    // Sprites and effects have no normal, and are left as they are.
-    if (dot(s.normal, s.normal) < 0.5) return;
-    float mu = max(dot(s.normal, s.toEye), parameters.w);
-    float mu0 = max(dot(s.normal, s.toSun), 0.0);
-    s.color = realisticPlanetsEncoded(decoded(s.color) * pow(vec3(mu), parameters.xyz - 1.0));
-    s.sunlight = pow(vec3(mu0), parameters.xyz);
+    realisticPlanetsLimb(s, parameters);
 }

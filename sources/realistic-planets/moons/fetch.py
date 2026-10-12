@@ -4,7 +4,6 @@ of each moon, from the USGS's Astrogeology Science Center.
 
     python3 fetch.py frames.json data
 """
-import json
 import os
 import sys
 
@@ -17,6 +16,4 @@ MAPS = ['Io_Galileo_SSI_Global_Mosaic_1km.tif', 'Europa_Voyager_GalileoSSI_globa
         'Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif']
 
 listing, out = sys.argv[1], sys.argv[2]
-with open(listing) as f:
-    urls = [url for frame in json.load(f)['frames'] for url in frame['urls']]
-download.fetch(urls + [MOSAICS + name for name in MAPS], out)
+download.fetch(download.listed([listing]) + [MOSAICS + name for name in MAPS], out)
