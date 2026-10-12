@@ -53,11 +53,16 @@ REPOSITORY = "OpenReliant/openreliant-mods"
 
 def section(path: pathlib.Path, name: str, keep_case: bool = False) -> dict[str, str]:
     """The section `name` of the ini file at `path`, by its keys in lower case, or as written with
-    `keep_case`; empty if there's none."""
+    `keep_case`; empty if there's none or the file is missing."""
+    return section_of(path.read_text(encoding="utf-8") if path.exists() else "", name, keep_case)
+
+
+def section_of(text: str, name: str, keep_case: bool = False) -> dict[str, str]:
+    """The section `name` of an ini file's text, as `section` gives it."""
     parsed = configparser.ConfigParser(delimiters=("=",), interpolation=None, strict=False, comment_prefixes=(";", "#"))
     if keep_case:
         parsed.optionxform = str  # type: ignore[assignment,method-assign]
-    parsed.read(path, encoding="utf-8")
+    parsed.read_string(text)
     return dict(parsed[name]) if parsed.has_section(name) else {}
 
 
@@ -192,14 +197,24 @@ class Mod:
         self.path = files.relative_to(ROOT).as_posix()
         self.category = category
         self.artist = artist
-        about = section(files / "mod.ini", "Mod")
+        self.describe(section(files / "mod.ini", "Mod"))
+        self.thumbnail = files / "mod.png" if (files / "mod.png").exists() else None
+
+    def describe(self, about: dict[str, str]) -> None:
+        """Takes its name, version, author, description, the OpenReliant it needs and its link from
+        the [Mod] section of a mod.ini."""
         self.name = about.get("name", self.id)
         self.version = about.get("version", "")
-        self.author = about.get("author", artist.name if artist else "")
+        self.author = about.get("author", self.artist.name if self.artist else "")
         self.description = about.get("description", "")
         self.needs = about.get("openreliant", "")
-        self.url = about.get("url", artist.url if artist else "")
-        self.thumbnail = files / "mod.png" if (files / "mod.png").exists() else None
+        self.url = about.get("url", self.artist.url if self.artist else "")
+
+    def as_released(self, tag: str) -> None:
+        """Takes on what its mod.ini gave at its release `tag`, for a mod of the collection, such as
+        when its current version isn't published yet."""
+        assert self.artist is None
+        self.describe(section_of(git("show", f"{tag}:{self.path}/mod.ini"), "Mod"))
 
     def credits(self) -> tuple[str, str]:
         """Where its credits and licence are, as a link's text and address: its license.txt, or
