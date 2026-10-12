@@ -3,7 +3,7 @@
 bands' brightness from Hubble's calibrated OPAL maps of August 2025, and the north polar cap from
 Hubble's maps of June 2018.
 
-    python3 compose.py data data/1993.tab out.png <stretch> <brightness> <key light blue>
+    python3 compose.py data data/1993.tab out.png <stretch> <brightness>
 
 Hubble's maps:
 
@@ -60,9 +60,9 @@ The texture:
   keeps Saturn's own.
 - `brightness` is the texture's mean luminance in linear light, for the game: at its true normal
   albedo Saturn would be near white in the game's lighting, as Jupiter is.
-- `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
-  the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
-  takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- The texture holds the body's own colour, as the mod lights the planets with white light
+  (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
+  down until all but `CLIPPED` of them fit.
 - For `haze.py`, it writes what an I/F of 1 in each of Cassini's filters becomes in the texture's
   linear sRGB, as the texture takes a place's albedo in them, to `data/colour.json`.
 """
@@ -81,7 +81,7 @@ import globe  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
-stretch, brightness, key_blue = float(sys.argv[4]), float(sys.argv[5]), float(sys.argv[6])
+stretch, brightness = float(sys.argv[4]), float(sys.argv[5])
 
 # Saturn's radii, km (IAU), as OPAL's maps take them, for turning planetographic latitudes into
 # planetocentric ones.
@@ -531,7 +531,6 @@ print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {n
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
 print(f"the equatorial zone's mean luminance in the texture, within 15 degrees: "
       f"{globe.area_mean(tc.luminance(texture), np.abs(lats) <= 15, lats):.3f}")
-texture[..., 2] /= key_blue
 fit = max(1.0, np.quantile(texture, 1 - CLIPPED))
 texture /= fit
 print(f"scaled down by {fit:.3f} to fit")
@@ -552,13 +551,10 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
 print('wrote', out)
 
 # For haze.py: an I/F of 1 in each filter in the texture's linear sRGB, as a place whose albedo in a
-# filter is the spectrum's there adds that filter's share of the spectrum, at the texture's scale, with
-# the key light's blue divided out as the texture's is, since the sun lights the haze as it lights the
-# disk.
-key_light = np.array([1.0, 1.0, 1.0 / key_blue])
-colours = {name: (scale / fit * each * key_light).tolist()
+# filter is the spectrum's there adds that filter's share of the spectrum, at the texture's scale.
+colours = {name: (scale / fit * each).tolist()
            for name, each in zip(cassini.FILTERS, tc.filter_colours(lam, albedo, M, list(cassini.FILTERS.values())))}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Saturn's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
-                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+    json.dump({'about': "Saturn's I/F in each of Cassini's filters as the texture's linear sRGB: a row for each "
+                        "filter.", 'colours': colours}, f, indent=1)
 print("the texture's linear sRGB for an I/F of 1 in each filter:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

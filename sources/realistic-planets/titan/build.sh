@@ -5,9 +5,8 @@
 # numpy, scipy and ImageMagick 7. It downloads about 200 MB into data.
 set -eu
 python3 fetch.py frames.json haze.json data
-# For the game: the surface shown at 0.15 of its contrast through the haze, a mean luminance of 0.12,
-# the same share of Titan's true brightness as Jupiter's 0.3 is of Jupiter's, and the game's key
-# light's blue of 0.8 divided out.
-python3 compose.py data frames.json data/1993.tab ../../../mods/environment/realistic-planets/realistic_planets_titan.png 0.15 0.12 0.8
+# For the game: the surface shown at 0.15 of its contrast through the haze, and a mean luminance of
+# 0.12, the same share of Titan's true brightness as Jupiter's 0.3 is of Jupiter's.
+python3 compose.py data frames.json data/1993.tab ../../../mods/environment/realistic-planets/realistic_planets_titan.png 0.15 0.12
 # The haze: compose.py writes data/colour.json, which turns its I/F into the texture's colours.
 python3 haze.py data frames.json haze.json

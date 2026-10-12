@@ -1,11 +1,11 @@
-"""Makes the figures of the note on Neptune's map, `neptune.typ`, from the build's working files, and
+"""Makes the figures of the note on Neptune's map, `neptune.tex`, from the build's working files, and
 prints the numbers the note quotes, so that a new build can be checked against its text. They come
 from the Voyager frames and the scripts alone; nothing of the game's goes into them.
 
     python3 figures.py ../neptune true-colour.png shipped.png figures
 
-`true-colour.png` is the map composed without the contrast stretch and the key light's correction,
-`shipped.png` the mod's texture.
+`true-colour.png` is the map composed without the contrast stretch, `shipped.png` the mod's
+texture.
 """
 import json
 import os
@@ -171,11 +171,11 @@ def views_figure(spots):
     great, second = spots['Great Dark Spot'][1], spots['Dark Spot 2'][1]
     between = (great + second) / 2 + (180 if abs(great - second) < 180 else 0)
     size, rows = 400, []
-    for path, light in ((true_colour, (1.0, 1.0, 1.0)), (shipped, (1.0, 1.0, 0.8))):
+    for path in (true_colour, shipped):
         texture = render.load(path)
         row = []
         for lon in (great, second, between):
-            big = render.render(texture, 2 * size, -25, lon, -26, lon + 15, 0.75, light)
+            big = render.render(texture, 2 * size, -25, lon, -26, lon + 15, 0.75)
             row.append(big.reshape(size, 2, size, 2, 3).mean(axis=(1, 3)))
         rows.append(stack(row, axis=1, gap=12))
     render.save(stack(rows, gap=12), f"{out}/views.jpg")

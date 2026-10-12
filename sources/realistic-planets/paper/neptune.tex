@@ -500,9 +500,8 @@ and~\ref{fig:views}).
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/maps.jpg}
-\caption{The map in true colour ($E = 1$, top) and as distributed for the game ($E = 3$, with the
-blue channel raised as described in Section~\ref{sec:game}, bottom). Equirectangular projection,
-north up, meridian \ang{0} in the middle, east to the right.}
+\caption{The map in true colour ($E = 1$, top) and as distributed for the game ($E = 3$, bottom).
+Equirectangular projection, north up, meridian \ang{0} in the middle, east to the right.}
 \label{fig:maps}
 \end{figure}
 
@@ -511,8 +510,8 @@ north up, meridian \ang{0} in the middle, east to the right.}
 \includegraphics[width=0.85\textwidth]{figures/views.jpg}
 \caption{Orthographic views of the map with Minnaert shading ($k = 0.75$), seen from \ang{25}S and
 illuminated from \ang{15} east of the viewer, rendered by the script \texttt{render.py} of the
-sources and not by the game. Top: true colour under white light. Bottom: the texture as
-distributed, under the colour of the game's light, without the game's tone curve. Left: the Great
+sources and not by the game, under white light. Top: true colour. Bottom: the texture as
+distributed, with its contrast stretched, without the game's tone curve. Left: the Great
 Dark Spot and its companion clouds. Middle: the second dark spot and, above it, the Scooter.
 Right: the hemisphere away from both.}
 \label{fig:views}
@@ -520,16 +519,16 @@ Right: the hemisphere away from both.}
 
 \section{Adaptation for StarLancer}\label{sec:game}
 
-Three adjustments were made for the game alone; they are not part of the measured map. First, a
+Two adjustments were made for the game alone; they are not part of the measured map. First, a
 brightness variation of a few per cent appears featureless on a game screen, so the texture uses
 $E = 3$ in Equation~\eqref{eq:texture}, in the same spirit as the contrast stretches applied to
-published Voyager images of Neptune. The mean colour is unchanged by this. Second, the game
-illuminates a planet with a single light of colour $(1, 1, 0.8)$, which its tone curve turns into
-a pronounced yellow cast; the blue channel of the texture is therefore divided by 0.8. The texture
-is equirectangular, with north at the top, the meridian \ang{0} in the middle column, and east to
-the right, as the spheres of the mod are mapped.
+published Voyager images of Neptune. The mean colour is unchanged by this. The original game
+illuminates a planet with a single light of colour $(1, 1, 0.8)$, which would give it a yellow
+cast; OpenReliant lets a mod give the planets a light of their own, and the mod makes it white, so
+the texture keeps its true colour. The texture is equirectangular, with north at the top, the
+meridian \ang{0} in the middle column, and east to the right, as the spheres of the mod are mapped.
 
-Third, the limb is rendered with the part of Minnaert's law that depends on the viewing geometry.
+Second, the limb is rendered with the part of Minnaert's law that depends on the viewing geometry.
 A surface shader multiplies the texture, in linear light, by $\mu^{k-1}$ in each colour channel,
 with the exponents of Table~\ref{tab:minnaert}: that of the orange filter for the red channel, for
 lack of a red filter, and those of the green and blue filters. Since the law was fitted only for
@@ -575,7 +574,7 @@ cross-calibration is comparable to the contrast of many features.
 
 \paragraph{Colour.} The reference spectrum was measured four years after the encounter, and the
 filter passbands are approximated. The colour of the texture as it appears in the game is further
-affected by the game's lighting and tone curve.
+affected by the game's tone curve.
 
 \paragraph{Validation.} The positions of features in the map have not been compared quantitatively
 with the positions tracked by \citet{sromovsky1993}; such a comparison would provide an

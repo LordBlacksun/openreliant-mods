@@ -40,7 +40,7 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     vec3(0.499, 0.46, 0.463),
     vec3(0.119, 0.115, 0.116),
     // Voyager's blue, green and orange filters' I/F to the game's colours.
-    mat3(-0.20353, 0.25230, 1.42995, -0.05585, 0.68837, -0.06105, 1.13900, 0.09700, -0.04382),
+    mat3(-0.20353, 0.25230, 1.14396, -0.05585, 0.68837, -0.04884, 1.13900, 0.09700, -0.03506),
     // A quarter of the haze's light blooms, as for Titan's.
     0.25);
 

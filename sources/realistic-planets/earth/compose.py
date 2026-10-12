@@ -2,7 +2,7 @@
 `sphere.py`'s spheres map it, with 0 degrees east in the middle column. It comes from NASA's Blue
 Marble of 2002 with its clouds, with the haze of the air added back as GOES-18 sees it (`goes.py`).
 
-    python3 compose.py data out.png <width> <brightness> <key light blue>
+    python3 compose.py data out.png <width> <brightness>
 
 - The Blue Marble shows the red, green and blue bands of MODIS, at 645, 555 and 469 nm, as sRGB's
   red, green and blue, as NASA's true-colour pictures of Earth do, with the haze of the air taken out.
@@ -22,10 +22,10 @@ Marble of 2002 with its clouds, with the haze of the air added back as GOES-18 s
   high, the view 54 degrees high and a phase angle of 19 degrees.
 - The haze follows a power of the wavelength through the two bands, and t follows the optical depth
   of the air's Rayleigh scattering, which goes as the fourth power; both give the green band's value.
-- `brightness` is the texture's mean luminance in linear light, for the game. `key light blue` is the
-  blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8): the texture's blue is
-  divided by it. If that takes the brightest texels past 1, the whole map is scaled down until all
-  but `CLIPPED` of them fit.
+- `brightness` is the texture's mean luminance in linear light, for the game. The texture holds
+  the body's own colour, as the mod lights the planets with white light (`records.planet_light` in
+  `records.luau`). If its brightest texels pass 1, the whole map is scaled down until all but
+  `CLIPPED` of them fit.
 """
 import glob
 import os
@@ -41,7 +41,7 @@ import goes  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, out = sys.argv[1:3]
-size, brightness, key_blue = int(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5])
+size, brightness = int(sys.argv[3]), float(sys.argv[4])
 
 BLUE_MARBLE = 'land_ocean_ice_cloud_8192.tif'
 # The wavelengths of the bands of MODIS that the Blue Marble's red, green and blue show, nm. GOES's
@@ -124,7 +124,6 @@ mean = np.array([globe.area_mean(texture[..., c], np.ones(h, dtype=bool), tex_la
 texture *= brightness / tc.luminance(mean)
 print(f"the mean colour, at the texture's brightness of {brightness}: 8-bit sRGB "
       f"{np.round(tc.encode(mean * brightness / tc.luminance(mean)) * 255).astype(int)}")
-texture[..., 2] /= key_blue
 fit = max(1.0, float(np.quantile(texture[::4, ::4], 1 - CLIPPED)))
 texture /= fit
 print(f"scaled down by {fit:.3f} to fit")

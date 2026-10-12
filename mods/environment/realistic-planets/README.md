@@ -38,13 +38,16 @@ What OpenReliant's source and `sltool` show about them:
   radius of 1,280,625 units, draws within 25,000,000 units; its far level, 320 triangles with a
   radius of 1,024,500, draws beyond that, out to 2,500,000,000. The far model is a 320-triangle
   sphere of the far level's size.
-- The engine moves each level to stand on the middle of its vertices and works out its normals
-  again from its faces. It lights a planet with the scene's second key light alone, whose colour is
-  (1, 1, 0.8), and takes the planet's radius from its last level.
+- The engine moves each level to stand on the middle of its vertices, works out its normals again
+  from its faces, and takes the planet's radius from its last level.
+- The original lights a planet with the scene's second key light alone, whose colour, (1, 1, 0.8),
+  would turn the planets yellow. OpenReliant gives the planets a light of their own, which reaches
+  nothing else and has the same colour unless a mod gives it another. This mod makes it white
+  (`records.planet_light` in `records.luau`), so its textures hold each body's true colour.
 - Neptune, Uranus, Jupiter and Venus have an atmosphere: a band that faces the camera and is added
-  over the planet, sized by that radius. Neptune's and Uranus's band runs from 0.85 to 0.95 of the
-  radius, inside the disk, so it hardly shows; Jupiter's and Venus's reach just past the edge, to
-  1.005.
+  over the planet, sized by the planet's radius. Neptune's and Uranus's band runs from 0.85 to 0.95
+  of the radius, inside the disk, so it hardly shows; Jupiter's and Venus's reach just past the
+  edge, to 1.005.
 - The same four planets turn about their own Y by 0.0007 of a radian each tick. With 100 ticks a
   second, that's one turn every 90 seconds. Y points down in the game's frame, and a positive turn
   about it carries this mod's maps westward. Neptune and Jupiter really turn eastward, Uranus and
@@ -282,13 +285,9 @@ not data.
 
 ### For the game
 
-Two changes are made to the texture for the game alone:
-
-- In true colour, Neptune's brightness varies by only a few per cent, which looks featureless on a
-  game screen, so the texture stretches the brightness's differences from the mean threefold, as
-  Voyager's published pictures of Neptune were stretched. The mean colour stays the same.
-- The game lights a planet with a single light of colour (1, 1, 0.8), which its tone curve turns
-  into a strong yellow cast, so the texture's blue is divided by 0.8.
+In true colour, Neptune's brightness varies by only a few per cent, which looks featureless on a
+game screen, so the texture stretches the brightness's differences from the mean threefold, as
+Voyager's published pictures of Neptune were stretched. The mean colour stays the same.
 
 ### Sharper frames
 
@@ -433,7 +432,6 @@ Neptune's: close to Cassini's look, with each channel in Jupiter's own proportio
 - OPAL's mean normal albedo is 1.53 times the spectrum's geometric albedo, which puts Jupiter's
   mean luminance at about 0.77. In the game's lighting that's near white, and the bloom makes it
   glow. So the texture's mean luminance is set to 0.3, a choice for the game, as the stretch is.
-- As for Neptune, the texture's blue is divided by 0.8 for the game's light.
 
 The game turns Jupiter westward. The mod turns it eastward, as it really turns
 ([Turning and leaning](#turning-and-leaning)).
@@ -519,7 +517,6 @@ Uranus's map is Hubble's OPAL map of November 2022, with its colour taken from K
   top of the range, so past Neptune's level a brighter texture mostly pales Uranus towards white. The
   texture's mean luminance is 0.55: a little brighter than Neptune, as the real planet is, with fewer
   near-white pixels on its lit disk than Neptune shows, but less colour, as the real planet is paler.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 Uranus really turns westward, about a pole that leans 82 degrees, and the mod turns it so
 ([Turning and leaning](#turning-and-leaning)).
@@ -592,7 +589,6 @@ Cassini's colours.
 - At its true normal albedo, 1.16 times the spectrum's geometric albedo at 502 nm, Saturn's mean
   luminance is about 0.56. The texture's is 0.22, the same share of its true brightness as
   Jupiter's 0.3 is of Jupiter's, so the two keep their real proportion.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 ### The ring
 
@@ -771,7 +767,6 @@ the blue, and hardly at all in green and red.
 - Venus's geometric albedo has 1.36 times the luminance of Jupiter's, and both darken toward the
   limb about as a plain ball does (see below), so the texture's mean luminance is 0.41, 1.36 times
   Jupiter's 0.3.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 ### Venus's haze
 
@@ -868,7 +863,6 @@ blue fringe from the front, and with the sun behind Titan, a bright ring round t
 - At its true normal albedo, 1.39 times the spectrum's geometric albedo by Minnaert's law in green,
   Titan's mean luminance is about 0.31. The texture's is 0.12, the same share of its true brightness
   as Jupiter's 0.3 is of Jupiter's.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 ### The haze over and beyond the disk
 
@@ -926,8 +920,7 @@ same way in `scattering.py`.
   70 times as bright as light scattered by 150 degrees in red and green, and 21 times in blue.
 - The colour: the three filters' I/F becomes the game's colour as the texture's does, Karkoschka's
   spectrum of Titan bent through each filter's brightness over the frames' mean, at the texture's
-  scale, its blue divided by the key light's as the texture's is, since the sun lights the haze as
-  it lights the disk. `compose.py` writes that matrix to `data/colour.json`.
+  scale. `compose.py` writes that matrix to `data/colour.json`.
 - Over the disk: the texture is Titan as Cassini saw it at a mean of 35 degrees of phase, its haze
   included. So the haze in front of the disk adds only what its phase function gives beyond what it
   gives at 35 degrees: nothing at low phase, and with the sun behind Titan the crescent that its
@@ -1076,7 +1069,6 @@ browner trailing side, and Ganymede and Callisto a faintly warm grey.
   visual geometric albedos of 0.62, 0.68, 0.44 and 0.19 and Minnaert's law in green.
 - Ganymede's texture is 8192 by 4096, as mission 83 shows it from close by; the other moons' are
   4096 by 2048.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 ## Triton
 
@@ -1133,8 +1125,7 @@ equator.
 - At its true brightness, Triton's mean colour is sRGB (243, 244, 229), a pale cream-white.
 - The texture's mean luminance is 0.35, the same share of Triton's true brightness as Jupiter's 0.3
   is of Jupiter's, from NASA's visual geometric albedo of 0.72 and Minnaert's law in green.
-- The texture is 4096 by 2048, and its blue is divided by 0.8 for the game's light, as for the
-  others.
+- The texture is 4096 by 2048.
 
 ## Earth
 
@@ -1187,7 +1178,6 @@ planet, and its night side shows its city lights, from NASA's Black Marble
 - The texture's mean luminance is 0.22, the same share of Earth's true brightness as Jupiter's 0.3 is
   of Jupiter's, from NASA's visual geometric albedo of 0.434 and Minnaert's law in green. Its mean
   colour is a bluish grey, sRGB (124, 129, 141) at that luminance.
-- As for the others, the texture's blue is divided by 0.8 for the game's light.
 
 ### City lights
 

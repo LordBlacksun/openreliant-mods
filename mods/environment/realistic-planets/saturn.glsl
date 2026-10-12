@@ -49,7 +49,7 @@ const RealisticPlanetsHaze saturnHaze = RealisticPlanetsHaze(
     vec3(0, 0, 0),
     vec3(1, 1, 1),
     // Cassini's blue, green and red filters' I/F to the game's colours.
-    mat3(-0.10745, 0.14639, 0.55445, 0.22973, 0.33104, -0.02729, 0.31752, -0.00177, -0.00764),
+    mat3(-0.10745, 0.14639, 0.44356, 0.22973, 0.33104, -0.02183, 0.31752, -0.00177, -0.00611),
     // A quarter of the haze's light blooms, as for Titan's and Neptune's.
     0.25);
 

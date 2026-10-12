@@ -1,7 +1,7 @@
 """Composes Neptune's texture from the mosaics, as a 4096x2048 sRGB PNG: north at the top, 0 degrees
 east in the middle column and east to the right, as `sphere.py`'s spheres map it.
 
-    python3 compose.py maps data/1993.tab out.png <enhance> <key light blue>
+    python3 compose.py maps data/1993.tab out.png <enhance>
 
 - The brightness is the luminance mosaic's, at Neptune's normal albedo: the spectrum's full-disk
   albedo, scaled by the green mosaic's Minnaert albedo over the spectrum's in green.
@@ -14,8 +14,8 @@ east in the middle column and east to the right, as `sphere.py`'s spheres map it
   latitude, smoothed along each latitude so that no cloud shows twice.
 - `enhance` multiplies the brightness's differences from the mean, as Voyager's published images
   of Neptune were stretched; 1 keeps true colour, and the mean colour stays true either way.
-- `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
-  the texture's blue is divided by it, so that the planet shows its own colour in the game.
+- The texture holds Neptune's own colour, as the mod lights the planets with white light
+  (`records.planet_light` in `records.luau`).
 - For `haze.py`, it writes what an I/F of 1 in each of the blue, green and orange filters becomes in
   the texture's linear sRGB, as the texture takes a place's albedo in them, to `data/colour.json`.
 """
@@ -32,7 +32,7 @@ import truecolour as tc  # noqa: E402
 import voyager  # noqa: E402
 
 maps, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
-enhance, key_blue = float(sys.argv[4]), float(sys.argv[5])
+enhance = float(sys.argv[4])
 
 lum = np.load(f"{maps}/luminance.npz")
 L, lats, lons = lum['albedo'], lum['lats'], lum['lons']
@@ -85,16 +85,13 @@ chroma = chroma * (1 - blend[..., None]) + chroma[::-1] * blend[..., None]
 
 stretched = np.clip(1.0 + enhance * (filled - 1.0), 0.05, None)
 linear = chroma * (luminance(mean_rgb) * normal_over_full * stretched)[..., None]
-linear[..., 2] /= key_blue
 
 # For haze.py: an I/F of 1 in each filter in the texture's linear sRGB, as a place whose albedo in a
-# filter is its mean's adds that filter's share of the spectrum, with the key light's blue divided
-# out as the texture's is, since the sun lights the haze as it lights the disk.
-key_light = np.array([1.0, 1.0, 1.0 / key_blue])
-colours = {f: (K[f] * normal_over_full / np.nanmean(m['albedo'][seen]) * key_light).tolist() for f, m in colour.items()}
+# filter is its mean's adds that filter's share of the spectrum.
+colours = {f: (K[f] * normal_over_full / np.nanmean(m['albedo'][seen])).tolist() for f, m in colour.items()}
 with open(os.path.join(os.path.dirname(spectrum), 'colour.json'), 'w') as f:
-    json.dump({'about': "Neptune's I/F in each of Voyager's filters as the texture's linear sRGB, its blue divided by "
-                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+    json.dump({'about': "Neptune's I/F in each of Voyager's filters as the texture's linear sRGB: a row for each "
+                        "filter.", 'colours': colours}, f, indent=1)
 print('the texture\'s linear sRGB for an I/F of 1 in each filter:', {f: np.round(c, 5).tolist() for f, c in colours.items()})
 
 # North at the top and 180 east at the left edge, resampled to 4096x2048 in linear light.
