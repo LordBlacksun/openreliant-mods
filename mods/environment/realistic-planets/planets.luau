@@ -1,7 +1,8 @@
 -- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
--- (minnaert.glsl), Saturn shaded by its ring (saturn.glsl) and Earth with its city lights at night
--- (earth.glsl). This is a player script: it runs for the whole game. The functions need PER-PIXEL
--- LIGHTING. How the bodies turn and lean is in records.luau.
+-- (minnaert.glsl), Saturn shaded by its ring (saturn.glsl), Earth with its city lights at night
+-- (earth.glsl) and Titan's haze beyond its disk (titan_haze.glsl). This is a player script: it runs
+-- for the whole game. The functions need PER-PIXEL LIGHTING. How the bodies turn and lean, and which
+-- ring Titan's haze is drawn on, is in records.luau.
 
 local shaders = require("openreliant.shaders")
 
@@ -74,6 +75,14 @@ shaders.register_surface({
     shader = "minnaert.glsl",
     textures = { "realistic_planets_titan" },
     parameters = { 0.877, 0.892, 0.876, 0.25 },
+})
+
+-- Titan's haze beyond its disk: single scattering of sunlight in its main haze and its detached
+-- layer, fitted to Cassini's frames from 28 to 164 degrees of phase by the collection's
+-- sources/realistic-planets/titan/haze.py. records.luau gives Titan the ring it draws on.
+shaders.register_surface({
+    name = "titan_haze",
+    shader = "titan_haze.glsl",
 })
 
 -- Jupiter's moons: the exponents of Voyager's frames of 1979, at the red, green and blue channels'

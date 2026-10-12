@@ -1,0 +1,330 @@
+"""Fits a model of Titan's haze beyond its disc to Cassini's frames, for the mod's `titan_haze.glsl`,
+and prints the shader's numbers. Run `compose.py` first: it writes `data/colour.json`, which turns
+the haze's I/F into the texture's colours.
+
+    python3 haze.py data frames.json haze.json
+
+The frames:
+
+- `frames.json`'s twelve frames, at phase angles of 28 to 50 degrees, which `compose.py` makes the
+  texture from, and `haze.json`'s 33: eleven sets in the blue, green and red filters from February
+  2009 to August 2010, around Titan's equinox, at phase angles of 140 to 164 degrees. With the sun
+  behind Titan, the haze scatters the sunlight toward the camera and shows as a bright ring round the
+  dark disc, and above it the detached haze layer as a fainter one.
+- The sun's direction in each frame comes from the frame's geometry (`cassini.axes`).
+- A low-phase frame's disc is fitted to its lit limb as `compose.py` fits it (`cassini.limb`), so
+  that heights here match the texture's edges. A high-phase frame has no lit disc: its centre is
+  fitted to the outer edge of the ring on the sun's side, where the brightness along each ray falls to
+  a quarter of its peak, and the fit below moves it further where the model needs.
+- Each frame's sky, the median more than `SKY_FROM` km beyond `BASE`, is taken off, and its I/F is
+  averaged in bins of height above `BASE` and of angle from the sun's direction.
+
+The model, which the shader works out for each pixel in the same way:
+
+- A sky point's I/F is the sunlight that the haze along its line of sight scatters toward the camera
+  once: omega P(theta) / 4 times the integral of the extinction along the line, each point weighted
+  by the share of the sunlight that reaches it, exp(-tau_sun), and the share of the light it scatters
+  that reaches the camera, exp(-tau_view). Light scattered more than once is left out.
+- In each filter, the extinction is the main haze's, falling exponentially with height above `BASE`,
+  and the detached layer's, a Gaussian in height. Both are the same all round Titan.
+- tau_sun is the main haze's optical depth toward the sun, Chapman's grazing-incidence integral
+  (S. Chapman, Proc. Phys. Soc. 43, 1931): at radius r, with x = r / H, the extinction there times
+  H sqrt(pi x / 2) exp(y^2) erfc(y), y = sqrt(x / 2) cos chi, for a sun cos chi above the horizon;
+  below it, twice the integral from the line's lowest point, less that back from r. The detached
+  layer is optically thin, and is left out of it.
+- P is the sum of two Henyey-Greenstein lobes (L. G. Henyey and J. L. Greenstein, ApJ 93, 1941), the
+  first taking `share` of the light.
+- The camera blurs each frame by a Gaussian of `BLUR` pixels, and its stray light lifts the sky round
+  the bright disc and ring: an exponential tail in height, with its own length, and a constant, in
+  each frame.
+
+The fit:
+
+- Each filter is fitted on its own, by least squares, to the heights where the haze stands out from
+  the stray light (`FITTED`), each bin weighted by `RELATIVE` of its I/F plus `ABSOLUTE`. The haze's
+  numbers are shared by all the filter's frames; the stray light, and each high-phase frame's centre,
+  within `MOST_SHIFT` km, are each frame's own.
+- It prints each filter's numbers, each frame's own, and the constants for `titan_haze.glsl`, in
+  the order blue, green, red, with the matrix that turns the three filters' I/F into the texture's
+  linear sRGB (`data/colour.json`).
+"""
+import json
+import multiprocessing
+import os
+import sys
+
+import numpy as np
+from scipy import ndimage, optimize, sparse
+from scipy.special import erfcx
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cassini  # noqa: E402
+
+# Heights are measured from `BASE` km from Titan's centre, about the haze's edge in red, and the haze
+# is cut off `TOP` km above it. The game's sphere is `UNIT` km: the haze's edge in green, where the
+# texture's disc ends (`compose.py`). The main haze's extinction is given `REFERENCE` km above `BASE`.
+BASE = 2710.0
+TOP = 700.0
+UNIT = 2741.0
+REFERENCE = 100.0
+# The bins: heights above `BASE`, km, and angles from the sun's direction, degrees.
+HEIGHT_BINS = np.arange(-200.0, 801.0, 8.0)
+ANGLE_BINS = np.arange(-180.0, 181.0, 10.0)
+# The sky is the median more than `SKY_FROM` km beyond `BASE`.
+SKY_FROM = 1100.0
+# A high-phase frame's ring: rays within `RING_SIDE` degrees of the sun's direction, from `RING_REACH`
+# of the radius in `RING_SAMPLES` steps, its outer edge where the brightness falls to `RING_EDGE` of
+# the ray's peak, and the fit repeated `RING_FITS` times. The first guess at the ring is the pixels
+# brighter than `RING_GUESS` of the 99.5th percentile, `RING_RADIUS` km across.
+RING_SIDE = 90.0
+RING_REACH = (0.6, 1.5)
+RING_SAMPLES = 451
+RING_EDGE = 0.25
+RING_FITS = 6
+RING_GUESS = 0.3
+RING_RADIUS = 2900.0
+# The fit: the heights modelled, km above `BASE`, with a margin round those fitted for the blur; the
+# heights fitted in a high-phase frame (True) and a low-phase one (False); the least pixels a bin
+# needs; each bin's weight; how far a high-phase frame's centre may move, km; the camera's blur,
+# pixels; and the most evaluations.
+MODELLED = (0.0, 560.0)
+FITTED = {True: (40.0, 380.0), False: (60.0, 260.0)}
+LEAST_PIXELS = 6
+RELATIVE, ABSOLUTE = 0.05, 3e-4
+MOST_SHIFT = 120.0
+BLUR = 0.6
+MOST_EVALUATIONS = 200
+# The steps along a line of sight, closest where it passes nearest Titan.
+STEPS, SPREAD = 96, 3.0
+# The haze's numbers, their first guesses and bounds: the main haze's extinction 100 km above `BASE`
+# (its logarithm, per km) and scale height (km), the detached layer's peak extinction (its
+# logarithm), height (km above `BASE`) and width (km), the single-scattering albedo, and the phase
+# function's two lobes' asymmetries and the first's share.
+NAMES = ['log extinction', 'scale height', 'log layer', 'layer height', 'layer width', 'albedo',
+         'first lobe', 'second lobe', 'share']
+FIRST_GUESS = [np.log(1.5e-3), 28.0, np.log(1e-5), 318.0, 32.0, 0.95, 0.75, -0.2, 0.9]
+LOWEST = [-15.0, 10.0, -20.0, 250.0, 8.0, 0.3, 0.2, -0.8, 0.3]
+HIGHEST = [2.0, 120.0, -5.0, 380.0, 80.0, 1.0, 0.97, 0.6, 1.0]
+# Each frame's own: its centre's shift (km), its stray light's tail and the tail's length (km), and a
+# constant; their first guesses, and their bounds, but for the shift's, which is `MOST_SHIFT` at high
+# phase and none at low phase.
+OWN = ['dx', 'dy', 'tail', 'length', 'offset']
+OWN_FIRST_GUESS = [0.0, 0.0, 1e-3, 200.0, 0.0]
+OWN_LOWEST = [0.0, 40.0, -3e-3]
+OWN_HIGHEST = [0.05, 2000.0, 3e-3]
+
+
+def sun_direction(f):
+    """The sun's direction in a frame, radians from right toward up."""
+    right, up, _, sun = cassini.axes(f)
+    return np.arctan2(sun @ up, sun @ right)
+
+
+def polar(image, cx, cy, radii, angles):
+    """An image along rays from (`cx`, `cy`), NaN beyond its edges."""
+    xs = cx + np.outer(np.cos(angles), radii)
+    ys = cy - np.outer(np.sin(angles), radii)
+    return ndimage.map_coordinates(image, [ys, xs], order=1, mode='constant', cval=np.nan)
+
+
+def ring_centre(image, res, sun):
+    """A high-phase frame's centre and radius, pixels: the ring's outer edge on the sun's side, along
+    rays where the brightness falls to `RING_EDGE` of the ray's peak, and a circle through those
+    points."""
+    bright = image > RING_GUESS * np.percentile(image, 99.5)
+    cy, cx = np.argwhere(bright).mean(axis=0)
+    radius = RING_RADIUS / res
+    angles = sun + np.radians(np.arange(-RING_SIDE, RING_SIDE + 0.1, 1.0))
+    for _ in range(RING_FITS):
+        radii = np.linspace(*RING_REACH, RING_SAMPLES) * radius
+        rays = polar(image, cx, cy, radii, angles)
+        peaks = np.nanmax(rays, axis=1)
+        points = []
+        for a, ray, peak in zip(angles, rays, peaks):
+            if not peak > RING_EDGE * np.nanmax(peaks):
+                continue
+            i = np.nanargmax(ray)
+            beyond = np.nonzero(ray[i:] < RING_EDGE * peak)[0]
+            if len(beyond) == 0:
+                continue
+            j = i + beyond[0]
+            edge = radii[j - 1] + (ray[j - 1] - RING_EDGE * peak) / (ray[j - 1] - ray[j]) * (radii[j] - radii[j - 1])
+            points.append((cx + np.cos(a) * edge, cy - np.sin(a) * edge))
+        points = np.array(points)
+        (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * points, np.ones(len(points))], (points ** 2).sum(axis=1), rcond=None)
+        radius = np.sqrt(c + cx ** 2 + cy ** 2)
+    return cx, cy, radius
+
+
+def binned(image, cx, cy, res, sun):
+    """A frame's I/F averaged in bins of height and of angle from the sun, and the pixels in each."""
+    lines, samples = np.indices(image.shape).astype(np.float64)
+    x, y = samples - cx, cy - lines
+    height = np.hypot(x, y) * res - BASE
+    angle = (np.degrees(np.arctan2(y, x) - sun) + 180) % 360 - 180
+    ok = np.isfinite(image) & (height >= HEIGHT_BINS[0]) & (height < HEIGHT_BINS[-1])
+    rows = np.digitize(height[ok], HEIGHT_BINS) - 1
+    columns = np.clip(np.digitize(angle[ok], ANGLE_BINS) - 1, 0, len(ANGLE_BINS) - 2)
+    shape = (len(HEIGHT_BINS) - 1, len(ANGLE_BINS) - 1)
+    index = rows * shape[1] + columns
+    total = np.bincount(index, weights=image[ok], minlength=shape[0] * shape[1])
+    count = np.bincount(index, minlength=shape[0] * shape[1])
+    with np.errstate(invalid='ignore'):
+        return (total / count).reshape(shape), count.reshape(shape)
+
+
+def sky_level(image, cx, cy, res):
+    """A frame's sky: the median more than `SKY_FROM` km beyond `BASE`."""
+    lines, samples = np.indices(image.shape).astype(np.float64)
+    far = np.isfinite(image) & (np.hypot(samples - cx, cy - lines) * res > BASE + SKY_FROM)
+    return np.median(image[far]) if far.any() else 0.0
+
+
+def prepare(data, frames, high):
+    """Each frame's bins, with its filter, phase angle and resolution."""
+    prepared = []
+    for f in frames:
+        # A pixel that can't be trusted is left out of the bins, but the sky's noise below zero is kept,
+        # which `cassini.trusted` sets to zero for the limb fit.
+        image = cassini.frame(os.path.join(data, os.path.basename(f['urls'][1])))
+        image = np.where(np.isfinite(image) & (image < cassini.MOST_IF), image, np.nan)
+        res, sun = f['resolution_km'], sun_direction(f)
+        if high:
+            cx, cy, radius = ring_centre(np.nan_to_num(image), res, sun)
+        else:
+            cx, cy, radius = cassini.limb(cassini.trusted(image), f)
+        sky = sky_level(image, cx, cy, res)
+        mean, count = binned(image - sky, cx, cy, res, sun)
+        prepared.append(dict(name=f['name'], filter=f['filter'], phase=f['phase'], res=res, high=high, mean=mean, count=count))
+        edge = "the ring's outer edge" if high else "the haze's edge"
+        print(f"{f['name']} ({f['filter']}, {f['time'][:10]}, phase {f['phase']:.1f} degrees): centre ({cx:.1f}, {cy:.1f}), "
+              f"{edge} {radius * res:.0f} km from it, sky {sky:+.5f}")
+    return prepared
+
+
+def lobe(g, cos_theta):
+    """Henyey and Greenstein's phase function of asymmetry `g`, at the scattering angle's cosine."""
+    return (1 - g * g) / (1 + g * g - 2 * g * cos_theta) ** 1.5
+
+
+def main_haze(r, log_extinction, scale):
+    """The main haze's extinction at radius r, km."""
+    return np.exp(np.minimum(log_extinction - (r - BASE - REFERENCE) / scale, 600.0))
+
+
+def toward_sun(r, cos_chi, log_extinction, scale):
+    """The main haze's optical depth from radius r toward the sun, cos_chi from the vertical."""
+    x = r / scale
+    here = main_haze(r, log_extinction, scale) * scale * np.sqrt(np.pi * x / 2) * erfcx(np.sqrt(x / 2) * np.abs(cos_chi))
+    lowest = r * np.sqrt(np.clip(1 - cos_chi ** 2, 0, 1))
+    through = 2 * main_haze(lowest, log_extinction, scale) * scale * np.sqrt(np.pi * (lowest / scale) / 2)
+    return np.where(cos_chi >= 0, here, through - here)
+
+
+def sky_iof(x, y, phase, haze):
+    """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
+    from afar at `phase` degrees."""
+    log_extinction, scale, log_layer, layer_height, layer_width, albedo, first, second, share = haze
+    a = np.radians(phase)
+    sun = np.array([np.sin(a), 0.0, np.cos(a)])
+    through = np.hypot(x, y)
+    chord = np.sqrt(np.clip((BASE + TOP) ** 2 - through ** 2, 0, None))
+    u = np.linspace(-1, 1, STEPS)
+    along = chord[..., None] * np.sinh(SPREAD * u) / np.sinh(SPREAD)
+    step = chord[..., None] * SPREAD * np.cosh(SPREAD * u) / np.sinh(SPREAD) * (u[1] - u[0])
+    r = np.sqrt(through[..., None] ** 2 + along ** 2)
+    cos_chi = (x[..., None] * sun[0] + y[..., None] * sun[1] + along * sun[2]) / r
+    layer = (r - BASE - layer_height) / layer_width
+    extinction = main_haze(r, log_extinction, scale) + np.exp(log_layer - 0.5 * layer ** 2)
+    piece = extinction * step
+    # The depth from each step to the camera, at +along: the steps beyond it.
+    depth = np.cumsum(piece[..., ::-1], axis=-1)[..., ::-1] - 0.5 * piece
+    light = np.sum(piece * np.exp(-toward_sun(r, cos_chi, log_extinction, scale) - depth), axis=-1)
+    cos_theta = -np.cos(a)
+    return albedo * (share * lobe(first, cos_theta) + (1 - share) * lobe(second, cos_theta)) * light / 4
+
+
+def fit_filter(frames):
+    """The haze's numbers fitted to one filter's frames, and each frame's own."""
+    heights = (HEIGHT_BINS[:-1] + HEIGHT_BINS[1:]) / 2
+    angles = np.radians((ANGLE_BINS[:-1] + ANGLE_BINS[1:]) / 2)
+    modelled = (heights > MODELLED[0]) & (heights < MODELLED[1])
+    hh, aa = np.meshgrid(heights[modelled], angles, indexing='ij')
+    data, weights, used = [], [], []
+    for f in frames:
+        low, high = FITTED[f['high']]
+        rows = (heights[modelled] >= low) & (heights[modelled] <= high)
+        mean, count = f['mean'][modelled][rows], f['count'][modelled][rows]
+        ok = np.isfinite(mean) & (count >= LEAST_PIXELS)
+        data.append(np.where(ok, mean, 0))
+        weights.append(np.where(ok, 1 / (RELATIVE * np.abs(np.where(ok, mean, 0)) + ABSOLUTE), 0))
+        used.append(rows)
+
+    def model(f, haze, own):
+        dx, dy, tail, length, offset = own
+        m = sky_iof((BASE + hh) * np.cos(aa) - dx, (BASE + hh) * np.sin(aa) - dy, f['phase'], haze)
+        m = ndimage.gaussian_filter1d(m, BLUR * f['res'] / (HEIGHT_BINS[1] - HEIGHT_BINS[0]), axis=0, mode='nearest')
+        return m + tail * np.exp(-hh / length) + offset
+
+    def split(p):
+        return p[:len(NAMES)], [p[len(NAMES) + i * len(OWN):len(NAMES) + (i + 1) * len(OWN)] for i in range(len(frames))]
+
+    def residuals(p):
+        haze, owns = split(p)
+        return np.concatenate([((model(f, haze, own)[rows] - d) * w).ravel() for f, own, rows, d, w in zip(frames, owns, used, data, weights)])
+
+    start, lowest, highest = list(FIRST_GUESS), list(LOWEST), list(HIGHEST)
+    for f in frames:
+        # The bounds must stand apart, so a low-phase frame's shift is held within a hair of none.
+        shift = (MOST_SHIFT if f['high'] else 0.0) + 1e-6
+        start += OWN_FIRST_GUESS
+        lowest += [-shift, -shift] + OWN_LOWEST
+        highest += [shift, shift] + OWN_HIGHEST
+    sparsity = sparse.lil_matrix((sum(d.size for d in data), len(start)), dtype=int)
+    row = 0
+    for i, d in enumerate(data):
+        sparsity[row:row + d.size, :len(NAMES)] = 1
+        sparsity[row:row + d.size, len(NAMES) + i * len(OWN):len(NAMES) + (i + 1) * len(OWN)] = 1
+        row += d.size
+    result = optimize.least_squares(residuals, start, bounds=(lowest, highest), jac_sparsity=sparsity, x_scale='jac',
+                                    max_nfev=MOST_EVALUATIONS)
+    return split(result.x)
+
+
+def vec3(values, digits):
+    """A GLSL vec3 of `values`, to `digits` significant digits."""
+    return 'vec3(' + ', '.join(f'{v:.{digits}g}' for v in values) + ')'
+
+
+if __name__ == '__main__':
+    data, low_listing, high_listing = sys.argv[1:4]
+    with open(os.path.join(data, 'colour.json')) as f:
+        colours = json.load(f)['colours']
+    frames = []
+    for listing, high in [(low_listing, False), (high_listing, True)]:
+        with open(listing) as f:
+            frames += prepare(data, json.load(f)['frames'], high)
+    order = sorted(cassini.FILTERS, key=cassini.FILTERS.get)
+    with multiprocessing.Pool(len(order)) as pool:
+        fitted = dict(zip(order, pool.map(fit_filter, [[f for f in frames if f['filter'] == name] for name in order])))
+    for name in order:
+        haze, owns = fitted[name]
+        print(f"{name}: " + ', '.join(f'{k} {v:.4g}' for k, v in zip(NAMES, haze)))
+        for f, own in zip([f for f in frames if f['filter'] == name], owns):
+            print(f"  {f['name']} at {f['phase']:.1f} degrees: " + ', '.join(f'{k} {v:.4g}' for k, v in zip(OWN, own)))
+    haze = np.array([fitted[name][0] for name in order]).T
+    print('for titan_haze.glsl:')
+    print(f'const float titanHazeUnit = {UNIT:.1f};')
+    print(f'const float titanHazeBase = {BASE:.1f};')
+    print(f'const float titanHazeTop = {TOP:.1f};')
+    print(f'const float titanHazeReference = {REFERENCE:.1f};')
+    print(f'const vec3 titanHazeExtinction = {vec3(np.exp(haze[0]), 4)};')
+    print(f'const vec3 titanHazeScale = {vec3(haze[1], 4)};')
+    print(f'const vec3 titanHazeLayer = {vec3(np.exp(haze[2]), 4)};')
+    print(f'const vec3 titanHazeLayerHeight = {vec3(haze[3], 4)};')
+    print(f'const vec3 titanHazeLayerWidth = {vec3(haze[4], 3)};')
+    print(f'const vec3 titanHazeAlbedo = {vec3(haze[5], 3)};')
+    print(f'const vec3 titanHazeFirstLobe = {vec3(haze[6], 3)};')
+    print(f'const vec3 titanHazeSecondLobe = {vec3(haze[7], 3)};')
+    print(f'const vec3 titanHazeFirstShare = {vec3(haze[8], 3)};')
+    print('const mat3 titanHazeColour = mat3(' + ', '.join(f'{v:.5f}' for name in order for v in colours[name]) + ');')

@@ -38,9 +38,11 @@ Run each script from its own folder, in this order:
 5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
    into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
    `planets.luau`. It takes about a minute.
-6. `titan/build.sh` downloads Cassini's frames of Titan, Cassini's map of its surface and
-   Karkoschka's spectrum, about 62 MB, into `titan/data`, makes `realistic_planets_titan.png`, and
-   prints the limb's exponents for `planets.luau`. It takes about ten seconds.
+6. `titan/build.sh` downloads Cassini's frames of Titan at low and high phase, Cassini's map of its
+   surface and Karkoschka's spectrum, about 200 MB, into `titan/data`, makes
+   `realistic_planets_titan.png`, prints the limb's exponents for `planets.luau`, and fits Titan's
+   haze beyond the disk, printing the numbers for `titan_haze.glsl`. The texture takes about ten
+   seconds, and the haze's fit about ten minutes, its three filters at once.
 7. `moons/build.sh` downloads the USGS's maps of Io, Europa, Ganymede, Callisto and Triton and
    Voyager's colour frames of them, about 1.4 GB, into `moons/data`, fits the frames' pointing into
    `moons/fits.json`, makes `realistic_planets_io.png`, `realistic_planets_europa.png`,
@@ -90,9 +92,12 @@ Run each script from its own folder, in this order:
 | `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
 | `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
 | `venus/photometry.py` | Venus's spectrum, shared by `compose.py` and `limb.py` |
-| `titan/frames.json` | The Cassini frames used, with their geometry from OPUS and the volume's index, and their download links |
+| `titan/frames.json` | The Cassini frames at low phase, for the texture and the haze, with their geometry from OPUS and the volume's index, and their download links |
+| `titan/haze.json` | The Cassini frames at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
-| `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, and composes the texture with the map of the surface and the spectrum |
+| `titan/cassini.py` | Reads the frames, works out their geometry and fits the disk to the lit limb, for `compose.py` and `haze.py` |
+| `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, composes the texture with the map of the surface and the spectrum, and writes the texture's colours for the haze to `data/colour.json` |
+| `titan/haze.py` | Fits the model of the haze beyond the disk to the frames at low and high phase, and prints the numbers for `titan_haze.glsl` |
 | `moons/frames.json` | The Voyager frames used: for Jupiter's moons one colour set for each 20 degrees of each moon's longitude, and for Triton every colour set, with their geometry from OPUS and their download links |
 | `moons/fetch.py` | Downloads the frames and the USGS's maps |
 | `moons/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |
