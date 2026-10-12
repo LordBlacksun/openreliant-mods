@@ -7,10 +7,11 @@ describes Neptune's map in detail.
 
 ## What you need
 
-- Python 3 with numpy and scipy, and h5py for Venus and Earth, for example in a virtual environment:
+- Python 3 with numpy and scipy, h5py for Venus and Earth, and miepython for Venus's and Jupiter's
+  haze, for example in a virtual environment:
 
   ```bash
-  python3 -m venv venv && venv/bin/pip install numpy scipy h5py
+  python3 -m venv venv && venv/bin/pip install numpy scipy h5py miepython
   ```
 
   Then put `venv/bin` first on your `PATH`, or run the scripts with `venv/bin/python3`.
@@ -29,7 +30,8 @@ Run each script from its own folder, in this order:
    printing the numbers for `neptune.glsl`. It takes about a quarter of an hour, most of it the
    haze's fit, with its Monte Carlo of the light scattered more than once.
 2. `jupiter/build.sh` downloads Cassini's map, Hubble's OPAL maps and Karkoschka's spectrum, about
-   93 MB, into `jupiter/data`, and makes `realistic_planets_jupiter.png`. It takes a few seconds.
+   93 MB, into `jupiter/data`, makes `realistic_planets_jupiter.png`, and works out Jupiter's haze from
+   measurements of it, printing the numbers for `jupiter.glsl`. It takes a few seconds.
 3. `uranus/build.sh` downloads Hubble's OPAL maps of Uranus and Karkoschka's spectrum, about 3 MB,
    into `uranus/data`, and makes `realistic_planets_uranus.png`.
 4. `saturn/build.sh` downloads Cassini's global maps of Saturn, Hubble's OPAL maps, Karkoschka's
@@ -39,8 +41,9 @@ Run each script from its own folder, in this order:
    `saturn.glsl`, and fits Saturn's haze, printing the numbers for `saturn.glsl`. It takes under a
    minute.
 5. `venus/build.sh` downloads Akatsuki's ultraviolet maps and Venus Express's pictures, about 270 MB,
-   into `venus/data`, makes `realistic_planets_venus.png`, and prints the limb's exponents for
-   `planets.luau`. It takes about a minute.
+   into `venus/data`, makes `realistic_planets_venus.png`, prints the limb's exponents for
+   `planets.luau`, and works out Venus's haze from Venus Express's measurements, printing the numbers
+   for `venus.glsl`. It takes about a minute.
 6. `titan/build.sh` downloads Cassini's frames of Titan at low and high phase, Cassini's map of its
    surface and Karkoschka's spectrum, about 200 MB, into `titan/data`, makes
    `realistic_planets_titan.png`, prints the limb's exponents for `planets.luau`, and fits Titan's
@@ -73,13 +76,14 @@ Run each script from its own folder, in this order:
 | `build.sh` | Builds the spheres and the thumbnail |
 | `download.py` | Downloads files once each, and reads the download links of the frames a listing names, for the bodies' fetch scripts |
 | `fits.py` | Reads the image of a FITS file, as Hubble's OPAL maps hold it |
-| `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, bends a spectrum through filters, and finds the wavelength each channel stands for |
+| `truecolour.py` | Reads Karkoschka's spectra, turns a reflectance spectrum into sRGB, bends a spectrum through filters, works out what an I/F of 1 through each filter adds to a body's colours, and finds the wavelength each channel stands for |
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
 | `globe.py` | Points from a body's centre toward a latitude and longitude, takes the area-weighted mean over its global map, and fits a circle to its disk's edge in a frame, for the bodies' scripts |
 | `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune, Jupiter's moons and Triton |
-| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera, once and, as an estimate, more than once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's, Saturn's and Titan's fits |
+| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera, once and, as an estimate, more than once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for every body's haze |
 | `cassini.py` | Reads Cassini's calibrated frames, works out their geometry and fits a disk to its lit limb, for Titan's and Saturn's scripts |
 | `edges.py` | Fits a body's edge on frames that see a stretch of its limb, round or flattened, bins the I/F by height across it, works out where the camera sees each stretch from, and fits the haze to the stretches, for Neptune's and Saturn's haze |
+| `mie.py` | A haze's particles through Mie theory, and the haze's phase function fitted to theirs, for Venus's and Jupiter's haze |
 | `multiple.py` | A Monte Carlo of all orders of scattering in a body's haze, and the numbers of the estimate of the light scattered more than once fitted to it, for Neptune's and Titan's fits |
 | `neptune/frames.json` | The Voyager frames used for the texture, with their geometry from OPUS and their download links |
 | `neptune/haze.json` | The Voyager frames at high phase, for the haze and its check, with their geometry from OPUS and their download links |
@@ -91,7 +95,8 @@ Run each script from its own folder, in this order:
 | `neptune/haze.py` | Fits the model of the haze beyond the disk to the frames at high phase, and prints the numbers for `neptune.glsl` |
 | `neptune/nepgeo.py` | Neptune's shape, the camera's blemishes, Neptune's winds, and the twist found from its bands, shared by the scripts |
 | `jupiter/fetch.py` | Downloads Cassini's map, Hubble's OPAL maps and the spectrum |
-| `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture |
+| `jupiter/compose.py` | Calibrates Cassini's map with OPAL's and composes the texture, and writes the texture's colours for the haze to `data/colour.json` |
+| `jupiter/haze.py` | Works out the stratospheric haze from measurements of it with Mie theory, and prints the numbers for `jupiter.glsl` |
 | `uranus/fetch.py` | Downloads Hubble's OPAL maps of Uranus and the spectrum |
 | `uranus/compose.py` | Composes the texture from OPAL's maps and the spectrum |
 | `saturn/haze.json` | The Cassini frames of the limb at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
@@ -101,9 +106,10 @@ Run each script from its own folder, in this order:
 | `saturn/ringdepth.py` | Prints the ring's optical depth for `saturn.glsl`, from the ring's texture |
 | `saturn/haze.py` | Fits the model of the haze beyond the disk to the frames at high phase, and prints the numbers for `saturn.glsl` |
 | `venus/fetch.py` | Downloads Akatsuki's ultraviolet maps and Venus Express's pictures with their geometry |
-| `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos |
+| `venus/compose.py` | Composes the texture from Akatsuki's maps and Venus's albedos, and writes the texture's colours for the haze to `data/colour.json` |
 | `venus/limb.py` | Measures the limb's exponents from Venus Express's pictures |
-| `venus/photometry.py` | Venus's spectrum, shared by `compose.py` and `limb.py` |
+| `venus/photometry.py` | Venus's spectrum, shared by `compose.py`, `limb.py` and `haze.py`, and the haze's wavelengths |
+| `venus/haze.py` | Works out the upper haze from SPICAV IR's measurements with Mie theory, and prints the numbers for `venus.glsl` |
 | `titan/frames.json` | The Cassini frames at low phase, for the texture and the haze, with their geometry from OPUS and the volume's index, and their download links |
 | `titan/haze.json` | The Cassini frames at high phase, for the haze, with their geometry from OPUS and the volumes' indexes, and their download links |
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |

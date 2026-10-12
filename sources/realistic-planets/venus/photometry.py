@@ -1,5 +1,5 @@
 """Venus's spectrum in the visible, at the phase angle the texture takes its colour at, shared by
-`compose.py` and `limb.py`."""
+`compose.py`, `limb.py` and `haze.py`."""
 import numpy as np
 
 # Mallama, Krobusek and Pavlov (2017): Venus's geometric albedo in the Sloan bands and the Johnson B

@@ -1,11 +1,11 @@
 // Realistic Planets (planets.luau): a body's haze, the sunlight it scatters once and an estimate of
 // what it scatters more than once, which a body's function includes with its own numbers
-// (`RealisticPlanetsHaze`), as neptune.glsl and titan.glsl do. The function draws two things. On
-// the body's texture, where parameters.w is the least cosine of the view for Minnaert's law, it
-// lights the disk by that law (limb.glsl) and adds the haze in front of it. On the ring that
-// OpenReliant draws behind the body for its atmosphere (records.luau), where the parameters are 0,
-// it draws the haze beyond the disk. The texture's points are in its model's units, and the ring's
-// in its own unit (`ringUnit`). A flattened body, such as Saturn, is worked out in a frame
+// (`RealisticPlanetsHaze`), as each body's shader does, such as titan.glsl. The function draws two
+// things. On the body's texture, where parameters.w is the least cosine of the view for Minnaert's
+// law, it lights the disk by that law (limb.glsl) and adds the haze in front of it. On the ring
+// that OpenReliant draws behind the body for its atmosphere (records.luau), where the parameters
+// are 0, it draws the haze beyond the disk. The texture's points are in its model's units, and the
+// ring's in its own unit (`ringUnit`). A flattened body, such as Saturn, is worked out in a frame
 // stretched along its pole, the model's Y axis, where it is round. The mod's sources work the model
 // out in the same way, in sources/realistic-planets/scattering.py, to fit each body's numbers, and
 // the mod's README describes it.
@@ -14,21 +14,21 @@
 // that reaches it toward the eye, as much as its haze's extinction, single-scattering albedo and
 // phase function say, and the haze between it and the eye dims that light. The light scattered more
 // than once is an estimate: a beam of sunlight scattered forward again on its way to the eye, and a
-// glow of light scattered many times, whose numbers the mod's sources fit to a Monte Carlo of each
-// body's haze (sources/realistic-planets/multiple.py). The sunlight that reaches a step is dimmed
-// by the main haze on its way, Chapman's integral, so the haze on the night side is lit only high
-// up, where the sun still reaches it past the body's edge. Beyond the disk the line is followed
-// through. Over the disk it is followed down to the disk, and only the light the texture doesn't
-// hold already counts: the texture is the body as seen from the front, so over the disk the haze
-// adds what its phase function gives beyond what it gives there, which with the sun behind the body
-// is the crescent its forward scattering lights. Everything is worked out in the three filters of
-// the body's fit, in the order of their wavelengths, and turned into the game's colours at the end,
-// on the same scale as the texture. The haze is added in linear light, lit by the sun as the disk
-// is (`scattered`), so the disk and the ring meet at the edge.
+// glow of light scattered many times, whose numbers the mod's sources fit to a Monte Carlo of a
+// body's haze (sources/realistic-planets/multiple.py), where they estimate it. The sunlight that
+// reaches a step is dimmed by the main haze on its way, Chapman's integral, so the haze on the
+// night side is lit only high up, where the sun still reaches it past the body's edge. Beyond the
+// disk the line is followed through. Over the disk it is followed down to the disk, and only the
+// light the texture doesn't hold already counts: the texture is the body as seen from the front, so
+// over the disk the haze adds what its phase function gives beyond what it gives there, which with
+// the sun behind the body is the crescent its forward scattering lights. Everything is worked out
+// in the body's three filters, or three wavelengths, in their order, and turned into the game's
+// colours at the end, on the same scale as the texture. The haze is added in linear light, lit by
+// the sun as the disk is (`scattered`), so the disk and the ring meet at the edge.
 
 #include "limb.glsl"
 
-// A body's haze, in its fit's three filters, in the order of their wavelengths.
+// A body's haze, in its three filters or wavelengths, in their order.
 struct RealisticPlanetsHaze {
     // The sphere's radius in the game, km: where the texture's disk ends.
     float unit;

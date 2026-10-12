@@ -58,8 +58,11 @@ The colour:
 - `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
   the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
   takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- For `haze.py`, it writes what an I/F of 1 at each of the haze's wavelengths becomes in the
+  texture's linear sRGB, as the texture takes a place's albedo there, to `data/colour.json`.
 """
 import glob
+import json
 import os
 import subprocess
 import sys
@@ -72,6 +75,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import minnaert  # noqa: E402
 import photometry  # noqa: E402
+import scattering  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, out = sys.argv[1], sys.argv[2]
@@ -310,7 +314,8 @@ table = (albedo[None, :] * np.exp(exaggeration * shares[None, :] * grid[:, None]
 texture = np.stack([np.interp(logs, grid, table[:, c]) for c in range(3)], axis=-1)
 
 # At the brightness asked for.
-texture *= brightness / (np.sum(tc.luminance(texture) * area) / (area.sum() * width))
+scale = brightness / (np.sum(tc.luminance(texture) * area) / (area.sum() * width))
+texture *= scale
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}, "
       f"luminance {tc.luminance(geometric):.3f}; the texture's mean luminance: {brightness:.3f}")
 texture[..., 2] /= key_blue
@@ -332,3 +337,15 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
+
+# For haze.py: an I/F of 1 at each of the haze's wavelengths in the texture's linear sRGB, as a place
+# whose albedo there is the spectrum's adds that wavelength's share of the spectrum, at the texture's
+# scale, with the key light's blue divided out as the texture's is, since the sun lights the haze as
+# it lights the disk.
+key_light = np.array([1.0, 1.0, 1.0 / key_blue])
+colours = {name: (scale / fit * each * key_light).tolist()
+           for name, each in zip(scattering.WAVELENGTHS, tc.filter_colours(lam, albedo, M, list(scattering.WAVELENGTHS.values())))}
+with open(os.path.join(data, 'colour.json'), 'w') as f:
+    json.dump({'about': "Venus's I/F at each of the haze's wavelengths as the texture's linear sRGB, its blue divided by "
+                        "the key light's: a row for each wavelength.", 'colours': colours}, f, indent=1)
+print("the texture's linear sRGB for an I/F of 1 at each wavelength:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

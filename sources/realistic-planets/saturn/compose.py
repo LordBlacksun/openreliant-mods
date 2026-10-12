@@ -556,7 +556,8 @@ print('wrote', out)
 # the key light's blue divided out as the texture's is, since the sun lights the haze as it lights the
 # disk.
 key_light = np.array([1.0, 1.0, 1.0 / key_blue])
-colours = {name: (scale / fit * K[w] / np.interp(w, lam, albedo) * key_light).tolist() for name, w in cassini.FILTERS.items()}
+colours = {name: (scale / fit * each * key_light).tolist()
+           for name, each in zip(cassini.FILTERS, tc.filter_colours(lam, albedo, M, list(cassini.FILTERS.values())))}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
     json.dump({'about': "Saturn's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
                         "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
