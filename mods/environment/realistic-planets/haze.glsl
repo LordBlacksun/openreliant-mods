@@ -51,14 +51,14 @@ struct RealisticPlanetsHaze {
     vec3 secondLobe;
     vec3 firstShare;
     vec3 secondShare;
-    // The light scattered more than once. The beam's chance of each further scattering, for each
-    // optical depth along the light's path from the sun to the eye. The glow's strength, as a share
-    // of the sunlight at `reference`, the height it falls by e over, km, and the sun's cosine where
-    // it is half as it fades through the terminator, and how gradually, in the sun's cosine.
+    // The light scattered more than once: the beam's chance of a further scattering for each optical
+    // depth along the light's path from the sun to the eye; and the glow's strength, as a share of
+    // the sunlight at `reference`, the height over which it falls by e, km, and how it fades through
+    // the terminator, as the sun's cosine at the middle of the fade and the fade's width.
     vec3 beam;
     vec3 glow;
     vec3 glowFall;
-    vec3 glowCentre;
+    vec3 glowMiddle;
     vec3 glowWidth;
     // The haze's I/F in the three filters to the game's linear sRGB, as the texture takes the
     // body's brightness in them (columns), its blue divided by the key light's as the texture's is.
@@ -174,7 +174,7 @@ vec3 realisticPlanetsHazeLine(RealisticPlanetsHaze haze, float through, vec3 out
         light += sunlit;
         twice += sunlit * path;
         thrice += sunlit * path * path;
-        glow += piece * exp(-view - (r - haze.reference) / haze.glowFall) / (1.0 + exp(-(cosChi - haze.glowCentre) / haze.glowWidth));
+        glow += piece * exp(-view - (r - haze.reference) / haze.glowFall) / (1.0 + exp(-(cosChi - haze.glowMiddle) / haze.glowWidth));
         depth += piece;
     }
     // Once; then the beam, two and three scatterings in all, each further one at the beam's chance

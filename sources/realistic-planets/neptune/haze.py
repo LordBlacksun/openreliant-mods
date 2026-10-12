@@ -340,22 +340,20 @@ def measure(data, f):
 
 
 def haze_of(own_filter, shared):
-    """A filter's haze as the model and the Monte Carlo take it (`multiple.Haze`): one lobe and
+    """A filter's haze as the model and the Monte Carlo take it (`scattering.Haze`): one lobe and
     Rayleigh's."""
     log_extinction, scale, albedo = own_filter
     lobe, share = shared
-    return multiple.Haze(UNIT + REFERENCE, log_extinction, scale, albedo, (lobe, 0.0, share, 0.0), UNIT + TOP, UNIT - FLOOR)
+    return scattering.Haze(UNIT + REFERENCE, log_extinction, scale, albedo, (lobe, 0.0, share, 0.0), UNIT + TOP, UNIT - FLOOR)
 
 
 def stretch_iof(heights, angle, phase, own_filter, shared, more=None):
     """The haze's I/F at `heights` km above `UNIT` across the limb at `angle` degrees round from the
     sun's direction, seen from afar at `phase` degrees (`scattering.iof`), and with `more`, the
     estimate's numbers, the light scattered more than once."""
-    body = haze_of(own_filter, shared)
     a = np.radians(angle)
     r = UNIT + heights
-    return scattering.iof(r * np.cos(a), r * np.sin(a), phase, body.reference, body.log_extinction, body.scale, body.albedo,
-                          body.lobes, body.top, STEPS, SPREAD, multiple=more)
+    return scattering.iof(r * np.cos(a), r * np.sin(a), phase, haze_of(own_filter, shared), STEPS, SPREAD, more)
 
 
 def estimate(own_filter, shared, seed):

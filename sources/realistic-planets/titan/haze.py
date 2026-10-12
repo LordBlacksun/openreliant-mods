@@ -220,20 +220,18 @@ def layer_of(haze):
 
 
 def haze_of(haze):
-    """The haze's numbers as the model and the Monte Carlo take them (`multiple.Haze`): two lobes and
-    the detached layer."""
+    """The haze's numbers as the model and the Monte Carlo take them (`scattering.Haze`): two lobes
+    and the detached layer."""
     log_extinction, scale, log_layer, layer_height, layer_width, albedo, first, second, share = haze
-    return multiple.Haze(BASE + REFERENCE, log_extinction, scale, albedo, (first, second, share, 1 - share), BASE + TOP,
-                         SURFACE, layer_of(haze))
+    return scattering.Haze(BASE + REFERENCE, log_extinction, scale, albedo, (first, second, share, 1 - share), BASE + TOP,
+                           SURFACE, layer_of(haze))
 
 
 def sky_iof(x, y, phase, haze, more=None):
     """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
     from afar at `phase` degrees (`scattering.iof`), and with `more`, the estimate's numbers, the light
     scattered more than once."""
-    body = haze_of(haze)
-    return scattering.iof(x, y, phase, body.reference, body.log_extinction, body.scale, body.albedo, body.lobes, body.top,
-                          STEPS, SPREAD, body.layer, more)
+    return scattering.iof(x, y, phase, haze_of(haze), STEPS, SPREAD, more)
 
 
 def estimate(haze, seed):
