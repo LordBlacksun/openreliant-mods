@@ -114,17 +114,28 @@ make them again.
 
 The mod's page shows these pictures after its thumbnail, in the order of their names. They are taken
 in OpenReliant 0.12 with the default settings, so with the bloom and without the flight display,
-from a camera placed at a chosen phase angle from the sun. Every picture is 1920 by 1080 pixels: the
-single views are rendered at 3840 by 2160 and scaled down, and the pictures of four views combine
-four renders, at 3840 by 2160 for the crescents and 1920 by 1080 for Titan.
+from a camera placed at a chosen phase angle from the sun. Each view is rendered at 3840 by 2160
+and scaled down to 1920 by 1080; a picture of four views puts four renders together.
+
+No mission places Io, Europa, Callisto or Earth. For their pictures, a local helper mod loaded
+after this one gives Ganymede in mission 83 the model of Io, Europa or Callisto, and Venus in
+mission 30 Earth's model, with Earth's air and lean in Venus's planet record.
 
 | File | What it shows |
 |---|---|
-| `screenshots/1-saturn.png` | Saturn, with Titan in front, in mission 21 at 50 degrees of phase, from 1.6 times the ring's outer radius |
-| `screenshots/2-saturn-backlit.png` | Saturn in mission 21 at 150 degrees of phase, next to the sun, from 2.3 times the ring's outer radius |
-| `screenshots/3-jupiter.png` | Jupiter in mission 27 at 45 degrees of phase, from 2.5 times its radius |
-| `screenshots/4-neptune.png` | Neptune, with Triton to the left, in mission 3 at 105 degrees of phase, from 2.4 times Neptune's radius |
-| `screenshots/5-triton.png` | Triton in front of Neptune in mission 2 at 60 degrees of phase, from 2.4 times Triton's radius |
-| `screenshots/6-ganymede.png` | Ganymede in mission 83 at 75 degrees of phase, from 2.4 times its radius |
-| `screenshots/7-crescents.png` | Backlit crescents: Venus in mission 30 at 125 degrees of phase, Uranus in mission 11 at 120, Jupiter in mission 27 at 130 and Neptune in mission 3 at 130 |
-| `screenshots/titan.png` | Titan in mission 25 at 30, 100, 150 and 165 degrees of phase, from 3.8 times its radius |
+| `screenshots/01-saturn.png` | Saturn, with Titan in front, in mission 21 at 50 degrees of phase, from 1.6 times the ring's outer radius |
+| `screenshots/02-saturn-backlit.png` | Saturn in mission 21 at 150 degrees of phase, next to the sun, from 2.3 times the ring's outer radius |
+| `screenshots/03-titan.png` | Titan, with Saturn behind it, in mission 25 at 100 degrees of phase, from 3 times its radius |
+| `screenshots/04-jupiter.png` | Jupiter in mission 27 at 45 degrees of phase, from 2.5 times its radius |
+| `screenshots/05-io.png` | Io, in Ganymede's place in mission 83, at 60 degrees of phase, from 2.4 times its radius |
+| `screenshots/06-europa.png` | Europa, in Ganymede's place in mission 83, at 50 degrees of phase, from 2.4 times its radius |
+| `screenshots/07-ganymede.png` | Ganymede in mission 83 at 75 degrees of phase, from 2.4 times its radius |
+| `screenshots/08-callisto.png` | Callisto, in Ganymede's place in mission 83, at 70 degrees of phase, from 2.4 times its radius |
+| `screenshots/09-uranus.png` | Uranus in mission 11 at 75 degrees of phase, from 2.4 times its radius |
+| `screenshots/10-neptune.png` | Neptune, with Triton to the left, in mission 3 at 105 degrees of phase, from 2.4 times Neptune's radius |
+| `screenshots/11-triton.png` | Triton in front of Neptune in mission 2 at 60 degrees of phase, from 2.4 times Triton's radius |
+| `screenshots/12-venus.png` | Venus in mission 30 at 70 degrees of phase, from 2.4 times its radius |
+| `screenshots/13-earth.png` | Earth, in Venus's place in mission 30, at 70 degrees of phase, from 2.4 times its radius |
+| `screenshots/14-earth-night.png` | Earth's city lights, in Venus's place in mission 30, at 115 degrees of phase, from 2.4 times its radius |
+| `screenshots/15-crescents.png` | Backlit crescents: Venus in mission 30 at 125 degrees of phase, Uranus in mission 11 at 120, Jupiter in mission 27 at 130 and Neptune in mission 3 at 130 |
+| `screenshots/16-titan-phases.png` | Titan in mission 25 at 30, 100, 150 and 165 degrees of phase, from 3.8 times its radius |
