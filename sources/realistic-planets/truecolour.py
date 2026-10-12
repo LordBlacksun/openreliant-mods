@@ -83,13 +83,6 @@ def hats(lam, wavelengths):
     return out
 
 
-def filter_colours(lam, albedo, matrix, wavelengths):
-    """What an I/F of 1 through filters at `wavelengths` adds in linear sRGB to a body whose albedo over
-    `lam` is `albedo`: the share of its spectrum each filter takes (`hats`), over its albedo at the
-    filter's wavelength. `matrix` is `matrix(lam)`."""
-    return [((albedo * hat)[:, None] * matrix).sum(axis=0) / np.interp(w, lam, albedo) for w, hat in zip(wavelengths, hats(lam, wavelengths))]
-
-
 def channels(lam, albedo, matrix):
     """Each sRGB channel's wavelength for a spectrum, nm: the mean of the wavelengths it takes in,
     weighted by how much of each it takes in. `matrix` is `matrix(lam)`."""

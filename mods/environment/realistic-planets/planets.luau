@@ -1,9 +1,8 @@
 -- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
--- (minnaert.glsl), Earth with its city lights at night (earth.glsl), Saturn shaded by its ring, and
--- Neptune, Jupiter, Saturn, Venus and Titan with their haze (neptune.glsl, jupiter.glsl,
--- saturn.glsl, venus.glsl, titan.glsl). This is a player script: it runs for the whole game. The functions need PER-PIXEL
--- LIGHTING. How the bodies turn and lean, and which rings their haze is drawn on, is in
--- records.luau.
+-- (minnaert.glsl), the planets and Titan with their haze or air (haze.glsl, through each body's own
+-- shader), Saturn shaded by its ring, and Earth with its city lights at night. This is a player
+-- script: it runs for the whole game. The functions need PER-PIXEL LIGHTING. How the bodies turn
+-- and lean, and which rings their haze is drawn on, is in records.luau.
 
 local shaders = require("openreliant.shaders")
 
@@ -17,10 +16,8 @@ shaders.register_surface({
     parameters = { 0.680, 0.712, 0.768, 0.25 },
 })
 
--- Neptune's haze beyond its disk, which neptune.glsl draws where it is given no parameters: the
--- sunlight its haze scatters, fitted to Voyager 2's frames at 136 and 152 degrees of phase by the
--- collection's sources/realistic-planets/neptune/haze.py. records.luau gives Neptune the ring it
--- draws on.
+-- Neptune's haze beyond its disk, which neptune.glsl draws where it is given no parameters, on the
+-- ring records.luau gives Neptune. Each body's haze is drawn the same way.
 shaders.register_surface({
     name = "neptune_haze",
     shader = "neptune.glsl",
@@ -36,9 +33,6 @@ shaders.register_surface({
     parameters = { 0.988, 0.965, 0.905, 0.25 },
 })
 
--- Jupiter's haze beyond its disk, which jupiter.glsl draws where it is given no parameters: the
--- sunlight its stratospheric haze scatters, worked out from measurements of it by the collection's
--- sources/realistic-planets/jupiter/haze.py. records.luau gives Jupiter the ring it draws on.
 shaders.register_surface({
     name = "jupiter_haze",
     shader = "jupiter.glsl",
@@ -46,12 +40,17 @@ shaders.register_surface({
 
 -- Uranus: the exponents of Hubble's OPAL maps of November 2022 (0.85 at 467 nm, 0.80 at 547 and 0.57
 -- at 657), at the red, green and blue channels' wavelengths for Uranus's spectrum (594, 539 and 453
--- nm, the blue taking 467's), and the same least cosine.
+-- nm, the blue taking 467's), and the same least cosine; and its haze in front of the disk.
 shaders.register_surface({
     name = "uranus",
-    shader = "minnaert.glsl",
+    shader = "uranus.glsl",
     textures = { "realistic_planets_uranus" },
     parameters = { 0.702, 0.805, 0.850, 0.25 },
+})
+
+shaders.register_surface({
+    name = "uranus_haze",
+    shader = "uranus.glsl",
 })
 
 -- Saturn: the exponents of Hubble's OPAL maps of August 2025 (0.40 at 395 nm, 0.65 at 502 and 0.80
@@ -64,10 +63,6 @@ shaders.register_surface({
     parameters = { 0.770, 0.697, 0.540, 0.25 },
 })
 
--- Saturn's haze beyond its disk, which saturn.glsl draws where it is given no parameters: the
--- sunlight its haze scatters, fitted to Cassini's frames at 151 to 176 degrees of phase by the
--- collection's sources/realistic-planets/saturn/haze.py. records.luau gives Saturn the ring it
--- draws on.
 shaders.register_surface({
     name = "saturn_haze",
     shader = "saturn.glsl",
@@ -83,10 +78,6 @@ shaders.register_surface({
     parameters = { 1.070, 1.077, 0.982, 0.25 },
 })
 
--- Venus's haze beyond its disk, which venus.glsl draws where it is given no parameters: the
--- sunlight its upper haze scatters, worked out from Venus Express's measurements by the
--- collection's sources/realistic-planets/venus/haze.py. records.luau gives Venus the ring it draws
--- on.
 shaders.register_surface({
     name = "venus_haze",
     shader = "venus.glsl",
@@ -94,13 +85,18 @@ shaders.register_surface({
 
 -- Earth: the exponents of GOES-18's and GOES-19's pictures of the same moment, from 137 and 75 degrees
 -- west (0.750 at 470 nm and 0.907 at 640), at the red, green and blue channels' wavelengths for a grey
--- spectrum (601, 540 and 452 nm, the blue taking 470's), and the same least cosine; and its city
--- lights on its night side.
+-- spectrum (601, 540 and 452 nm, the blue taking 470's), and the same least cosine; its air in front
+-- of the disk, and its city lights on its night side.
 shaders.register_surface({
     name = "earth",
     shader = "earth.glsl",
     textures = { "realistic_planets_earth" },
     parameters = { 0.871, 0.815, 0.750, 0.25 },
+})
+
+shaders.register_surface({
+    name = "earth_haze",
+    shader = "earth.glsl",
 })
 
 -- Titan: the exponents of Cassini's frames of 2010 (0.876 at 463 nm, 0.897 at 568 and 0.855 at 647),
@@ -113,10 +109,6 @@ shaders.register_surface({
     parameters = { 0.877, 0.892, 0.876, 0.25 },
 })
 
--- Titan's haze beyond its disk, which titan.glsl draws where it is given no parameters: the
--- sunlight its main haze and its detached layer scatter, fitted to Cassini's frames from 28 to 164
--- degrees of phase by the collection's sources/realistic-planets/titan/haze.py. records.luau gives
--- Titan the ring it draws on.
 shaders.register_surface({
     name = "titan_haze",
     shader = "titan.glsl",

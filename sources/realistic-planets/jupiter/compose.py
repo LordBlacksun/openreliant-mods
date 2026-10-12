@@ -22,10 +22,7 @@ spheres map it, with the longitudes of Cassini's map.
 - The texture holds the body's own colour, as the mod lights the planets with white light
   (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
   down until all but `CLIPPED` of them fit.
-- For `haze.py`, it writes what an I/F of 1 at each of the haze's wavelengths becomes in the
-  texture's linear sRGB, as the texture takes a place's albedo there, to `data/colour.json`.
 """
-import json
 import os
 import subprocess
 import sys
@@ -35,7 +32,6 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import fits  # noqa: E402
-import scattering  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -152,14 +148,3 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
-
-# For haze.py: an I/F of 1 at each of the haze's wavelengths in the texture's linear sRGB, as a place
-# whose albedo there is the spectrum's adds that wavelength's share of the spectrum, at the texture's
-# scale.
-scale = brightness / tc.luminance(geometric)
-colours = {name: (scale / fit * each).tolist()
-           for name, each in zip(scattering.WAVELENGTHS, tc.filter_colours(lam, albedo, weights, list(scattering.WAVELENGTHS.values())))}
-with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Jupiter's I/F at each of the haze's wavelengths as the texture's linear sRGB: a row for each "
-                        "wavelength.", 'colours': colours}, f, indent=1)
-print("the texture's linear sRGB for an I/F of 1 at each wavelength:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

@@ -1,8 +1,8 @@
-"""Downloads what Neptune's texture and its haze are made from into a folder of its own: each frame's
-GEOMED image and label that the listings name, from the PDS Ring-Moon Systems Node, and Karkoschka's
-1993 albedo spectra of the giant planets, from the PDS Atmospheres Node.
+"""Downloads what Neptune's texture is made from into a folder of its own: each frame's GEOMED image
+and label that the listing names, from the PDS Ring-Moon Systems Node, and Karkoschka's 1993 albedo
+spectra of the giant planets, from the PDS Atmospheres Node.
 
-    python3 fetch.py frames.json haze.json data
+    python3 fetch.py frames.json data
 """
 import os
 import sys
