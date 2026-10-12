@@ -1,9 +1,13 @@
 -- Realistic Planets: how each body turns and leans, in OpenReliant's table of planets
--- (records.planets), the haze beyond Neptune's, Jupiter's, Saturn's, Venus's and Titan's disks, and
--- Earth made a planet, so that the sun alone lights it, as it lights the others. This is a load
--- script: it runs once, as OpenReliant starts.
+-- (records.planets), the planets' white light, the haze beyond Neptune's, Jupiter's, Saturn's,
+-- Venus's and Titan's disks, and Earth made a planet, so that the sun alone lights it, as it lights
+-- the others. This is a load script: it runs once, as OpenReliant starts.
 
 local records = require("openreliant.records")
+
+-- The planets' own light, white: the textures hold each body's true colour. The game's key lights,
+-- (1, 1, 0.8), would turn them yellow, and only the planets and their atmospheres take this light.
+records.planet_light = vector.create(1, 1, 1)
 
 -- How many times faster than in reality the bodies turn. At 60 an hour passes in a minute, and
 -- Jupiter, the fastest, turns once every ten minutes.

@@ -1,7 +1,7 @@
 """Composes Uranus's texture from Hubble's OPAL maps of November 2022, as a 4096x2048 sRGB PNG: north
 at the top and east to the right, as `sphere.py`'s spheres map it.
 
-    python3 compose.py data data/1993.tab out.png <stretch> <brightness> <key light blue>
+    python3 compose.py data data/1993.tab out.png <stretch> <brightness>
 
 - OPAL's maps are calibrated: I/F, with the limb darkening taken out by Minnaert's law, at 0.5
   degrees a pixel in planetographic latitude. Their files hold the north first and put 0 degrees east
@@ -22,9 +22,9 @@ at the top and east to the right, as `sphere.py`'s spheres map it.
 - `brightness` is the texture's mean luminance in linear light, for the game: at its true normal
   albedo, the spectrum's geometric albedo times the ratio of OPAL's mean normal albedo to it at 547 nm,
   about 0.61, the game's lighting pales Uranus towards white.
-- `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
-  the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
-  takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- The texture holds the body's own colour, as the mod lights the planets with white light
+  (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
+  down until all but `CLIPPED` of them fit.
 """
 import os
 import subprocess
@@ -39,7 +39,7 @@ import globe  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
-stretch, brightness, key_blue = float(sys.argv[4]), float(sys.argv[5]), float(sys.argv[6])
+stretch, brightness = float(sys.argv[4]), float(sys.argv[5])
 
 # Uranus's radii, km (IAU), for turning planetographic latitudes into planetocentric ones.
 EQUATOR, POLE = 25559.0, 24973.0
@@ -139,7 +139,6 @@ texture *= brightness / globe.area_mean(tc.luminance(texture), everywhere, centr
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
-texture[..., 2] /= key_blue
 fit = max(1.0, np.quantile(texture, 1 - CLIPPED))
 texture /= fit
 print(f"scaled down by {fit:.3f} to fit")

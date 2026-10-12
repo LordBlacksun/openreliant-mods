@@ -38,7 +38,7 @@ const RealisticPlanetsHaze venusHaze = RealisticPlanetsHaze(
     vec3(0, 0, 0),
     vec3(1, 1, 1),
     // The haze's I/F at 450, 550 and 650 nm to the game's colours.
-    mat3(-0.07305, 0.07647, 0.74199, 0.17774, 0.50200, 0.00851, 0.49614, 0.02599, -0.01647),
+    mat3(-0.07305, 0.07647, 0.59359, 0.17774, 0.50200, 0.00681, 0.49614, 0.02599, -0.01317),
     // A quarter of the haze's light blooms, as for the other bodies.
     0.25);
 

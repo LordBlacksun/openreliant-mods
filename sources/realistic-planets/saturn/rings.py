@@ -1,7 +1,7 @@
 """Composes the texture of Saturn's rings: a strip of 4096 by 8 RGBA texels, its width running out from
 radius `INNER` to `OUTER`, every row alike, for the ring that `sphere.py` writes.
 
-    python3 rings.py data globe.png out.png <key light blue>
+    python3 rings.py data globe.png out.png
 
 - The alpha is the share of the light the rings stop seen face on, 1 - exp(-tau), from the normal
   optical depth tau that Voyager 2's photopolarimeter measured as the rings passed in front of the star
@@ -22,16 +22,20 @@ radius `INNER` to `OUTER`, every row alike, for the ring that `sphere.py` writes
   show sharply.
 - The ring's brightness is tied to the planet's: the B ring at its brightest, seen and lit from the
   same height, is as bright as Saturn's equatorial zone in the planet's texture seen and lit from
-  overhead, as the two look about alike from Earth. `globe.png` is the planet's texture, and `key
-  light blue` the factor its blue was divided by.
+  overhead, as the two look about alike from Earth. `globe.png` is the planet's texture, in its own
+  colours.
 """
+import os
 import subprocess
 import sys
 
 import numpy as np
 from scipy import ndimage
 
-data, globe, out, key_blue = sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4])
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import truecolour as tc  # noqa: E402
+
+data, globe, out = sys.argv[1], sys.argv[2], sys.argv[3]
 
 # The strip's radii, km, and size in texels.
 INNER, OUTER = 74000.0, 141000.0
@@ -88,20 +92,12 @@ def steepest(x, y, centre, half, sign, smooth):
     return x[near][np.argmax(slope[near])]
 
 
-def luminance(rgb):
-    return rgb @ np.array([0.2126, 0.7152, 0.0722])
-
-
-def decoded(srgb):
-    return np.where(srgb <= 0.04045, srgb / 12.92, ((srgb + 0.055) / 1.055) ** 2.4)
-
-
 def read(path):
     """A picture's pixels in linear light, rows first."""
     w, h = map(int, subprocess.run(['magick', 'identify', '-format', '%w %h', path], capture_output=True, text=True,
                                    check=True).stdout.split())
     raw = subprocess.run(['magick', path, '-depth', '16', 'rgb:-'], capture_output=True, check=True).stdout
-    return decoded(np.frombuffer(raw, '<u2').reshape(h, w, 3).astype(np.float64) / 65535)
+    return tc.decode(np.frombuffer(raw, '<u2').reshape(h, w, 3).astype(np.float64) / 65535)
 
 
 # The strip's texels.
@@ -139,7 +135,7 @@ for name, (a, b) in (('C ring', (74500, 92000)), ('B ring', (92000, 117500)), ('
 # Cassini's mosaic: the line through the arcs' turning points, where the C ring's inner edge and the A
 # ring's outer edge turn.
 mosaic = read(f"{data}/PIA11142.tif")
-L = luminance(mosaic)
+L = tc.luminance(mosaic)
 rows = np.nonzero((L > MOSAIC_C_EDGE[2]).any(axis=1))[0]
 rows = np.arange(rows.min() + 20, rows.max() - 20)
 
@@ -173,7 +169,7 @@ def matched(edges, column_at, reach):
     found = []
     for radius, sign in edges:
         at = steepest(r_iss, brightness, radius, 250, sign, 1.0)
-        found.append((steepest(x.astype(float), luminance(band), column_at(at), reach, sign, 1.5), at))
+        found.append((steepest(x.astype(float), tc.luminance(band), column_at(at), reach, sign, 1.5), at))
     return found
 
 
@@ -193,19 +189,18 @@ columns = np.where(radii > anchors[-1, 1], anchors[-1, 0] + (radii - anchors[-1,
 
 # The hue at each texel, where the mosaic shows the rings, interpolated across the gaps and smoothed.
 sampled = np.stack([np.interp(columns, x, band[:, c]) for c in range(3)], axis=-1)
-lum = luminance(sampled)
+lum = tc.luminance(sampled)
 shown = lum > MOSAIC_DARKEST
 hue = np.stack([np.interp(radii, radii[shown], sampled[shown, c] / lum[shown]) for c in range(3)], axis=-1)
 hue = ndimage.gaussian_filter1d(hue, HUE_SMOOTH / ((OUTER - INNER) / w), axis=0, mode='nearest')
-hue /= luminance(hue)[:, None]
+hue /= tc.luminance(hue)[:, None]
 
 # The planet's equatorial zone, in its own colours.
 planet = read(globe)
-planet[..., 2] *= key_blue
 latitudes = 90 - (np.arange(planet.shape[0]) + 0.5) * 180 / planet.shape[0]
 zone = np.abs(latitudes) <= EQUATORIAL_ZONE
 weights = np.cos(np.radians(latitudes[zone]))[:, None]
-equatorial = np.sum(luminance(planet[zone]) * weights) / (weights.sum() * planet.shape[1])
+equatorial = np.sum(tc.luminance(planet[zone]) * weights) / (weights.sum() * planet.shape[1])
 
 # The B ring at its brightest, seen and lit from the same height, which gives S / 2, as bright as the
 # equatorial zone seen and lit from overhead.

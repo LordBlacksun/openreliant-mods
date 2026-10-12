@@ -8,7 +8,9 @@ are then planetocentric, as `sphere.py`'s spheres take them.
 
 `--k` takes one exponent, or one each for red, green and blue, as the mod's surface functions do, and
 `--least` holds the limb's factor at its value at that cosine of the view, as they do too.
-`--light 1 1 0.8` lights the planet as StarLancer does, apart from the game's tone curve.
+`--light R G B` gives the light's colour, encoded as the game's lights' colours are, and white by
+default, as the mod lights the planets. `--light 1 1 0.8` lights the planet as the original's key light
+does, apart from the game's tone curve.
 
 `--ring` adds a ring in the plane of the equator, from its strip of a texture, as `sphere.py` writes it,
 between an inner and an outer radius, in the equator's radii. It's drawn as the mod's surface
@@ -27,6 +29,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import globe  # noqa: E402
+import truecolour as tc  # noqa: E402
 
 
 def load(path, alpha=False):
@@ -135,7 +138,7 @@ def main():
     p.add_argument('--sun-lat', type=float, default=-20); p.add_argument('--sun-lon', type=float, default=20)
     p.add_argument('--k', type=float, nargs='+', default=[0.75], help="Minnaert's exponent, or one for each of red, green and blue")
     p.add_argument('--least', type=float, default=0.0, help="the cosine of the view nearer the limb than which the limb's factor holds")
-    p.add_argument('--light', type=float, nargs=3, default=(1.0, 1.0, 1.0), metavar=('R', 'G', 'B'), help="the light's colour")
+    p.add_argument('--light', type=float, nargs=3, default=(1.0, 1.0, 1.0), metavar=('R', 'G', 'B'), help="the light's colour, encoded")
     p.add_argument('--polar', type=float, default=1.0, help="the polar radius over the equator's")
     p.add_argument('--ring', nargs=3, metavar=('TEXTURE', 'INNER', 'OUTER'), help="a ring's texture, and its radii in the equator's")
     p.add_argument('--extent', type=float, default=1.0, help="the equator's radii the picture reaches above and below the middle")
@@ -143,7 +146,8 @@ def main():
     a = p.parse_args()
     ring = (load(a.ring[0], alpha=True), float(a.ring[1]), float(a.ring[2])) if a.ring else None
     k = a.k[0] if len(a.k) == 1 else a.k
-    save(render(load(a.texture), a.size, a.lat, a.lon, a.sun_lat, a.sun_lon, k, a.light, a.polar, ring, a.extent, a.aspect, a.least), a.out)
+    save(render(load(a.texture), a.size, a.lat, a.lon, a.sun_lat, a.sun_lon, k, tc.decode(a.light), a.polar, ring, a.extent, a.aspect,
+                a.least), a.out)
 
 
 if __name__ == '__main__':

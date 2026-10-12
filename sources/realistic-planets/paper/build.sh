@@ -6,8 +6,8 @@ set -eu
 neptune=../neptune
 mod=../../../mods/environment/realistic-planets
 mkdir -p work
-# The map in true colour, without the contrast stretch and the key light's correction.
-python3 "$neptune/compose.py" "$neptune/maps" "$neptune/data/1993.tab" work/true-colour.png 1 1
+# The map in true colour, without the contrast stretch.
+python3 "$neptune/compose.py" "$neptune/maps" "$neptune/data/1993.tab" work/true-colour.png 1
 python3 figures.py "$neptune" work/true-colour.png "$mod/realistic_planets_neptune.png" figures
 tectonic --outdir work neptune.tex
 cp work/neptune.pdf "$mod/neptune-voyager-map.pdf"

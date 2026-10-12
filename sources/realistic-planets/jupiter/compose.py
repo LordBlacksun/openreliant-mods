@@ -2,7 +2,7 @@
 January 2015, as a 4096x2048 sRGB PNG: north at the top and east to the right, as `sphere.py`'s
 spheres map it, with the longitudes of Cassini's map.
 
-    python3 compose.py data data/1993.tab out.png <stretch> <brightness> <key light blue>
+    python3 compose.py data data/1993.tab out.png <stretch> <brightness>
 
 - Cassini's cylindrical map (PIA07782) has 0.1 degrees a pixel, in planetocentric latitude and
   longitude. It holds data from 88 degrees north to 82 south. Past that, Cassini saw nothing, and the
@@ -19,9 +19,9 @@ spheres map it, with the longitudes of Cassini's map.
 - `stretch` multiplies Jupiter's contrast, on the logarithm of the brightness, for the game: 1 keeps
   Jupiter's own. `brightness` is the texture's mean luminance in linear light, for the game: at its
   true normal albedo, about 0.78, Jupiter is near white in the game's lighting.
-- `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
-  the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
-  takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- The texture holds the body's own colour, as the mod lights the planets with white light
+  (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
+  down until all but `CLIPPED` of them fit.
 - For `haze.py`, it writes what an I/F of 1 at each of the haze's wavelengths becomes in the
   texture's linear sRGB, as the texture takes a place's albedo there, to `data/colour.json`.
 """
@@ -39,7 +39,7 @@ import scattering  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, spectrum, out = sys.argv[1], sys.argv[2], sys.argv[3]
-stretch, brightness, key_blue = float(sys.argv[4]), float(sys.argv[5]), float(sys.argv[6])
+stretch, brightness = float(sys.argv[4]), float(sys.argv[5])
 
 # Jupiter's radii, km (IAU), for turning OPAL's planetographic latitudes into planetocentric ones.
 EQUATOR, POLE = 71492.0, 66854.0
@@ -135,7 +135,6 @@ texture *= geometric / mean * brightness / tc.luminance(geometric)
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
-texture[..., 2] /= key_blue
 fit = max(1.0, np.quantile(texture, 1 - CLIPPED))
 texture /= fit
 print(f"scaled down by {fit:.3f} to fit")
@@ -156,13 +155,11 @@ print('wrote', out)
 
 # For haze.py: an I/F of 1 at each of the haze's wavelengths in the texture's linear sRGB, as a place
 # whose albedo there is the spectrum's adds that wavelength's share of the spectrum, at the texture's
-# scale, with the key light's blue divided out as the texture's is, since the sun lights the haze as
-# it lights the disk.
-key_light = np.array([1.0, 1.0, 1.0 / key_blue])
+# scale.
 scale = brightness / tc.luminance(geometric)
-colours = {name: (scale / fit * each * key_light).tolist()
+colours = {name: (scale / fit * each).tolist()
            for name, each in zip(scattering.WAVELENGTHS, tc.filter_colours(lam, albedo, weights, list(scattering.WAVELENGTHS.values())))}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Jupiter's I/F at each of the haze's wavelengths as the texture's linear sRGB, its blue divided by "
-                        "the key light's: a row for each wavelength.", 'colours': colours}, f, indent=1)
+    json.dump({'about': "Jupiter's I/F at each of the haze's wavelengths as the texture's linear sRGB: a row for each "
+                        "wavelength.", 'colours': colours}, f, indent=1)
 print("the texture's linear sRGB for an I/F of 1 at each wavelength:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

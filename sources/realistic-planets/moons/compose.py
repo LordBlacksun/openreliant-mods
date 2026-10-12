@@ -3,7 +3,7 @@ top and east to the right, as `sphere.py`'s spheres map it, with 0 degrees east 
 Its detail comes from a global map of the moon, and its colour from Voyager's frames. It also prints
 the limb's exponents for the mod's `planets.luau`.
 
-    python3 compose.py data frames.json fits.json <moon> out.png <width> <brightness> <key light blue>
+    python3 compose.py data frames.json fits.json <moon> out.png <width> <brightness>
 
 - Each frame's pointing is fitted by `fit.py`, and its sky is taken off it (`moons.sky`). Each
   filter's Minnaert exponent is the median of its frames': Io's two largest violet frames give
@@ -33,10 +33,10 @@ the limb's exponents for the mod's `planets.luau`.
   holds nothing, the texel takes the mean of its latitude. Triton's north, which no picture saw,
   takes its brightness and the remainder of its colour from the opposite latitude, 180 degrees round
   (`moons.mirrored`).
-- `brightness` is the texture's mean luminance in linear light, for the game. `key light blue` is
-  the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8): the texture's blue is
-  divided by it. If that takes the brightest texels past 1, the whole map is scaled down until all
-  but `CLIPPED` of them fit.
+- `brightness` is the texture's mean luminance in linear light, for the game. The texture holds
+  the body's own colour, as the mod lights the planets with white light (`records.planet_light` in
+  `records.luau`). If its brightest texels pass 1, the whole map is scaled down until all but
+  `CLIPPED` of them fit.
 """
 import json
 import os
@@ -54,7 +54,7 @@ import truecolour as tc  # noqa: E402
 import voyager  # noqa: E402
 
 data, listing, fits_path, moon, out = sys.argv[1:6]
-size, brightness, key_blue = int(sys.argv[6]), float(sys.argv[7]), float(sys.argv[8])
+size, brightness = int(sys.argv[6]), float(sys.argv[7])
 
 # The colour maps' cells, degrees: finer for Io, whose frames are the sharpest and whose colours
 # vary the most.
@@ -254,7 +254,6 @@ print(f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} ti
 
 # At the brightness asked for.
 texture *= brightness / globe.area_mean(tc.luminance(texture), np.ones(h, dtype=bool), tex_lats)
-texture[..., 2] /= key_blue
 scale = max(1.0, np.quantile(texture[::4, ::4], 1 - CLIPPED))
 texture /= scale
 print(f"scaled down by {scale:.3f} to fit")

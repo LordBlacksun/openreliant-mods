@@ -37,7 +37,7 @@ const RealisticPlanetsHaze titanHaze = RealisticPlanetsHaze(
     vec3(-0.241, -0.255, 0.225),
     vec3(0.01, 0.01, 0.0928),
     // Cassini's blue, green and red filters' I/F to the game's colours.
-    mat3(-0.14988, 0.21081, 0.69685, 0.27673, 0.35667, -0.03369, 0.35095, -0.00266, -0.00834),
+    mat3(-0.14988, 0.21081, 0.55748, 0.27673, 0.35667, -0.02695, 0.35095, -0.00266, -0.00667),
     // A quarter of the haze's light blooms, as the bloom would spread the bright haze of a backlit
     // Titan well past what Cassini saw.
     0.25);

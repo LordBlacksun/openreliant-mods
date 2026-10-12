@@ -69,7 +69,7 @@ struct RealisticPlanetsHaze {
     vec3 glowMiddle;
     vec3 glowWidth;
     // The haze's I/F in the three filters to the game's linear sRGB, as the texture takes the
-    // body's brightness in them (columns), its blue divided by the key light's as the texture's is.
+    // body's brightness in them (columns).
     mat3 color;
     // How much of the haze's light blooms.
     float bloom;

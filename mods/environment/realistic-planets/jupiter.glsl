@@ -38,7 +38,7 @@ const RealisticPlanetsHaze jupiterHaze = RealisticPlanetsHaze(
     vec3(0, 0, 0),
     vec3(1, 1, 1),
     // The haze's I/F at 450, 550 and 650 nm to the game's colours.
-    mat3(-0.07895, 0.08304, 0.74668, 0.17935, 0.50883, 0.00725, 0.50345, 0.02853, -0.01705),
+    mat3(-0.07895, 0.08304, 0.59734, 0.17935, 0.50883, 0.00580, 0.50345, 0.02853, -0.01364),
     // A quarter of the haze's light blooms, as for the other bodies.
     0.25);
 

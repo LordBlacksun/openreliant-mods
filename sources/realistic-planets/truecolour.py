@@ -60,6 +60,12 @@ def luminance(rgb):
     return rgb[..., 0] * 0.2126 + rgb[..., 1] * 0.7152 + rgb[..., 2] * 0.0722
 
 
+def decode(encoded):
+    """Encoded sRGB in linear light, the reverse of `encode`."""
+    encoded = np.asarray(encoded, dtype=float)
+    return np.where(encoded <= 0.04045, encoded / 12.92, ((encoded + 0.055) / 1.055) ** 2.4)
+
+
 def encode(linear):
     linear = np.clip(linear, 0, 1)
     return np.where(linear <= 0.0031308, 12.92 * linear, 1.055 * linear ** (1 / 2.4) - 0.055)

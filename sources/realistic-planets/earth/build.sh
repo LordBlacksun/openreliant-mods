@@ -7,7 +7,7 @@ set -eu
 python3 fetch.py data
 python3 limb.py data
 # For the game: a mean luminance of 0.22, the same share of Earth's true brightness as Jupiter's 0.3
-# is of Jupiter's, and the game's key light's blue of 0.8 divided out.
-python3 compose.py data ../../../mods/environment/realistic-planets/realistic_planets_earth.png 4096 0.22 0.8
+# is of Jupiter's.
+python3 compose.py data ../../../mods/environment/realistic-planets/realistic_planets_earth.png 4096 0.22
 # The city lights, at the texture's size and the Black Marble's brightness.
 python3 nightlights.py data/BlackMarble_2016_3km.jpg ../../../mods/environment/realistic-planets/realistic_planets_earth_emissive.png 4096 1

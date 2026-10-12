@@ -4,7 +4,7 @@ its haze come from Cassini's frames and Karkoschka's spectrum, and its surface, 
 from the eye, from Cassini's map at 938 nm, shown faintly. It also prints the limb's exponents for
 the mod's `planets.luau`.
 
-    python3 compose.py data frames.json data/1993.tab out.png <surface> <brightness> <key light blue>
+    python3 compose.py data frames.json data/1993.tab out.png <surface> <brightness>
 
 The haze:
 
@@ -36,9 +36,9 @@ The colour, the surface and the brightness:
   `surface` is the share of the map's contrast, on the logarithm, that the texture shows through the
   haze's colour: 0 gives the haze alone.
 - `brightness` is the texture's mean luminance in linear light, for the game.
-- `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
-  the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
-  takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- The texture holds the body's own colour, as the mod lights the planets with white light
+  (`records.planet_light` in `records.luau`). If its brightest texels pass 1, the whole map is scaled
+  down until all but `CLIPPED` of them fit.
 """
 import json
 import os
@@ -55,7 +55,7 @@ import minnaert  # noqa: E402
 import truecolour as tc  # noqa: E402
 
 data, listing, spectrum, out = sys.argv[1:5]
-surface, brightness, key_blue = float(sys.argv[5]), float(sys.argv[6]), float(sys.argv[7])
+surface, brightness = float(sys.argv[5]), float(sys.argv[6])
 
 # The least height of the sun, and of the view above the limb, where a frame is used, degrees; the
 # bands of latitude the haze is measured in, degrees; and the latitudes each frame's mean is taken
@@ -151,7 +151,6 @@ normal_over_geometric = (2 * limb_exponents[1] + 1) / 2
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric by Minnaert's law in green: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
-texture[..., 2] /= key_blue
 fit = max(1.0, np.quantile(texture[::4, ::4], 1 - CLIPPED))
 texture /= fit
 print(f"scaled down by {fit:.3f} to fit")
@@ -162,12 +161,10 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
 print('wrote', out)
 
 # For haze.py: what the I/F in each filter becomes in the texture's linear sRGB, as a band's
-# brightness over the frames' mean bends the spectrum, with its blue divided by the key light's as the
-# texture's is, since the sun lights the haze as it lights the disk.
-key_light = np.array([1.0, 1.0, 1.0 / key_blue])
-colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name])) * key_light).tolist() for name, wavelength in cassini.FILTERS.items()}
+# brightness over the frames' mean bends the spectrum.
+colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name]))).tolist() for name, wavelength in cassini.FILTERS.items()}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
-                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB: a row for each "
+                        "filter.", 'colours': colours}, f, indent=1)
 print('the texture\'s linear sRGB for an I/F of 1 in each filter:',
       {name: np.round(c, 5).tolist() for name, c in colours.items()})
