@@ -1,6 +1,6 @@
-"""Cassini's calibrated frames of Titan, shared by `compose.py` and `haze.py`: a frame's I/F from its
-detached PDS3 label, the directions of its sky in Titan's frame, each pixel's geometry, and the disk
-fitted to the lit limb.
+"""Cassini's calibrated frames, shared by Titan's and Saturn's scripts (`titan/compose.py`,
+`titan/haze.py`, `saturn/haze.py`): a frame's I/F from its detached PDS3 label, the directions of its
+sky in the body's frame, each pixel's geometry, and the disk fitted to the lit limb.
 """
 import re
 
@@ -51,8 +51,8 @@ def trusted(image):
 
 def axes(f):
     """A frame's right and up directions on the sky, and the directions toward the observer and the
-    sun, in Titan's frame: from the frame's sub-spacecraft and sub-solar points, and the clock angle
-    of Titan's north pole in the frame."""
+    sun, in the body's frame: from the frame's sub-spacecraft and sub-solar points, and the clock
+    angle of the body's north pole in the frame."""
     observer, sun = globe.unit(f['observer_lat'], f['observer_east_lon']), globe.unit(f['sun_lat'], f['sun_east_lon'])
     north = np.array([0.0, 0.0, 1.0]) - observer[2] * observer
     north /= np.linalg.norm(north)
@@ -60,6 +60,12 @@ def axes(f):
     t = np.radians(f['north_clock_angle'])
     right, up = np.sin(t) * north - np.cos(t) * across, np.cos(t) * north + np.sin(t) * across
     return right, up, observer, sun
+
+
+def sun_direction(f):
+    """The sun's direction in a frame, radians from right toward up."""
+    right, up, _, sun = axes(f)
+    return np.arctan2(sun @ up, sun @ right)
 
 
 def geometry(shape, cx, cy, radius, f):

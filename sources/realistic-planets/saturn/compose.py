@@ -63,7 +63,10 @@ The texture:
 - `key light blue` is the blue of the only light that reaches a planet in StarLancer, (1, 1, 0.8):
   the texture's blue is divided by it, so that the planet shows its own colour in the game. If that
   takes the brightest texels past 1, the whole map is scaled down until all but `CLIPPED` of them fit.
+- For `haze.py`, it writes what an I/F of 1 in each of Cassini's filters becomes in the texture's
+  linear sRGB, as the texture takes a place's albedo in them, to `data/colour.json`.
 """
+import json
 import os
 import subprocess
 import sys
@@ -72,6 +75,7 @@ import numpy as np
 from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import cassini  # noqa: E402
 import fits  # noqa: E402
 import globe  # noqa: E402
 import truecolour as tc  # noqa: E402
@@ -126,9 +130,8 @@ BLEND = (70.0, 76.0)
 # many degrees of data that colour is the mean of.
 FADE = 3.0
 CAP_MEAN = 2.0
-# Cassini's maps of 11 August 2011: each filter's effective wavelength, nm (Wang and others, 2025),
-# their degrees a pixel, and the level they hold where they have no data, their lowest.
-CASSINI = {'BL1': 463.0, 'GRN': 568.0, 'RED': 647.0}
+# Cassini's maps of 11 August 2011, one for each filter (`cassini.FILTERS`): their degrees a pixel,
+# and the level they hold where they have no data, their lowest.
 CASSINI_STEP = 0.1
 NO_DATA = 30
 # How far inside the edge of Cassini's data, degrees, Hubble's maps give way to it, the degrees of
@@ -441,22 +444,22 @@ true_green = globe.area_mean(hubble[502.0], (opal_lats >= MEAN_LATITUDES[0]) & (
 # Cassini's maps: rows from the north pole south at planetocentric latitudes, and columns from 360
 # degrees west down to 0, so east increases to the right. The first column holds no data and the last
 # is 0 degrees, so the maps are turned to start there.
-cassini = {}
-for name, wavelength in CASSINI.items():
+cassini_maps = {}
+for name, wavelength in cassini.FILTERS.items():
     image = np.roll(fits.image(f"{data}/Cassini_ISS_{name}_Saturn_global_map.fits")[:, 1:].astype(np.float64), 1, axis=1)
-    cassini[wavelength] = np.where(np.isfinite(image) & (image > NO_DATA), image, np.nan)
-lats = 90 - np.arange(cassini[647.0].shape[0]) * CASSINI_STEP
-seen = np.all([np.isfinite(m) for m in cassini.values()], axis=0)
+    cassini_maps[wavelength] = np.where(np.isfinite(image) & (image > NO_DATA), image, np.nan)
+lats = 90 - np.arange(cassini_maps[647.0].shape[0]) * CASSINI_STEP
+seen = np.all([np.isfinite(m) for m in cassini_maps.values()], axis=0)
 # Streaked rows, and a band of data narrower than `JOIN` degrees between latitudes without, such as the
 # one between the rings' shadow and the line along the equator, which the C ring's thin shadow still
 # darkens, are left to Hubble's maps too.
-streaks = np.any([streaked(m) for m in cassini.values()], axis=0)
+streaks = np.any([streaked(m) for m in cassini_maps.values()], axis=0)
 print(f"streaks left out: {streaks.sum() * CASSINI_STEP:.1f} degrees of latitude")
 blank = ~seen.any(axis=1) | streaks
 seen &= ~ndimage.binary_closing(blank, structure=np.ones(int(JOIN / CASSINI_STEP) + 1, bool))[:, None]
 # The seams between the mosaic's pieces, found on the red map, which all three share.
-joins = seams(cassini[647.0], lats)
-cassini = {w: without_seams(m, joins) for w, m in cassini.items()}
+joins = seams(cassini_maps[647.0], lats)
+cassini_maps = {w: without_seams(m, joins) for w, m in cassini_maps.items()}
 print(f"seams taken out at {len(joins)} longitudes: {', '.join(f'{c * CASSINI_STEP:.0f}' for c in joins)} degrees east")
 print(f"Cassini's maps hold {seen.mean():.1%} of the grid, from {lats[seen.any(axis=1)].min():.1f} to "
       f"{lats[seen.any(axis=1)].max():.1f} degrees")
@@ -478,7 +481,7 @@ full = share.min(axis=1) >= 1
 compared = (share >= 1) & (np.abs(lats) <= CONTRAST_LATITUDE)[:, None]
 cells = np.broadcast_to(np.cos(np.radians(lats))[:, None], seen.shape)[compared]
 maps = {}
-for w, m in cassini.items():
+for w, m in cassini_maps.items():
     reference = at_wavelength(on_grid, w)
     exponent = spread(reference[compared], cells) / spread(m[compared], cells)
     pivot = np.exp(np.sum(np.log(m[compared]) * cells) / cells.sum())
@@ -521,7 +524,8 @@ print(f"the channels' wavelengths for Saturn's spectrum: {np.round(channel).asty
 
 # At the brightness asked for; the true normal albedo, measured on Hubble's 502 nm maps, for reference.
 normal_over_geometric = true_green / np.interp(502.0, lam, albedo)
-texture *= brightness / globe.area_mean(tc.luminance(texture), everywhere, lats)
+scale = brightness / globe.area_mean(tc.luminance(texture), everywhere, lats)
+texture *= scale
 print(f"geometric albedo, linear sRGB {np.round(geometric, 4)}, as 8-bit sRGB {np.round(tc.encode(geometric) * 255).astype(int)}; "
       f"true mean luminance at the normal albedo, {normal_over_geometric:.3f} times the geometric: "
       f"{normal_over_geometric * tc.luminance(geometric):.3f}; in the texture: {brightness:.3f}")
@@ -546,3 +550,14 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                 '-colorspace', 'sRGB', '-depth', '8', '-define', 'png:exclude-chunks=date,time', out],
                input=pixels.tobytes(), check=True)
 print('wrote', out)
+
+# For haze.py: an I/F of 1 in each filter in the texture's linear sRGB, as a place whose albedo in a
+# filter is the spectrum's there adds that filter's share of the spectrum, at the texture's scale, with
+# the key light's blue divided out as the texture's is, since the sun lights the haze as it lights the
+# disk.
+key_light = np.array([1.0, 1.0, 1.0 / key_blue])
+colours = {name: (scale / fit * K[w] / np.interp(w, lam, albedo) * key_light).tolist() for name, w in cassini.FILTERS.items()}
+with open(os.path.join(data, 'colour.json'), 'w') as f:
+    json.dump({'about': "Saturn's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
+                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+print("the texture's linear sRGB for an I/F of 1 in each filter:", {name: np.round(c, 5).tolist() for name, c in colours.items()})

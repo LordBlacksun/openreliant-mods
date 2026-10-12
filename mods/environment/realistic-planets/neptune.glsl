@@ -7,7 +7,10 @@
 
 const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     // The sphere's radius in the game, Neptune's equatorial radius: the haze's edge in each filter,
-    // where the texture's disk ends.
+    // where the texture's disk ends. The game's Neptune is round, and its model holds the sphere
+    // alone.
+    24764.0,
+    1.0,
     24764.0,
     // The radius the haze's extinction is given at, 100 km above the edge, and the radius it is cut
     // off at, 300 km above it.
