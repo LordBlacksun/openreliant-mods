@@ -1,0 +1,6 @@
+Homing Screamers, a mod for OpenReliant
+=======================================
+
+By Lord Blacksun, under the Mozilla Public License 2.0. Its steering follows OpenReliant's own
+missile guidance (src/engine/game/missiles.zig), which is under the same licence. Its thumbnail,
+mod.png, is an original drawing made for it (sources/homing-screamers/mod.svg), not the game's art.
