@@ -160,11 +160,13 @@ subprocess.run(['magick', '-size', f'{w}x{h}', '-depth', '16', '-endian', 'LSB',
                input=pixels.tobytes(), check=True)
 print('wrote', out)
 
-# For haze.py: what the I/F in each filter becomes in the texture's linear sRGB, before the key
-# light's blue is divided out, as a band's brightness over the frames' mean bends the spectrum.
-colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name]))).tolist() for name, wavelength in cassini.FILTERS.items()}
+# For haze.py: what the I/F in each filter becomes in the texture's linear sRGB, as a band's
+# brightness over the frames' mean bends the spectrum, with its blue divided by the key light's as the
+# texture's is, since the sun lights the haze as it lights the disk.
+key_light = np.array([1.0, 1.0, 1.0 / key_blue])
+colours = {name: (scale / fit * K[wavelength] / np.exp(np.mean(means[name])) * key_light).tolist() for name, wavelength in cassini.FILTERS.items()}
 with open(os.path.join(data, 'colour.json'), 'w') as f:
-    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB, before its blue is "
-                        "divided by the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
-print('the texture\'s linear sRGB for an I/F of 1 in each filter, before the key light:',
+    json.dump({'about': "Titan's I/F in each of Cassini's filters as the texture's linear sRGB, its blue divided by "
+                        "the key light's: a row for each filter.", 'colours': colours}, f, indent=1)
+print('the texture\'s linear sRGB for an I/F of 1 in each filter:',
       {name: np.round(c, 5).tolist() for name, c in colours.items()})

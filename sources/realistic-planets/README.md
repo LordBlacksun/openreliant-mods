@@ -41,7 +41,7 @@ Run each script from its own folder, in this order:
 6. `titan/build.sh` downloads Cassini's frames of Titan at low and high phase, Cassini's map of its
    surface and Karkoschka's spectrum, about 200 MB, into `titan/data`, makes
    `realistic_planets_titan.png`, prints the limb's exponents for `planets.luau`, and fits Titan's
-   haze beyond the disk, printing the numbers for `titan_haze.glsl`. The texture takes about ten
+   haze beyond the disk, printing the numbers for `titan.glsl`. The texture takes about ten
    seconds, and the haze's fit about ten minutes, its three filters at once.
 7. `moons/build.sh` downloads the USGS's maps of Io, Europa, Ganymede, Callisto and Triton and
    Voyager's colour frames of them, about 1.4 GB, into `moons/data`, fits the frames' pointing into
@@ -97,7 +97,8 @@ Run each script from its own folder, in this order:
 | `titan/fetch.py` | Downloads the frames, the map of the surface and the spectrum |
 | `titan/cassini.py` | Reads the frames, works out their geometry and fits the disk to the lit limb, for `compose.py` and `haze.py` |
 | `titan/compose.py` | Fits the haze's profiles and the limb's exponents to the frames, composes the texture with the map of the surface and the spectrum, and writes the texture's colours for the haze to `data/colour.json` |
-| `titan/haze.py` | Fits the model of the haze beyond the disk to the frames at low and high phase, and prints the numbers for `titan_haze.glsl` |
+| `titan/haze.py` | Fits the model of the haze beyond the disk to the frames at low and high phase, and prints the numbers for `titan.glsl` |
+| `screenshots/titan.png` | The picture on the mod's page after its thumbnail: Titan in OpenReliant's mission 25, from 1.1 million units, 3.8 of its radii, at 30, 100, 150 and 165 degrees of phase, with the bloom and without the flight display, four views of 1920 by 1080 halved into one |
 | `moons/frames.json` | The Voyager frames used: for Jupiter's moons one colour set for each 20 degrees of each moon's longitude, and for Triton every colour set, with their geometry from OPUS and their download links |
 | `moons/fetch.py` | Downloads the frames and the USGS's maps |
 | `moons/fit.py` | Fits each frame's pointing against its moon's map, and its limb darkening; writes `fits.json` |

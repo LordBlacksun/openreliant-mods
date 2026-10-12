@@ -1,5 +1,5 @@
-"""Fits a model of Titan's haze beyond its disc to Cassini's frames, for the mod's `titan_haze.glsl`,
-and prints the shader's numbers. Run `compose.py` first: it writes `data/colour.json`, which turns
+"""Fits a model of Titan's haze beyond its disc to Cassini's frames, for the mod's `titan.glsl`, and
+prints the shader's numbers. Run `compose.py` first: it writes `data/colour.json`, which turns
 the haze's I/F into the texture's colours.
 
     python3 haze.py data frames.json haze.json
@@ -44,9 +44,10 @@ The fit:
   the stray light (`FITTED`), each bin weighted by `RELATIVE` of its I/F plus `ABSOLUTE`. The haze's
   numbers are shared by all the filter's frames; the stray light, and each high-phase frame's centre,
   within `MOST_SHIFT` km, are each frame's own.
-- It prints each filter's numbers, each frame's own, and the constants for `titan_haze.glsl`, in
+- It prints each filter's numbers, each frame's own, and the constants for `titan.glsl`, in
   the order blue, green, red, with the matrix that turns the three filters' I/F into the texture's
-  linear sRGB (`data/colour.json`).
+  linear sRGB (`data/colour.json`) and the cosine of the scattering angle at the mean phase of the
+  texture's frames.
 """
 import json
 import multiprocessing
@@ -304,6 +305,9 @@ if __name__ == '__main__':
     for listing, high in [(low_listing, False), (high_listing, True)]:
         with open(listing) as f:
             frames += prepare(data, json.load(f)['frames'], high)
+    # The phase the texture shows Titan at: the mean of its frames', the low-phase ones.
+    with open(low_listing) as f:
+        texture_phase = np.mean([frame['phase'] for frame in json.load(f)['frames']])
     order = sorted(cassini.FILTERS, key=cassini.FILTERS.get)
     with multiprocessing.Pool(len(order)) as pool:
         fitted = dict(zip(order, pool.map(fit_filter, [[f for f in frames if f['filter'] == name] for name in order])))
@@ -313,7 +317,7 @@ if __name__ == '__main__':
         for f, own in zip([f for f in frames if f['filter'] == name], owns):
             print(f"  {f['name']} at {f['phase']:.1f} degrees: " + ', '.join(f'{k} {v:.4g}' for k, v in zip(OWN, own)))
     haze = np.array([fitted[name][0] for name in order]).T
-    print('for titan_haze.glsl:')
+    print('for titan.glsl:')
     print(f'const float titanHazeUnit = {UNIT:.1f};')
     print(f'const float titanHazeBase = {BASE:.1f};')
     print(f'const float titanHazeTop = {TOP:.1f};')
@@ -323,6 +327,7 @@ if __name__ == '__main__':
     print(f'const vec3 titanHazeLayer = {vec3(np.exp(haze[2]), 4)};')
     print(f'const vec3 titanHazeLayerHeight = {vec3(haze[3], 4)};')
     print(f'const vec3 titanHazeLayerWidth = {vec3(haze[4], 3)};')
+    print(f'const float titanHazeTextureCosine = {-np.cos(np.radians(texture_phase)):.3f};')
     print(f'const vec3 titanHazeAlbedo = {vec3(haze[5], 3)};')
     print(f'const vec3 titanHazeFirstLobe = {vec3(haze[6], 3)};')
     print(f'const vec3 titanHazeSecondLobe = {vec3(haze[7], 3)};')

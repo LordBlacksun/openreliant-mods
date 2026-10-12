@@ -585,8 +585,8 @@ blue fringe from the front, and with the sun behind Titan, a bright ring round t
 
 | Source | What it is | Licence | Used |
 |---|---|---|---|
-| Cassini's narrow-angle camera, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2060 volume, with their geometry from the volume's index | Public domain (NASA/JPL/Space Science Institute) | Yes, 12 frames in the blue, green and red filters from January and February 2010, for the texture and the haze beyond the disk |
-| The same camera at high phase, through [OPUS](https://opus.pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2053 to COISS_2064 volumes, with their geometry from OPUS and the clock angle of Titan's pole from the volumes' indexes | Public domain (NASA/JPL/Space Science Institute) | Yes, 33 frames in the blue, green and red filters from February 2009 to August 2010, for the haze beyond the disk |
+| Cassini's narrow-angle camera, through the [PDS Ring-Moon Systems Node](https://pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2060 volume, with their geometry from the volume's index | Public domain (NASA/JPL/Space Science Institute) | Yes, 12 frames in the blue, green and red filters from January and February 2010, for the texture and the haze |
+| The same camera at high phase, through [OPUS](https://opus.pds-rings.seti.org/) | Frames calibrated to I/F with CISSCAL, from the COISS_2053 to COISS_2064 volumes, with their geometry from OPUS and the clock angle of Titan's pole from the volumes' indexes | Public domain (NASA/JPL/Space Science Institute) | Yes, 33 frames in the blue, green and red filters from February 2009 to August 2010, for the haze |
 | [PIA22770](https://science.nasa.gov/photojournal/titan-mosaic-the-surface-under-the-haze), "Titan Mosaic: The Surface Under the Haze" (2018) | Cassini's map of the surface's normal albedo at 938 nm, from 9,873 frames taken over 13 years, the haze taken out with a model of it, at 16 pixels a degree | Free to use with credit (JPL's image use policy) | Yes, for the surface |
 | [The USGS's global mosaic of Titan](https://astrogeology.usgs.gov/search/map/titan_cassini_iss_global_mosaic_4005m) | The surface at 938 nm from Cassini's frames, at about 4 km a pixel | Public domain | No: PIA22770 is sharper |
 | E. Karkoschka's spectra, through the [PDS Atmospheres Node](https://pds-atmospheres.nmsu.edu/) | Titan's geometric albedo from 300 to 1000 nm, measured in July 1993 | NASA Planetary Data System | For the colour |
@@ -626,12 +626,13 @@ blue fringe from the front, and with the sun behind Titan, a bright ring round t
   as Jupiter's 0.3 is of Jupiter's.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
 
-### The haze beyond the disk
+### The haze over and beyond the disk
 
-A surface function, `titan_haze.glsl`, draws Titan's haze beyond its disk on the ring that
-OpenReliant draws round a planet whose records name one (`records.luau`). It works out, for each
-pixel, the sunlight that a model of the haze scatters toward the camera, with the model's numbers
-fitted to Cassini's frames by `titan/haze.py`.
+A surface function, `titan.glsl`, lights Titan's disk by Minnaert's law as `minnaert.glsl` lights the
+other bodies, and adds the haze in front of the disk. It also draws the haze beyond the disk, on the
+ring that OpenReliant draws behind a planet whose records name one (`records.luau`). For each pixel
+it works out the sunlight that a model of the haze scatters toward the camera, with the model's
+numbers fitted to Cassini's frames by `titan/haze.py`.
 
 - The frames: the twelve at 28 to 50 degrees of phase that the texture comes from, and 33 more,
   eleven sets in the blue, green and red filters from February 2009 to August 2010, around Titan's
@@ -676,23 +677,36 @@ fitted to Cassini's frames by `titan/haze.py`.
   60 times as bright as light scattered by 150 degrees in red and green, and 17 times in blue.
 - The colour: the three filters' I/F becomes the game's colour as the texture's does, Karkoschka's
   spectrum of Titan bent through each filter's brightness over the frames' mean, at the texture's
-  scale. `compose.py` writes that matrix to `data/colour.json`.
+  scale, its blue divided by the key light's as the texture's is, since the sun lights the haze as
+  it lights the disk. `compose.py` writes that matrix to `data/colour.json`.
+- Over the disk: the texture is Titan as Cassini saw it at a mean of 35 degrees of phase, its haze
+  included. So the haze in front of the disk adds only what its phase function gives beyond what it
+  gives at 35 degrees: nothing at low phase, and with the sun behind Titan the crescent that its
+  forward scattering lights. The line of sight is followed from the top of the haze down to the
+  disk. The haze is added in linear light and lit by the sun as the disk is (OpenReliant's
+  `scattered`), so that it adds the same light over the lit crescent as beyond the edge.
 - The shader follows each pixel's line of sight in 32 steps, closest where it passes nearest Titan,
-  within 3% of the model's 96. A pixel that spans more than half the thinnest scale height takes up
-  to 4 lines of sight across it, so that the haze doesn't shimmer as Titan grows small, and the haze
-  fades over a pixel inside the disk's edge, where the edge's pixels show the sky round it too.
+  or where it meets the disk, within 3% of the model's 96. A pixel that spans more than half the
+  thinnest scale height takes up to 4 lines of sight across it, so that the haze doesn't shimmer as
+  Titan grows small. At the disk's edge, each pixel shows the disk and the sky round it: the disk
+  takes the lines of sight that meet it, and the ring those that pass beyond.
+- A quarter of the haze's light blooms, beyond the disk and over it, as the game's bloom would spread
+  the bright ring of a backlit Titan well past what Cassini saw. Titan's own lit disk blooms in
+  full, as the other bodies do.
 - The check: drawn in the game without its bloom, from 20 of Titan's radii at the phases of three of
   the sets, 28, 141 and 160 degrees, the haze beyond the disk matches Cassini's frames composed in
-  the same colours, within about a tenth in brightness, and in its thickness and colour, the
-  detached layer included, both sunward and at right angles to the sun. The game's bloom spreads
-  the bright ring further, and doubles its brightness just outside the edge at 141 degrees. From
-  nearer, the ring's sunward side grows brighter and broader, as the lines of sight from close by
-  scatter the light by smaller angles.
-- What it leaves out: light scattered more than once, so that the ring's brightest part, where the
-  line of sight crosses about one optical depth of haze, comes out about a fifth too faint; and the
-  haze's differences round Titan, such as its brighter south in blue and the polar hoods. At high phase the
-  disk itself, lit by Minnaert's law fitted at 28 to 50 degrees, shows a thinner crescent than
-  Cassini saw ([#46](https://github.com/OpenReliant/openreliant-mods/issues/46)).
+  the same colours, within about a tenth in brightness, and in its thickness, the detached layer
+  included, both sunward and at right angles to the sun. Over the disk, along the sun's direction,
+  the crescent at 141 degrees matches Cassini's within about 15% from 150 km inside the edge out to
+  it. Drawn with the bloom, it all matches as closely. From nearer, the ring's sunward side grows
+  brighter and broader, as the lines of sight from close by scatter the light by smaller angles.
+- What it leaves out: light scattered more than once
+  ([#49](https://github.com/OpenReliant/openreliant-mods/issues/49)), so that the ring's brightest
+  part, where the line of sight crosses about one optical depth of haze, comes out about a fifth too
+  faint, and at 160 degrees the crescent over the disk is 0.6 of Cassini's at the edge and a
+  quarter 100 km inside; and the haze's differences round Titan, such as its brighter south in blue
+  and the polar hoods. The haze takes the texture's colours, which keep only about three quarters of
+  Titan's blue in the game ([#48](https://github.com/OpenReliant/openreliant-mods/issues/48)).
 
 ## Jupiter's moons
 
@@ -963,8 +977,9 @@ before.
   unchanged.
 - With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
   terminator is soft, as a hazy planet's is, and it stands where the sun sets.
-- A surface function on the planet only draws on its disk. Titan's haze beyond the disk is drawn by
-  a function of its own ([The haze beyond the disk](#the-haze-beyond-the-disk)). The other bodies'
+- A surface function on the planet only draws on its disk. Titan's adds its haze in front of the
+  disk, and draws its haze beyond the disk on a ring of its own
+  ([The haze over and beyond the disk](#the-haze-over-and-beyond-the-disk)). The other bodies'
   haze beyond the disk, such as Earth's thin blue limb, is
   [#45](https://github.com/OpenReliant/openreliant-mods/issues/45).
 
@@ -995,12 +1010,12 @@ moons and Triton, and 740 MB for Earth, and makes the same textures again.
 - Cassini imaging: NASA/JPL/Space Science Institute, in the public domain, from NASA's Photojournal
   (PIA07782 and PIA11142), and Titan's frames from the PDS Ring-Moon Systems Node's COISS_2053 to
   COISS_2064 volumes, calibrated with CISSCAL.
-- Titan's haze beyond the disk: S. Chapman, "The absorption and ionising effect of monochromatic
-  radiation in an atmosphere on a rotating earth, part II: grazing incidence", Proceedings of the
-  Physical Society 43 (1931); L. G. Henyey and J. L. Greenstein, "Diffuse radiation in the Galaxy",
-  The Astrophysical Journal 93 (1941); and for the detached layer's height, R. A. West and others,
-  "The evolution of Titan's detached haze layer near equinox in 2009", Geophysical Research Letters
-  38, L06204 (2011), [doi:10.1029/2011GL046843](https://doi.org/10.1029/2011GL046843).
+- Titan's haze: S. Chapman, "The absorption and ionising effect of monochromatic radiation in an
+  atmosphere on a rotating earth, part II: grazing incidence", Proceedings of the Physical Society
+  43 (1931); L. G. Henyey and J. L. Greenstein, "Diffuse radiation in the Galaxy", The Astrophysical
+  Journal 93 (1941); and for the detached layer's height, R. A. West and others, "The evolution of
+  Titan's detached haze layer near equinox in 2009", Geophysical Research Letters 38, L06204 (2011),
+  [doi:10.1029/2011GL046843](https://doi.org/10.1029/2011GL046843).
 - Cassini's map of Titan's surface at 938 nm: NASA/JPL-Caltech/University of Arizona, from NASA's
   Photojournal (PIA22770), free to use with this credit under JPL's image use policy.
 - Cassini's global maps of Saturn: L. Li, R. West, X. Jiang and B. Knowles, "Cassini ISS Global Maps

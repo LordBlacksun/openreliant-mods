@@ -57,7 +57,8 @@ A mod is a folder with a `mod.ini`, in the folder of its category under [`mods/`
 `mods/ships/fighters/viper`. The folder's name is the mod's name, which its archive and its things
 are named after, so it must be the only mod of that name in the collection. Give it a `mod.png`
 thumbnail and a `license.txt` with its credits and licence, and open a pull request. Pictures for
-its page on the site go in `sources/<mod>/screenshots`, as PNG, JPEG or WebP files.
+its page on the site go in `sources/<mod>/screenshots`, as PNG, JPEG or WebP files. The page shows
+them after the thumbnail, in the order of their names.
 
 Every other folder under `mods/` is a category, and a category can hold categories of its own,
 such as `ships/fighters/alliance`. Its `README.md` gives its name as its first heading and what goes

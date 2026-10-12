@@ -1,7 +1,7 @@
 #!/bin/sh
 # Makes Titan's texture from Cassini's frames and map and Karkoschka's spectrum, prints its limb's
 # exponents, and fits its haze beyond the disc to Cassini's frames at low and high phase, printing the
-# numbers for titan_haze.glsl, as the mod's README.md describes. Run it from this folder, with Python 3,
+# numbers for titan.glsl, as the mod's README.md describes. Run it from this folder, with Python 3,
 # numpy, scipy and ImageMagick 7. It downloads about 200 MB into data.
 set -eu
 python3 fetch.py frames.json haze.json data
