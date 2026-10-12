@@ -12,10 +12,11 @@ are then planetocentric, as `sphere.py`'s spheres take them.
 
 `--ring` adds a ring in the plane of the equator, from its strip of a texture, as `sphere.py` writes it,
 between an inner and an outer radius, in the equator's radii. It's drawn as the mod's surface
-function `rings.glsl` draws it, lit as if the sun stood at `--ring-sun`, the cosine of its angle from
-the ring's pole, but blended in linear light. The planet hides the ring behind it, and neither
-shadows the other. `--extent` is how many of the equator's radii the picture reaches above and below
-the middle, and `--aspect` its width over its height.
+function `rings.glsl` draws it, lit by the sun on the side the sun shines on and by the light that
+comes through it on the other, but blended in linear light. The planet hides the ring behind it, and
+they shade each other as `saturn.glsl` and `rings.glsl` have it. `--extent` is how many of the
+equator's radii the picture reaches above and below the middle, and `--aspect` its width over its
+height.
 """
 import argparse
 import subprocess
@@ -38,9 +39,12 @@ def unit(lat, lon):
 
 def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), polar=1.0, ring=None, extent=1.0, aspect=1.0, least=0.0):
     """The picture, `size` pixels high. `k` is Minnaert's exponent, or one for each channel. `ring`
-    is the ring's texture, its inner and outer radius, and the cosine of the sun's angle from its
-    pole that it's lit for, or None. Nearer the limb than `least`, the cosine of the view, the limb's
-    factor stays as it is there."""
+    is the ring's texture and its inner and outer radius, or None. Nearer the limb than `least`, the
+    cosine of the view, the limb's factor stays as it is there.
+
+    The ring and the planet shade each other, as `saturn.glsl` and `rings.glsl` draw them in the
+    game: the ring lets through exp(-tau / mu0) of the sunlight to the planet behind it, and gets
+    none where the planet stands between it and the sun."""
     view = unit(lat, lon)                       # from the planet's centre toward the viewer
     north = np.array([0.0, 0.0, 1.0]) - view[2] * view
     north /= np.linalg.norm(north)
@@ -72,20 +76,47 @@ def render(tex, size, lat, lon, sun_lat, sun_lon, k, light=(1.0, 1.0, 1.0), pola
     mu, mu0 = np.clip(normal @ view, 0, 1), np.clip(normal @ sun, 0, 1)
     k = np.broadcast_to(np.asarray(k, dtype=float), (3,))
     shade = np.where(mu0[..., None] > 0, mu0[..., None] ** k * np.clip(mu, max(least, 1e-3), 1)[..., None] ** (k - 1), 0)
+    if ring is not None and abs(sun[2]) > 1e-6:
+        # The ring's shadow on the planet: where each point's ray toward the sun crosses the plane
+        # of the equator, the light the ring lets through there.
+        strip, inner, outer = ring
+        toward = -p[..., 2] / sun[2]
+        across = np.linalg.norm((p + toward[..., None] * sun)[..., :2], axis=-1)
+        shaded = disk & (toward > 0) & (across >= inner) & (across <= outer)
+        shade = shade * np.where(shaded, ring_clear(strip, inner, outer, across) ** (1 / abs(sun[2])), 1)[..., None]
     out = np.where(disk[..., None], albedo * shade * np.asarray(light), 0)
     if ring is not None and abs(view[2]) > 1e-6:
-        strip, inner, outer, ring_sun = ring
+        strip, inner, outer = ring
         # Where each ray crosses the plane of the equator, and whether that's in front of the planet.
         crossing = -plane[..., 2] / view[2]
-        radius = np.linalg.norm(plane + crossing[..., None] * view, axis=-1)
+        point = plane + crossing[..., None] * view
+        radius = np.linalg.norm(point, axis=-1)
         on_ring = (radius >= inner) & (radius <= outer) & (~disk | (crossing > t))
         texel = np.clip(((radius - inner) / (outer - inner) * strip.shape[1]).astype(int), 0, strip.shape[1] - 1)
         sample = strip[strip.shape[0] // 2, texel]
-        clear = 1 - sample[..., 3]
-        slant = abs(view[2])
-        scattered = sample[..., :3] * (ring_sun / (slant + ring_sun) * (1 - clear ** (1 / slant + 1 / ring_sun)))[..., None]
+        clear = np.clip(1 - sample[..., 3], 1e-6, 1)
+        slant, mu0 = abs(view[2]), abs(sun[2])
+        if view[2] * sun[2] > 0:
+            # The side the sun lights.
+            share = mu0 / (slant + mu0) * (1 - clear ** (1 / slant + 1 / mu0))
+        elif abs(slant - mu0) > 1e-3:
+            # The other side, lit by the light that comes through.
+            share = mu0 / (slant - mu0) * (clear ** (1 / slant) - clear ** (1 / mu0))
+        else:
+            share = -np.log(clear) / slant * clear ** (1 / slant)
+        # The planet's shadow: the ray from the ring toward the sun meets the flattened ball.
+        o, d = point * squeeze, sun * squeeze
+        ob = np.sum(o * d, axis=-1)
+        in_shadow = (ob < 0) & (ob * ob - (d @ d) * (np.sum(o * o, axis=-1) - 1) > 0)
+        scattered = sample[..., :3] * np.where(in_shadow, 0, share)[..., None]
         out = np.where(on_ring[..., None], scattered + (clear ** (1 / slant))[..., None] * out, out)
     return np.clip(out, 0, 1)
+
+
+def ring_clear(strip, inner, outer, radius):
+    """The share of the light the ring lets through seen face on, at `radius`."""
+    texel = np.clip(((radius - inner) / (outer - inner) * strip.shape[1]).astype(int), 0, strip.shape[1] - 1)
+    return np.clip(1 - strip[strip.shape[0] // 2, texel][..., 3], 1e-6, 1)
 
 
 def save(img, path):
@@ -107,11 +138,10 @@ def main():
     p.add_argument('--light', type=float, nargs=3, default=(1.0, 1.0, 1.0), metavar=('R', 'G', 'B'), help="the light's colour")
     p.add_argument('--polar', type=float, default=1.0, help="the polar radius over the equator's")
     p.add_argument('--ring', nargs=3, metavar=('TEXTURE', 'INNER', 'OUTER'), help="a ring's texture, and its radii in the equator's")
-    p.add_argument('--ring-sun', type=float, default=0.5, help="the cosine of the sun's angle from the ring's pole it's lit for")
     p.add_argument('--extent', type=float, default=1.0, help="the equator's radii the picture reaches above and below the middle")
     p.add_argument('--aspect', type=float, default=1.0, help="the picture's width over its height")
     a = p.parse_args()
-    ring = (load(a.ring[0], alpha=True), float(a.ring[1]), float(a.ring[2]), a.ring_sun) if a.ring else None
+    ring = (load(a.ring[0], alpha=True), float(a.ring[1]), float(a.ring[2])) if a.ring else None
     k = a.k[0] if len(a.k) == 1 else a.k
     save(render(load(a.texture), a.size, a.lat, a.lon, a.sun_lat, a.sun_lon, k, a.light, a.polar, ring, a.extent, a.aspect, a.least), a.out)
 
