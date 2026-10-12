@@ -12,10 +12,11 @@ The haze:
   in January and February 2010, months after Titan's equinox, with the sun over its equator and both
   poles lit. `frames.json` lists them, calibrated to I/F, with their geometry. Titan is about 800
   pixels across in them, at phase angles of 28 to 50 degrees.
-- Each frame's disc is fitted to its lit limb, where the brightness falls to half of that just
-  inside it. That's the haze's edge in the filter, about 2,710 km from the centre in red and green
-  and 2,840 km in blue, and it's the sphere the game draws.
-- Each pixel's latitude and the cosines of its angles of light and view come from the disc, the
+- Each frame's disk is fitted to its lit limb, where the brightness falls to half of that just
+  inside it. That's the haze's edge in the filter, at 28 to 33 degrees of phase about 2,710 km from
+  the centre in red, 2,730 km in green and 2,840 km in blue, and about 30 km higher at 50 degrees.
+  The game's sphere stands for green's, 2,741 km over the four sets (`haze.py`).
+- Each pixel's latitude and the cosines of its angles of light and view come from the disk, the
   frame's sub-spacecraft and sub-solar points, and the clock angle of Titan's pole in the frame.
 - Minnaert's law is fitted to each frame where the sun is more than `LEAST_HEIGHT` degrees up and
   the view more than that above the limb, each band of `BAND` degrees of latitude with its own
@@ -48,6 +49,7 @@ import numpy as np
 from scipy import ndimage
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cassini  # noqa: E402
 import globe  # noqa: E402
 import minnaert  # noqa: E402
@@ -83,8 +85,8 @@ least = np.sin(np.radians(LEAST_HEIGHT))
 for f in frames:
     image = cassini.trusted(cassini.frame(os.path.join(data, os.path.basename(f['urls'][1]))))
     cx, cy, radius = cassini.limb(image, f)
-    lat, mu, mu0, disc = cassini.geometry(image.shape, cx, cy, radius, f)
-    good = disc & (image > 0) & (mu > least) & (mu0 > least)
+    lat, mu, mu0, disk = cassini.geometry(image.shape, cx, cy, radius, f)
+    good = disk & (image > 0) & (mu > least) & (mu0 > least)
     bands = np.clip(((lat + 90) // BAND).astype(int), 0, len(centres) - 1)
     k, b = minnaert.fit(image, np.where(good, mu0, 1), np.where(good, mu, 1), good, bands)
     b = np.append(b, [np.nan] * (len(centres) - len(b)))

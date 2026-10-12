@@ -10,6 +10,8 @@ import re
 import numpy as np
 from scipy import ndimage, optimize
 
+import globe
+
 
 def label(path):
     """A PDS3 label's fields, the first value of each key."""
@@ -38,11 +40,6 @@ def pixel(fields):
     return np.deg2rad(float(fields['HORIZONTAL_PIXEL_FOV'].split()[0]))
 
 
-def unit(lat, lon):
-    la, lo = np.deg2rad(lat), np.deg2rad(lon)
-    return np.array([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
-
-
 class Body:
     """A body as an ellipsoid of revolution: its equatorial radius `a` and polar radius `c`, km."""
 
@@ -68,8 +65,8 @@ class View:
 
     def __init__(self, body, pixel, frame, cx=500.0, cy=500.0, twist=0.0, scale=1.0):
         self.body, self.pixel = body, pixel
-        self.observer = frame['distance_km'] * unit(frame['observer_lat'], frame['observer_east_lon'])
-        self.sun = unit(frame['sun_lat'], frame['sun_east_lon'])
+        self.observer = frame['distance_km'] * globe.unit(frame['observer_lat'], frame['observer_east_lon'])
+        self.sun = globe.unit(frame['sun_lat'], frame['sun_east_lon'])
         f = -self.observer / np.linalg.norm(self.observer)
         z = np.array([0.0, 0.0, 1.0])
         n = z - z.dot(f) * f

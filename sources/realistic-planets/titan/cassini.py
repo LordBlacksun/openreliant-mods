@@ -1,5 +1,5 @@
 """Cassini's calibrated frames of Titan, shared by `compose.py` and `haze.py`: a frame's I/F from its
-detached PDS3 label, the directions of its sky in Titan's frame, each pixel's geometry, and the disc
+detached PDS3 label, the directions of its sky in Titan's frame, each pixel's geometry, and the disk
 fitted to the lit limb.
 """
 import re
@@ -7,16 +7,18 @@ import re
 import numpy as np
 from scipy import ndimage
 
+import globe
+
 # Cassini's blue, green and red filters' effective wavelengths, nm, as for Saturn's maps (Wang and
 # others, 2025).
 FILTERS = {'BL1': 463.0, 'GRN': 568.0, 'RED': 647.0}
 # The highest I/F a frame's pixel can hold and be trusted: a higher one is a hot pixel or a cosmic ray.
 MOST_IF = 5.0
-# The limb fit. The first guess at the disc is the pixels brighter than `FIRST_GUESS` of the 99th
+# The limb fit. The first guess at the disk is the pixels brighter than `FIRST_GUESS` of the 99th
 # percentile. Rays `RAY_STEP` degrees apart run from the centre over `RAY_REACH` of the radius, in
 # `RAY_SAMPLES` steps, and the edge is where a ray's brightness falls to `EDGE` of its median between
 # `PLATEAU` of the radius. A ray counts where the sun's cosine at `LIT_AT` of the radius is at least
-# `LIT_LIMB`. The fit is repeated `FITS` times from the last disc.
+# `LIT_LIMB`. The fit is repeated `FITS` times from the last disk.
 FIRST_GUESS = 0.4
 RAY_STEP = 0.5
 RAY_REACH = (0.6, 1.4)
@@ -47,17 +49,11 @@ def trusted(image):
     return np.where(np.isfinite(image) & (image > 0) & (image < MOST_IF), image, 0)
 
 
-def unit(lat, lon):
-    """The unit vector toward a planetocentric latitude and east longitude, degrees."""
-    lat, lon = np.radians(lat), np.radians(lon)
-    return np.array([np.cos(lat) * np.cos(lon), np.cos(lat) * np.sin(lon), np.sin(lat)])
-
-
 def axes(f):
     """A frame's right and up directions on the sky, and the directions toward the observer and the
     sun, in Titan's frame: from the frame's sub-spacecraft and sub-solar points, and the clock angle
     of Titan's north pole in the frame."""
-    observer, sun = unit(f['observer_lat'], f['observer_east_lon']), unit(f['sun_lat'], f['sun_east_lon'])
+    observer, sun = globe.unit(f['observer_lat'], f['observer_east_lon']), globe.unit(f['sun_lat'], f['sun_east_lon'])
     north = np.array([0.0, 0.0, 1.0]) - observer[2] * observer
     north /= np.linalg.norm(north)
     across = np.cross(observer, north)
@@ -72,15 +68,22 @@ def geometry(shape, cx, cy, radius, f):
     right, up, observer, sun = axes(f)
     lines, samples = np.indices(shape).astype(np.float64)
     x, y = (samples - cx) / radius, (cy - lines) / radius
-    disc = x ** 2 + y ** 2 < 1
+    disk = x ** 2 + y ** 2 < 1
     mu = np.sqrt(np.clip(1 - x ** 2 - y ** 2, 0, None))
     point = x[..., None] * right + y[..., None] * up + mu[..., None] * observer
-    return np.degrees(np.arcsin(np.clip(point[..., 2], -1, 1))), mu, point @ sun, disc
+    return np.degrees(np.arcsin(np.clip(point[..., 2], -1, 1))), mu, point @ sun, disk
+
+
+def circle(points):
+    """The circle through `points`, (x, y) pixels, that fits them best, as its centre and radius: by
+    linear least squares on x^2 + y^2 = 2 cx x + 2 cy y + c."""
+    (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * points, np.ones(len(points))], (points ** 2).sum(axis=1), rcond=None)
+    return cx, cy, np.sqrt(c + cx ** 2 + cy ** 2)
 
 
 def limb(image, f):
-    """The disc's centre and radius, pixels, fitted to the lit limb: along rays from the centre, where
-    the brightness falls to `EDGE` of that just inside, and a circle through those points."""
+    """The disk's centre and radius, pixels, fitted to the lit limb: along rays from the centre,
+    where the brightness falls to `EDGE` of that just inside, and a circle through those points."""
     bright = image > FIRST_GUESS * np.percentile(image, 99)
     cy, cx = np.argwhere(bright).mean(axis=0)
     radius = np.sqrt(bright.sum() / np.pi)
@@ -104,7 +107,5 @@ def limb(image, f):
             x, y = cx + np.cos(angle) * edge, cy - np.sin(angle) * edge
             if 0 <= x < image.shape[1] - 1 and 0 <= y < image.shape[0] - 1:
                 edges.append((x, y))
-        edges = np.array(edges)
-        (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * edges, np.ones(len(edges))], (edges ** 2).sum(axis=1), rcond=None)
-        radius = np.sqrt(c + cx ** 2 + cy ** 2)
+        cx, cy, radius = circle(np.array(edges))
     return cx, cy, radius

@@ -5,7 +5,6 @@ the PDS Atmospheres Node.
 
     python3 fetch.py frames.json haze.json data
 """
-import json
 import os
 import sys
 
@@ -15,8 +14,4 @@ import download  # noqa: E402
 SURFACE = 'https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia22/pia22770/PIA22770.tif'
 
 listings, out = sys.argv[1:-1], sys.argv[-1]
-urls = []
-for listing in listings:
-    with open(listing) as f:
-        urls += [url for frame in json.load(f)['frames'] for url in frame['urls']]
-download.fetch(urls + [SURFACE] + download.KARKOSCHKA, out)
+download.fetch(download.listed(listings) + [SURFACE] + download.KARKOSCHKA, out)

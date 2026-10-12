@@ -597,8 +597,9 @@ blue fringe from the front, and with the sun behind Titan, a bright ring round t
   on 30 January and 16 February 2010, months after Titan's equinox, with the sun over its equator
   and both poles lit. Titan is about 800 pixels across in them, at phase angles of 28 to 50 degrees.
 - Each frame's disk is fitted to its lit limb, where the brightness falls to half of that just inside
-  it. That's the haze's edge in the filter, about 2,710 km from the centre in red, 2,730 km in green
-  and 2,840 km in blue, and the game's sphere stands for it.
+  it. That's the haze's edge in the filter, at 28 to 33 degrees of phase about 2,710 km from the
+  centre in red, 2,730 km in green and 2,840 km in blue, and about 30 km higher at 50 degrees. The
+  game's sphere stands for green's, 2,741 km over the four sets.
 - Each pixel's latitude and the cosines of its angles of light and view come from the disk, the
   frame's sub-spacecraft and sub-solar points, and the angle of Titan's north pole in the frame, from
   the volume's index. The sun's cosine follows the frames' brightness closely, which confirms the
@@ -632,7 +633,8 @@ A surface function, `titan.glsl`, lights Titan's disk by Minnaert's law as `minn
 other bodies, and adds the haze in front of the disk. It also draws the haze beyond the disk, on the
 ring that OpenReliant draws behind a planet whose records name one (`records.luau`). For each pixel
 it works out the sunlight that a model of the haze scatters toward the camera, with the model's
-numbers fitted to Cassini's frames by `titan/haze.py`.
+numbers fitted to Cassini's frames by `titan/haze.py`. The model is in `haze.glsl`, and the fit works
+it out in the same way in `scattering.py`.
 
 - The frames: the twelve at 28 to 50 degrees of phase that the texture comes from, and 33 more,
   eleven sets in the blue, green and red filters from February 2009 to August 2010, around Titan's
@@ -684,7 +686,8 @@ numbers fitted to Cassini's frames by `titan/haze.py`.
   gives at 35 degrees: nothing at low phase, and with the sun behind Titan the crescent that its
   forward scattering lights. The line of sight is followed from the top of the haze down to the
   disk. The haze is added in linear light and lit by the sun as the disk is (OpenReliant's
-  `scattered`), so that it adds the same light over the lit crescent as beyond the edge.
+  `scattered`), so that it adds the same light over the lit crescent as beyond the edge, where
+  OpenReliant adds the ring's light to the sky in linear light too.
 - The shader follows each pixel's line of sight in 32 steps, closest where it passes nearest Titan,
   or where it meets the disk, within 3% of the model's 96. A pixel that spans more than half the
   thinnest scale height takes up to 4 lines of sight across it, so that the haze doesn't shimmer as
@@ -921,9 +924,9 @@ planet, and its night side shows its city lights, from NASA's Black Marble
 
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
 The mod's player script, `planets.luau`, draws this with a surface function on each body's
-texture: `minnaert.glsl`, or for Saturn `saturn.glsl` and for Earth `earth.glsl`, which add the
-ring's shadow and the city lights. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as
-before.
+texture: `minnaert.glsl`, or for Saturn `saturn.glsl`, for Earth `earth.glsl` and for Titan
+`titan.glsl`, which add the ring's shadow, the city lights and the haze. Each takes the law from
+`limb.glsl`. It needs PER-PIXEL LIGHTING; without it, the planets are drawn as before.
 
 - The function applies Minnaert's law in full. The part that depends on the sun, mu0^k, sets how
   much of the sun lights the pixel, and the part that depends on the view, mu^(k-1), goes into the

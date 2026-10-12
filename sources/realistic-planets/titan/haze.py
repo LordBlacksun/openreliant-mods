@@ -1,4 +1,4 @@
-"""Fits a model of Titan's haze beyond its disc to Cassini's frames, for the mod's `titan.glsl`, and
+"""Fits a model of Titan's haze beyond its disk to Cassini's frames, for the mod's `titan.glsl`, and
 prints the shader's numbers. Run `compose.py` first: it writes `data/colour.json`, which turns
 the haze's I/F into the texture's colours.
 
@@ -10,32 +10,24 @@ The frames:
   texture from, and `haze.json`'s 33: eleven sets in the blue, green and red filters from February
   2009 to August 2010, around Titan's equinox, at phase angles of 140 to 164 degrees. With the sun
   behind Titan, the haze scatters the sunlight toward the camera and shows as a bright ring round the
-  dark disc, and above it the detached haze layer as a fainter one.
+  dark disk, and above it the detached haze layer as a fainter one.
 - The sun's direction in each frame comes from the frame's geometry (`cassini.axes`).
-- A low-phase frame's disc is fitted to its lit limb as `compose.py` fits it (`cassini.limb`), so
-  that heights here match the texture's edges. A high-phase frame has no lit disc: its centre is
+- A low-phase frame's disk is fitted to its lit limb as `compose.py` fits it (`cassini.limb`), so
+  that heights here match the texture's edges. A high-phase frame has no lit disk: its centre is
   fitted to the outer edge of the ring on the sun's side, where the brightness along each ray falls to
   a quarter of its peak, and the fit below moves it further where the model needs.
 - Each frame's sky, the median more than `SKY_FROM` km beyond `BASE`, is taken off, and its I/F is
   averaged in bins of height above `BASE` and of angle from the sun's direction.
 
-The model, which the shader works out for each pixel in the same way:
+The model (`scattering.py`), which the shader works out for each pixel in the same way:
 
-- A sky point's I/F is the sunlight that the haze along its line of sight scatters toward the camera
-  once: omega P(theta) / 4 times the integral of the extinction along the line, each point weighted
-  by the share of the sunlight that reaches it, exp(-tau_sun), and the share of the light it scatters
-  that reaches the camera, exp(-tau_view). Light scattered more than once is left out.
 - In each filter, the extinction is the main haze's, falling exponentially with height above `BASE`,
-  and the detached layer's, a Gaussian in height. Both are the same all round Titan.
-- tau_sun is the main haze's optical depth toward the sun, Chapman's grazing-incidence integral
-  (S. Chapman, Proc. Phys. Soc. 43, 1931): at radius r, with x = r / H, the extinction there times
-  H sqrt(pi x / 2) exp(y^2) erfc(y), y = sqrt(x / 2) cos chi, for a sun cos chi above the horizon;
-  below it, twice the integral from the line's lowest point, less that back from r. The detached
-  layer is optically thin, and is left out of it.
-- P is the sum of two Henyey-Greenstein lobes (L. G. Henyey and J. L. Greenstein, ApJ 93, 1941), the
-  first taking `share` of the light.
+  and the detached layer's, a Gaussian in height. Both are the same all round Titan. The detached
+  layer is optically thin, and is left out of the sunlight's depth.
+- The phase function is the sum of two Henyey-Greenstein lobes, the first taking `share` of the
+  light.
 - The camera blurs each frame by a Gaussian of `BLUR` pixels, and its stray light lifts the sky round
-  the bright disc and ring: an exponential tail in height, with its own length, and a constant, in
+  the bright disk and ring: an exponential tail in height, with its own length, and a constant, in
   each frame.
 
 The fit:
@@ -44,10 +36,10 @@ The fit:
   the stray light (`FITTED`), each bin weighted by `RELATIVE` of its I/F plus `ABSOLUTE`. The haze's
   numbers are shared by all the filter's frames; the stray light, and each high-phase frame's centre,
   within `MOST_SHIFT` km, are each frame's own.
-- It prints each filter's numbers, each frame's own, and the constants for `titan.glsl`, in
-  the order blue, green, red, with the matrix that turns the three filters' I/F into the texture's
-  linear sRGB (`data/colour.json`) and the cosine of the scattering angle at the mean phase of the
-  texture's frames.
+- It prints each filter's numbers, each frame's own, and the haze for `titan.glsl`
+  (`scattering.constructor`), in the order blue, green, red, with the matrix that turns the three
+  filters' I/F into the texture's linear sRGB (`data/colour.json`) and the cosine of the scattering
+  angle at the mean phase of the texture's frames.
 """
 import json
 import multiprocessing
@@ -56,14 +48,15 @@ import sys
 
 import numpy as np
 from scipy import ndimage, optimize, sparse
-from scipy.special import erfcx
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import cassini  # noqa: E402
+import scattering  # noqa: E402
 
 # Heights are measured from `BASE` km from Titan's centre, about the haze's edge in red, and the haze
 # is cut off `TOP` km above it. The game's sphere is `UNIT` km: the haze's edge in green, where the
-# texture's disc ends (`compose.py`). The main haze's extinction is given `REFERENCE` km above `BASE`.
+# texture's disk ends (`compose.py`). The main haze's extinction is given `REFERENCE` km above `BASE`.
 BASE = 2710.0
 TOP = 700.0
 UNIT = 2741.0
@@ -95,6 +88,9 @@ RELATIVE, ABSOLUTE = 0.05, 3e-4
 MOST_SHIFT = 120.0
 BLUR = 0.6
 MOST_EVALUATIONS = 200
+# How much of the haze's light blooms, which the mod chooses rather than the fit: a quarter, as the
+# bloom would spread the bright haze of a backlit Titan well past what Cassini saw.
+BLOOM = 0.25
 # The steps along a line of sight, closest where it passes nearest Titan.
 STEPS, SPREAD = 96, 3.0
 # The haze's numbers, their first guesses and bounds: the main haze's extinction 100 km above `BASE`
@@ -151,9 +147,7 @@ def ring_centre(image, res, sun):
             j = i + beyond[0]
             edge = radii[j - 1] + (ray[j - 1] - RING_EDGE * peak) / (ray[j - 1] - ray[j]) * (radii[j] - radii[j - 1])
             points.append((cx + np.cos(a) * edge, cy - np.sin(a) * edge))
-        points = np.array(points)
-        (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * points, np.ones(len(points))], (points ** 2).sum(axis=1), rcond=None)
-        radius = np.sqrt(c + cx ** 2 + cy ** 2)
+        cx, cy, radius = cassini.circle(np.array(points))
     return cx, cy, radius
 
 
@@ -203,46 +197,23 @@ def prepare(data, frames, high):
     return prepared
 
 
-def lobe(g, cos_theta):
-    """Henyey and Greenstein's phase function of asymmetry `g`, at the scattering angle's cosine."""
-    return (1 - g * g) / (1 + g * g - 2 * g * cos_theta) ** 1.5
-
-
-def main_haze(r, log_extinction, scale):
-    """The main haze's extinction at radius r, km."""
-    return np.exp(np.minimum(log_extinction - (r - BASE - REFERENCE) / scale, 600.0))
-
-
-def toward_sun(r, cos_chi, log_extinction, scale):
-    """The main haze's optical depth from radius r toward the sun, cos_chi from the vertical."""
-    x = r / scale
-    here = main_haze(r, log_extinction, scale) * scale * np.sqrt(np.pi * x / 2) * erfcx(np.sqrt(x / 2) * np.abs(cos_chi))
-    lowest = r * np.sqrt(np.clip(1 - cos_chi ** 2, 0, 1))
-    through = 2 * main_haze(lowest, log_extinction, scale) * scale * np.sqrt(np.pi * (lowest / scale) / 2)
-    return np.where(cos_chi >= 0, here, through - here)
-
-
 def sky_iof(x, y, phase, haze):
     """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
-    from afar at `phase` degrees."""
+    from afar at `phase` degrees (`scattering.sky_light`)."""
     log_extinction, scale, log_layer, layer_height, layer_width, albedo, first, second, share = haze
-    a = np.radians(phase)
-    sun = np.array([np.sin(a), 0.0, np.cos(a)])
-    through = np.hypot(x, y)
-    chord = np.sqrt(np.clip((BASE + TOP) ** 2 - through ** 2, 0, None))
-    u = np.linspace(-1, 1, STEPS)
-    along = chord[..., None] * np.sinh(SPREAD * u) / np.sinh(SPREAD)
-    step = chord[..., None] * SPREAD * np.cosh(SPREAD * u) / np.sinh(SPREAD) * (u[1] - u[0])
-    r = np.sqrt(through[..., None] ** 2 + along ** 2)
-    cos_chi = (x[..., None] * sun[0] + y[..., None] * sun[1] + along * sun[2]) / r
-    layer = (r - BASE - layer_height) / layer_width
-    extinction = main_haze(r, log_extinction, scale) + np.exp(log_layer - 0.5 * layer ** 2)
-    piece = extinction * step
-    # The depth from each step to the camera, at +along: the steps beyond it.
-    depth = np.cumsum(piece[..., ::-1], axis=-1)[..., ::-1] - 0.5 * piece
-    light = np.sum(piece * np.exp(-toward_sun(r, cos_chi, log_extinction, scale) - depth), axis=-1)
-    cos_theta = -np.cos(a)
-    return albedo * (share * lobe(first, cos_theta) + (1 - share) * lobe(second, cos_theta)) * light / 4
+    reference = BASE + REFERENCE
+
+    def extinction(r):
+        layer = (r - BASE - layer_height) / layer_width
+        return scattering.main_haze(r, reference, log_extinction, scale) + np.exp(log_layer - 0.5 * layer ** 2)
+
+    # The detached layer is optically thin, and is left out of the sunlight's depth.
+    def sun_depth(r, cos_chi):
+        return scattering.toward_sun(r, cos_chi, reference, log_extinction, scale)
+
+    light = scattering.sky_light(x, y, phase, extinction, sun_depth, BASE + TOP, STEPS, SPREAD)
+    cos_theta = -np.cos(np.radians(phase))
+    return albedo * (share * scattering.lobe(first, cos_theta) + (1 - share) * scattering.lobe(second, cos_theta)) * light / 4
 
 
 def fit_filter(frames):
@@ -292,11 +263,6 @@ def fit_filter(frames):
     return split(result.x)
 
 
-def vec3(values, digits):
-    """A GLSL vec3 of `values`, to `digits` significant digits."""
-    return 'vec3(' + ', '.join(f'{v:.{digits}g}' for v in values) + ')'
-
-
 if __name__ == '__main__':
     data, low_listing, high_listing = sys.argv[1:4]
     with open(os.path.join(data, 'colour.json')) as f:
@@ -317,19 +283,10 @@ if __name__ == '__main__':
         for f, own in zip([f for f in frames if f['filter'] == name], owns):
             print(f"  {f['name']} at {f['phase']:.1f} degrees: " + ', '.join(f'{k} {v:.4g}' for k, v in zip(OWN, own)))
     haze = np.array([fitted[name][0] for name in order]).T
+    # The fit stops a hair short of its bounds: a first lobe within a millionth of all the light takes
+    # all of it.
+    share = np.where(haze[8] > 1 - 1e-6, 1.0, haze[8])
     print('for titan.glsl:')
-    print(f'const float titanHazeUnit = {UNIT:.1f};')
-    print(f'const float titanHazeBase = {BASE:.1f};')
-    print(f'const float titanHazeTop = {TOP:.1f};')
-    print(f'const float titanHazeReference = {REFERENCE:.1f};')
-    print(f'const vec3 titanHazeExtinction = {vec3(np.exp(haze[0]), 4)};')
-    print(f'const vec3 titanHazeScale = {vec3(haze[1], 4)};')
-    print(f'const vec3 titanHazeLayer = {vec3(np.exp(haze[2]), 4)};')
-    print(f'const vec3 titanHazeLayerHeight = {vec3(haze[3], 4)};')
-    print(f'const vec3 titanHazeLayerWidth = {vec3(haze[4], 3)};')
-    print(f'const float titanHazeTextureCosine = {-np.cos(np.radians(texture_phase)):.3f};')
-    print(f'const vec3 titanHazeAlbedo = {vec3(haze[5], 3)};')
-    print(f'const vec3 titanHazeFirstLobe = {vec3(haze[6], 3)};')
-    print(f'const vec3 titanHazeSecondLobe = {vec3(haze[7], 3)};')
-    print(f'const vec3 titanHazeFirstShare = {vec3(haze[8], 3)};')
-    print('const mat3 titanHazeColour = mat3(' + ', '.join(f'{v:.5f}' for name in order for v in colours[name]) + ');')
+    print(scattering.constructor(
+        'titanHaze', UNIT, BASE + REFERENCE, BASE + TOP, np.exp(haze[0]), haze[1], np.exp(haze[2]), BASE + haze[3], haze[4],
+        -np.cos(np.radians(texture_phase)), haze[5], haze[6], haze[7], share, 1 - share, [colours[name] for name in order], BLOOM))
