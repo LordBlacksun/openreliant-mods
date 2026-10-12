@@ -9,8 +9,8 @@ folder.
 **Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
 and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. The mod needs OpenReliant 0.12.
 Each body is lit by Minnaert's law in full, Saturn and its ring shade each other, Earth is a planet
-with its city lights on its night side, Neptune's, Saturn's and Titan's haze show beyond their
-disks, and every body turns and leans as it really does, sixty times as fast.
+with its city lights on its night side, Neptune's, Saturn's, Venus's and Titan's haze show beyond
+their disks, and every body turns and leans as it really does, sixty times as fast.
 
 ## The game's planets
 
@@ -684,6 +684,8 @@ the blue, and hardly at all in green and red.
 | Venus Express's camera, VMC, through [ESA's Planetary Science Archive](https://archives.esac.esa.int/psa/ftp/VENUS-EXPRESS/VMC/) | Pictures at 365, 513, 965 and 1010 nm from 2006 to 2014, with each pixel's latitude and angles | CC BY-NC 3.0 IGO | For the limb |
 | A. Mallama, B. Krobusek and H. Pavlov (2017) | Venus's geometric albedos in the Johnson and Sloan bands, and its phase curves | Published values | For the colour |
 | A. Payne and others (2025) | Venus's spectrum, from MESSENGER's spectra of one region, scaled to Mallama's albedo in V | Published values | No: yellower than Venus seen whole, B-V 0.92 |
+| M. Luginin and others (2016) | The upper haze from Venus Express's SPICAV IR, 222 solar occultations from 2006 to 2014: its droplets' sizes and numbers, and its scale height | Published values | For the haze |
+| J. E. Hansen and J. W. Hovenier (1974) | The cloud droplets' refractive index and spread of sizes, from the polarisation of Venus's light | Published values | For the haze's droplets |
 
 ### The map
 
@@ -730,6 +732,50 @@ the blue, and hardly at all in green and red.
   limb about as a plain ball does (see below), so the texture's mean luminance is 0.41, 1.36 times
   Jupiter's 0.3.
 - As for the others, the texture's blue is divided by 0.8 for the game's light.
+
+### Venus's haze
+
+`venus.glsl` adds Venus's upper haze over the disk and beyond it, with the model of the other bodies'
+haze from `haze.glsl`. The open archives hold no frames of Venus's limb sharp enough to fit the haze
+to, as Titan's, Neptune's and Saturn's are: Venus Express's camera saw the limb from its apocentre at
+about 40 km a pixel, and the haze's scale height is a few km. So `venus/haze.py` builds the haze from
+what Venus Express measured of it.
+
+- SPICAV IR measured the upper haze, 70 to 95 km up, in 222 solar occultations from 2006 to 2014
+  (Luginin and others, 2016): droplets of two sizes, with effective radii of 0.12 and 0.84
+  micrometres, about 500 and 1 in a cubic centimetre at 75 km, and an aerosol scale height of 3.3
+  km.
+- The droplets are sulphuric acid, with the refractive index and the spread of sizes that the
+  polarisation of Venus's clouds shows (Hansen and Hovenier, 1974): about 1.44 in visible light, a
+  little more in blue and less in red, and a log-normal of effective variance 0.07.
+- Mie theory gives the droplets' extinction and phase function at 450, 550 and 650 nm. The haze's
+  extinction is their number times their cross-section, and it falls above 75 km with the measured
+  scale height. The small droplets scatter blue best, and give 80% of the extinction in blue and 55%
+  in red. The droplets absorb next to no visible light, so the haze's single-scattering albedo is 1.
+- The model's phase function, two Henyey-Greenstein lobes and Rayleigh's, is fitted to Mie's on its
+  logarithm at every degree, with the 30 degrees round the forward direction, where a backlit haze's
+  light comes from, counted three times. It follows Mie's within about 10% there, and within 20 to
+  30% elsewhere, short of the glory near the backward direction:
+
+  | | Blue, 450 nm | Green, 550 nm | Red, 650 nm |
+  |---|---|---|---|
+  | Extinction 5 km above the cloud tops | 0.022 per km | 0.014 per km | 0.010 per km |
+  | First lobe: asymmetry, share | 0.90, 0.10 | 0.87, 0.18 | 0.84, 0.28 |
+  | Second lobe: asymmetry, share | 0.56, 0.88 | 0.49, 0.74 | 0.47, 0.56 |
+  | Rayleigh's share | 0.02 | 0.08 | 0.16 |
+
+- The game's sphere is the cloud tops, about 70 km up, which Akatsuki's maps show. Seen edge on,
+  the haze is about one optical depth thick about 10 km above them. It's cut off 60 km above them,
+  and `records.luau` gives Venus a ring out to 1.012 of its radius.
+- The colour: `compose.py` writes the matrix that turns the haze's I/F at the three wavelengths into
+  the texture's colours to `data/colour.json`, from Venus's spectrum, as the texture takes it. Over
+  the disk the haze adds only what its phase function gives beyond what it gives at the texture's 45
+  degrees, so at 60 degrees of phase Venus looks as before, and at high phase its crescent is
+  brighter and paler. Seen backlit, the haze is a line a few km thick along the lit limb.
+- What it leaves out: the light scattered more than once, as for Saturn's; the gas's own Rayleigh
+  scattering, a few per cent of the extinction in blue; the haze's change with latitude, whose scale
+  height runs from 2 to 5.5 km north of 60 degrees (Luginin and others, 2018); and the detached
+  layers at 80 to 90 km. No frames check it.
 
 ## Titan
 
@@ -1124,8 +1170,8 @@ planet, and its night side shows its city lights, from NASA's Black Marble
 A planet's haze changes how its sunlit limb looks against a plain ball's, mostly brightening it.
 The mod's player script, `planets.luau`, draws this with a surface function on each body's
 texture: `minnaert.glsl`, or for Saturn `saturn.glsl`, which adds the ring's shadow and the haze,
-for Earth `earth.glsl`, which adds the city lights, and for Neptune and Titan `neptune.glsl` and
-`titan.glsl`, which add the haze.
+for Earth `earth.glsl`, which adds the city lights, and for Neptune, Venus and Titan `neptune.glsl`,
+`venus.glsl` and `titan.glsl`, which add the haze.
 Each takes the law from `limb.glsl`. It needs PER-PIXEL LIGHTING; without it, the planets are drawn
 as before.
 
@@ -1181,9 +1227,10 @@ as before.
   unchanged.
 - With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
   terminator is soft, as a hazy planet's is, and it stands where the sun sets.
-- A surface function on the planet only draws on its disk. Neptune's, Saturn's and Titan's add
-  their haze in front of the disk, and draw their haze beyond the disk on a ring of their own
+- A surface function on the planet only draws on its disk. Neptune's, Saturn's, Venus's and Titan's
+  add their haze in front of the disk, and draw their haze beyond the disk on a ring of their own
   ([The haze at high phase](#the-haze-at-high-phase), [Saturn's haze](#saturns-haze),
+  [Venus's haze](#venuss-haze),
   [The haze over and beyond the disk](#the-haze-over-and-beyond-the-disk)). The other bodies' haze
   beyond the disk, such as Earth's thin blue limb, is
   [#45](https://github.com/OpenReliant/openreliant-mods/issues/45).
@@ -1255,6 +1302,11 @@ moons and Triton, and 740 MB for Earth, and makes the same textures again.
 - Venus's albedos and phase curves: A. Mallama, B. Krobusek and H. Pavlov, "Comprehensive wide-band
   magnitudes and albedos for the planets, with applications to exo-planets and Planet Nine", Icarus
   282 (2017).
+- Venus's haze: M. Luginin and others, "Aerosol properties in the upper haze of Venus from SPICAV
+  IR data", Icarus 277 (2016), and "Scale heights and detached haze layers in the mesosphere of
+  Venus from SPICAV IR data", Icarus (2018); J. E. Hansen and J. W. Hovenier, "Interpretation of the
+  polarization of Venus", Journal of the Atmospheric Sciences 31 (1974); Mie theory by S. Prahl's
+  miepython.
 - The geometric albedos of the Galilean moons, of Triton and of Earth: NASA's Jovian Satellite,
   Neptunian Satellite and Earth Fact Sheets.
 - Venus's spectrum considered: A. Payne, G. L. Villanueva and others, "A comprehensive spectroscopic

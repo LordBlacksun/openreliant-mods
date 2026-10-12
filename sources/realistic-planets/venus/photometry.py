@@ -1,5 +1,5 @@
 """Venus's spectrum in the visible, at the phase angle the texture takes its colour at, shared by
-`compose.py` and `limb.py`."""
+`compose.py`, `limb.py` and `haze.py`."""
 import numpy as np
 
 # Mallama, Krobusek and Pavlov (2017): Venus's geometric albedo in the Sloan bands and the Johnson B
@@ -17,6 +17,9 @@ BANDS = {
 # The phase angle whose colour the texture takes, degrees, and the Sun's B-V (Table 6).
 PHASE = 45.0
 SUN_B_V = 0.65
+# The wavelengths the haze is worked out at, nm, in blue, green and red (`haze.py`), whose I/F
+# `compose.py` turns into the texture's colours.
+HAZE = {'blue': 450.0, 'green': 550.0, 'red': 650.0}
 
 
 def fainter(coefficients):
