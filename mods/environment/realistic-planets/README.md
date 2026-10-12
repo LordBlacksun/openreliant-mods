@@ -893,7 +893,9 @@ before.
   unchanged.
 - With k below 1, mu0^k falls off more slowly than the sun's cosine as the sun sinks, so the
   terminator is soft, as a hazy planet's is, and it stands where the sun sets.
-- There's no glow outside the disk: a surface function only draws on the planet itself.
+- There's no glow outside the disk: a surface function only draws on the planet itself. The
+  atmosphere band that a mod can now set could draw Titan's blue fringe and Earth's thin blue limb
+  ([#45](https://github.com/OpenReliant/openreliant-mods/issues/45)).
 
 ## Making it again
 
