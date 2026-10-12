@@ -1,5 +1,5 @@
 """Single scattering of sunlight in a body's haze, as the mod's `haze.glsl` works it out for each
-pixel, for the bodies' fits (`titan/haze.py`).
+pixel, for the bodies' fits (`titan/haze.py`, `neptune/haze.py`).
 
 - A sky point's I/F is the sunlight that the haze along its line of sight scatters toward the camera
   once: omega P(theta) / 4 times the integral of the extinction along the line, each point weighted

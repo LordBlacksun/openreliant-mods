@@ -1,6 +1,7 @@
 -- Realistic Planets: how each body turns and leans, in OpenReliant's table of planets
--- (records.planets), Titan's haze beyond its disk, and Earth made a planet, so that the sun alone
--- lights it, as it lights the others. This is a load script: it runs once, as OpenReliant starts.
+-- (records.planets), Neptune's and Titan's haze beyond their disks, and Earth made a planet, so that
+-- the sun alone lights it, as it lights the others. This is a load script: it runs once, as
+-- OpenReliant starts.
 
 local records = require("openreliant.records")
 
@@ -18,7 +19,7 @@ local TIME_SCALE = 60
 -- pole stands about 30 degrees from the solar system's, and it turns westward, as it orbits
 -- Neptune.
 local BODIES = {
-    neptune = { day = 16.11, tilt = 28.32 },
+    neptune = { day = 16.11, tilt = 28.32, haze = { surface = "neptune_haze", inner = 0.98, outer = 1.013 } },
     triton = { day = -141.04, tilt = 30 },
     uranus = { day = -17.24, tilt = 82.23 },
     saturn = { day = 10.656, tilt = 26.73 },
@@ -40,8 +41,9 @@ local TILT_TOWARD = -math.pi / 2
 -- Sets a planet's spin and lean from its body. The band the game draws over the rim of Neptune,
 -- Uranus, Jupiter and Venus is left out, as each body's limb law, fitted to its measured photometry,
 -- already gives the rim its light. A body with a haze beyond its disk has it drawn by its surface
--- function (planets.luau) on a ring from `inner` to `outer` times its radius: Titan's haze reaches
--- about 700 km above its edge, a quarter of its radius.
+-- function (planets.luau) on a ring from `inner` to `outer` times its radius: Neptune's haze
+-- reaches 300 km above its edge, about a hundredth of its radius, and Titan's about 700 km, a
+-- quarter.
 local function apply(planet, body)
     planet.spin = 2 * math.pi * TIME_SCALE / (body.day * 3600)
     planet.tilt = math.rad(body.tilt)

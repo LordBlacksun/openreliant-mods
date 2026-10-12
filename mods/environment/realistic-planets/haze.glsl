@@ -1,12 +1,12 @@
 // Realistic Planets (planets.luau): a body's haze, by single scattering of sunlight, which a body's
-// function includes with its own numbers (`RealisticPlanetsHaze`), as titan.glsl does. The function
-// draws two things. On the body's texture, where parameters.w is the least cosine of the view for
-// Minnaert's law, it lights the disk by that law (limb.glsl) and adds the haze in front of it. On
-// the ring that OpenReliant draws behind the body for its atmosphere (records.luau), where the
-// parameters are 0, it draws the haze beyond the disk. The texture's points are in its model's
-// units, and the ring's in the body's radii. The mod's sources work the model out in the same way,
-// in sources/realistic-planets/scattering.py, to fit each body's numbers, and the mod's README
-// describes it.
+// function includes with its own numbers (`RealisticPlanetsHaze`), as neptune.glsl and titan.glsl
+// do. The function draws two things. On the body's texture, where parameters.w is the least cosine
+// of the view for Minnaert's law, it lights the disk by that law (limb.glsl) and adds the haze in
+// front of it. On the ring that OpenReliant draws behind the body for its atmosphere
+// (records.luau), where the parameters are 0, it draws the haze beyond the disk. The texture's
+// points are in its model's units, and the ring's in the body's radii. The mod's sources work the
+// model out in the same way, in sources/realistic-planets/scattering.py, to fit each body's
+// numbers, and the mod's README describes it.
 //
 // Each pixel's line of sight is followed through the haze in steps. Each step scatters the sunlight
 // that reaches it toward the eye, as much as its haze's extinction, single-scattering albedo and
