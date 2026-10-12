@@ -9,8 +9,9 @@ folder.
 **Status:** every body the game has is done: Neptune and Triton, Uranus, Saturn and Titan, Jupiter
 and its moons Io, Europa, Ganymede and Callisto, Earth and Venus. The mod needs OpenReliant 0.12.
 Each body is lit by Minnaert's law in full, Saturn and its ring shade each other, Earth is a planet
-with its city lights on its night side, every planet and Titan has its haze or air
-([The haze](#the-haze)), and every body turns and leans as it really does, sixty times as fast.
+with its city lights on its night side, every planet and Titan has its haze or air and a backlit
+crescent as bright as the spacecraft saw it ([The haze](#the-haze)), and every body turns and leans as
+it really does, sixty times as fast.
 
 ## The game's planets
 
@@ -913,6 +914,9 @@ and each comes from spacecraft frames or published measurements:
 - How it scatters: two Henyey-Greenstein lobes for its particles, each with an asymmetry, from -1
   backward to 1 forward, and a share of the light, and Rayleigh's phase function, the gas's, with the
   rest.
+- The thick haze at the cloud tops, below the sphere's edge: how strongly its forward light brightens
+  the disk, as a share of the texture's brightness, and its lobe's asymmetry. With the sun behind the
+  planet, this is most of the crescent's light.
 - The phase angle the texture shows the body at, and a matrix that turns the haze's three bands into
   the game's colours, as the texture takes the body's colours and brightness. The bands are a
   camera's filters or three wavelengths, from blue to red; for a body given in red, green and blue,
@@ -924,7 +928,9 @@ only high up, where the sun still reaches it. Beyond the disk the haze is drawn 
 OpenReliant draws behind a planet for its atmosphere (`records.luau`). Over the disk the texture
 already holds the body as seen at its own phase angle, haze included, so the haze adds only what its
 phase function gives beyond what it gives there: with the sun behind the body, the crescent its
-forward scattering lights.
+forward scattering lights. The cloud tops' haze adds its light over the disk in the same way, as
+single scattering off a thick layer, Lommel and Seeliger's law, mu0 / (mu0 + mu), times its own lobe,
+in the colour of the texture beneath it, so the crescent keeps the planet's colours and bands.
 
 | Body | Optical depth, blue to red | Scale height, km | Albedo | Scattering | Where the numbers come from |
 |---|---|---|---|---|---|
@@ -935,6 +941,21 @@ forward scattering lights.
 | Venus | 0.32, 0.21, 0.16 | 3.3 | 1 | two forward lobes, one for each size of droplet, with a little of Rayleigh's | SPICAV IR's occultations: sulphuric acid droplets of 0.12 and 0.84 micrometres, about 500 and 1 per cubic centimetre at 75 km, and the scale height (Luginin and others, 2016); their refractive index (Hansen and Hovenier, 1974); the lobes from Mie theory |
 | Titan | 2.55, 0.72, 0.37 | 24, 27, 30 | 1, 0.85, 0.92 | two forward lobes | Cassini's frames from 28 to 164 degrees of phase, in its blue, green and red filters, with a detached layer 288 km above the sphere, about 450 km above the ground (West and others, 2011) |
 | Earth | 0.219, 0.107, 0.069 | 8 | 1 | Rayleigh's alone | the air's Rayleigh scattering at the channels' wavelengths (Bucholtz, 1995); the texture holds the haze of dust and droplets low down |
+
+Each body's cloud tops' forward light is set to one measured crescent or phase curve:
+
+| Body | Strength | Lobe | Where it comes from |
+|---|---|---|---|
+| Neptune | 0.18 | 0.8 | Voyager 2's crescents: about 2.5 times the light Minnaert's law gives at 160 degrees, and the law's light within a tenth at 133 |
+| Uranus | 0.34 | 0.8 | Voyager 2's crescent at 147 degrees: about twice the law's light, within a tenth from 200 to 1,000 km inside the edge |
+| Saturn | 0.83 | 0.8 | Cassini's crescent at 151 degrees: four to eight times the law's light, and cream rather than grey |
+| Jupiter | 0 | | Cassini's phase curve: at partial phases Jupiter is about a quarter darker than a plain ball (Mayorga and others, 2016), as the disk already is |
+| Venus | 0.45 | 0.6 | Venus's brightness by phase angle (Mallama and others, 2017), within about a tenth from 90 to 160 degrees |
+| Titan | 0.6 | 0.8 | Cassini's crescent at 141 degrees: about 1.3 times the law's light |
+| Earth | 0 | | Its clouds and ground scatter about as evenly as the texture holds them |
+
+The sharper lobe, 0.8, leaves a planet as it was at moderate phase angles and brightens it as the sun
+goes behind it, as Neptune's crescents at 133 and 160 degrees show.
 
 On the giant planets the haze is thin: tens of km on bodies tens of thousands of km across. Beyond the
 disk it shows as a fine line along the limb, brightest with the sun behind the planet, as in the
@@ -1012,6 +1033,8 @@ moons and Triton, and 740 MB for Earth, and makes the same textures again.
 - Venus's albedos and phase curves: A. Mallama, B. Krobusek and H. Pavlov, "Comprehensive wide-band
   magnitudes and albedos for the planets, with applications to exo-planets and Planet Nine", Icarus
   282 (2017).
+- Jupiter's phase curve: L. C. Mayorga and others, "Jupiter's phase variations from Cassini: a
+  testbed for future direct-imaging missions", The Astronomical Journal 152, 209 (2016).
 - Jupiter's haze: X. Zhang, R. A. West, D. Banfield and Y. L. Yung, "Stratospheric aerosols on
   Jupiter from Cassini observations", Icarus 226 (2013); D. Banfield and others, "Jupiter's cloud
   structure from Galileo imaging data", Icarus 135 (1998).

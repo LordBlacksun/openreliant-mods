@@ -15,6 +15,9 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     // Its albedo, and one forward lobe.
     vec3(1.0, 0.99, 1.0),
     vec3(0.59), vec3(0.0), vec3(1.0), vec3(0.0),
+    // The cloud tops' forward light, its strength and lobe: about 2.5 times the crescent's light at
+    // 160 degrees, and next to nothing at 133, as Voyager 2's frames show it.
+    0.18, 0.8,
     // The texture's frames' mean phase angle, the filters to the texture's colours, and a quarter of
     // the haze's light blooming.
     15.0,
