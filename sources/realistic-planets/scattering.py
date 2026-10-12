@@ -1,5 +1,5 @@
 """Single scattering of sunlight in a body's haze, as the mod's `haze.glsl` works it out for each
-pixel, for the bodies' fits (`titan/haze.py`).
+pixel, for the bodies' fits (`titan/haze.py`, `neptune/haze.py`).
 
 - A sky point's I/F is the sunlight that the haze along its line of sight scatters toward the camera
   once: omega P(theta) / 4 times the integral of the extinction along the line, each point weighted
@@ -25,6 +25,14 @@ def lobe(g, cos_theta):
 def rayleigh(cos_theta):
     """Rayleigh's phase function, at the scattering angle's cosine."""
     return 0.75 * (1 + cos_theta * cos_theta)
+
+
+def phase_function(cos_theta, first_lobe, second_lobe, first_share, second_share):
+    """The haze's phase function at the scattering angle's cosine, as `haze.glsl` has it: two
+    Henyey-Greenstein lobes, with their asymmetries and their shares of the light, and Rayleigh's
+    with the rest."""
+    rest = 1 - first_share - second_share
+    return first_share * lobe(first_lobe, cos_theta) + second_share * lobe(second_lobe, cos_theta) + rest * rayleigh(cos_theta)
 
 
 def main_haze(r, reference, log_extinction, scale):
@@ -62,6 +70,24 @@ def sky_light(x, y, phase, extinction, sun_depth, top, steps, spread):
     # The depth from each step to the camera, at +along: the steps beyond it.
     depth = np.cumsum(piece[..., ::-1], axis=-1)[..., ::-1] - 0.5 * piece
     return np.sum(piece * np.exp(-sun_depth(r, cos_chi) - depth), axis=-1)
+
+
+def iof(x, y, phase, reference, log_extinction, scale, albedo, lobes, top, steps, spread, layer=None):
+    """The haze's I/F at sky points (x, y), km from the body's centre, the sun's direction along x,
+    seen from afar at `phase` degrees, as `haze.glsl` works it out: the main haze's extinction
+    (`main_haze`), with a detached layer's, `layer(r)`, where there is one, which is optically thin
+    and left out of the sunlight's depth; the single-scattering albedo; and the phase function's
+    lobes and shares (`phase_function`). The lines of sight are followed as `sky_light` follows
+    them."""
+    def extinction(r):
+        main = main_haze(r, reference, log_extinction, scale)
+        return main if layer is None else main + layer(r)
+
+    def sun_depth(r, cos_chi):
+        return toward_sun(r, cos_chi, reference, log_extinction, scale)
+
+    light = sky_light(x, y, phase, extinction, sun_depth, top, steps, spread)
+    return albedo * phase_function(-np.cos(np.radians(phase)), *lobes) * light / 4
 
 
 def vec3(values, digits):

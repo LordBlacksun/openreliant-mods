@@ -74,13 +74,6 @@ def geometry(shape, cx, cy, radius, f):
     return np.degrees(np.arcsin(np.clip(point[..., 2], -1, 1))), mu, point @ sun, disk
 
 
-def circle(points):
-    """The circle through `points`, (x, y) pixels, that fits them best, as its centre and radius: by
-    linear least squares on x^2 + y^2 = 2 cx x + 2 cy y + c."""
-    (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * points, np.ones(len(points))], (points ** 2).sum(axis=1), rcond=None)
-    return cx, cy, np.sqrt(c + cx ** 2 + cy ** 2)
-
-
 def limb(image, f):
     """The disk's centre and radius, pixels, fitted to the lit limb: along rays from the centre,
     where the brightness falls to `EDGE` of that just inside, and a circle through those points."""
@@ -107,5 +100,5 @@ def limb(image, f):
             x, y = cx + np.cos(angle) * edge, cy - np.sin(angle) * edge
             if 0 <= x < image.shape[1] - 1 and 0 <= y < image.shape[0] - 1:
                 edges.append((x, y))
-        cx, cy, radius = circle(np.array(edges))
+        cx, cy, radius = globe.circle(np.array(edges))
     return cx, cy, radius

@@ -1,19 +1,28 @@
 -- Realistic Planets: lights each body as its photometry was measured, with Minnaert's law
 -- (minnaert.glsl), Saturn shaded by its ring (saturn.glsl), Earth with its city lights at night
--- (earth.glsl) and Titan with its haze (titan.glsl). This is a player script: it runs for the whole
--- game. The functions need PER-PIXEL LIGHTING. How the bodies turn and lean, and which ring Titan's
--- haze is drawn on, is in records.luau.
+-- (earth.glsl), and Neptune and Titan with their haze (neptune.glsl, titan.glsl). This is a player
+-- script: it runs for the whole game. The functions need PER-PIXEL LIGHTING. How the bodies turn
+-- and lean, and which rings Neptune's and Titan's haze are drawn on, is in records.luau.
 
 local shaders = require("openreliant.shaders")
 
 -- Neptune: Minnaert's exponents fitted to Voyager 2's orange, green and blue frames, for the red,
 -- green and blue channels, and the least cosine of the view they were fitted at
--- (neptune-voyager-map.pdf, Table 2).
+-- (neptune-voyager-map.pdf, Table 2); and its haze in front of the disk.
 shaders.register_surface({
     name = "neptune",
-    shader = "minnaert.glsl",
+    shader = "neptune.glsl",
     textures = { "realistic_planets_neptune" },
     parameters = { 0.680, 0.712, 0.768, 0.25 },
+})
+
+-- Neptune's haze beyond its disk, which neptune.glsl draws where it is given no parameters: single
+-- scattering of sunlight in its haze, fitted to Voyager 2's frames at 136 and 152 degrees of phase
+-- by the collection's sources/realistic-planets/neptune/haze.py. records.luau gives Neptune the
+-- ring it draws on.
+shaders.register_surface({
+    name = "neptune_haze",
+    shader = "neptune.glsl",
 })
 
 -- Jupiter: the exponents of Hubble's OPAL maps of January 2015 (0.850 at 395 nm, 0.950 at 502 and
