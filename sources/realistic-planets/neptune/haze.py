@@ -41,9 +41,11 @@ The measurements:
 The model (`scattering.py`), which the shader works out for each pixel in the same way: one main
 haze, its extinction falling exponentially with height, the same all round Neptune, which stands for
 the gas and the haze together. Its phase function is a Henyey-Greenstein lobe, taking `share` of the
-light, and Rayleigh's, the gas's. The camera blurs each frame by a Gaussian of `BLUR` pixels, and
-its stray light lifts the sky: an exponential tail in height, with its own length, and a constant,
-in each frame.
+light, and Rayleigh's, the gas's. The light scattered more than once is an estimate
+(`scattering.multiple_light`), whose numbers come from a Monte Carlo of all orders of scattering in
+the fitted haze (`multiple.py`, `estimate`). The camera blurs each frame by a Gaussian of `BLUR`
+pixels, and its stray light lifts the sky: an exponential tail in height, with its own length, and
+a constant, in each frame.
 
 The fit, by least squares over the heights where the haze stands out from the stray light
 (`FITTED`), each bin weighted by `RELATIVE` of its I/F plus `ABSOLUTE`:
@@ -53,11 +55,15 @@ The fit, by least squares over the heights where the haze stands out from the st
 - Each filter has its own extinction, scale height and single-scattering albedo.
 - Each frame has its own stray light. The edges of the frames past `SPHERE_PHASE` degrees, at 152,
   are the game's sphere; a frame's at 136 degrees may stand `MOST_SHIFT` km off.
-- It prints each filter's numbers, each frame's own, and the haze for `neptune.glsl`
-  (`scattering.constructor`), in the order blue, green, orange, with the matrix that turns the three
-  filters' I/F into the texture's linear sRGB (`data/colour.json`, which `compose.py` writes).
+- The fit runs in `FIT_ROUNDS` rounds. The first fits the haze alone; after each, a Monte Carlo of
+  the fitted haze gives the estimate's numbers, and the next round fits the haze again with them.
+- It prints each round's estimate, each filter's numbers, each frame's own, and the haze for
+  `neptune.glsl` (`scattering.constructor`), in the order blue, green, orange, with the matrix that
+  turns the three filters' I/F into the texture's linear sRGB (`data/colour.json`, which
+  `compose.py` writes).
 """
 import json
+import multiprocessing
 import os
 import sys
 
@@ -66,6 +72,7 @@ from scipy import ndimage, optimize, sparse
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import globe  # noqa: E402
+import multiple  # noqa: E402
 import scattering  # noqa: E402
 import voyager  # noqa: E402
 
@@ -140,6 +147,14 @@ FRAME_HIGHEST = [0.5, 0.2]
 SHORTEST_TAIL = 30.0
 SHORTEST_TAIL_KM = 100.0
 LONGEST_TAIL_KM = 3000.0
+# The light scattered more than once (`multiple.py`): the rounds of the fit, each after the first
+# fitting the haze with the estimate the last round's haze gave; the Monte Carlo's heights above
+# `UNIT`, km, and its paths for each line; and how far below `UNIT` its paths end, km, in haze far
+# too deep for sunlight to reach.
+FIT_ROUNDS = 3
+MULTIPLE_HEIGHTS = np.array([2.0, 6.0, 12.0, 20.0, 30.0, 45.0, 60.0, 80.0, 110.0, 150.0])
+MULTIPLE_PATHS = 20000
+FLOOR = 200.0
 # How much of the haze's light blooms, which the mod chooses rather than the fit: a quarter, as for
 # Titan's.
 BLOOM = 0.25
@@ -324,19 +339,34 @@ def measure(data, f):
     return dict(name=f['name'], filter=f['filter'], phase=f['phase'], km=km, stretches=stretches)
 
 
-def stretch_iof(heights, angle, phase, own_filter, shared):
-    """The haze's I/F at `heights` km above `UNIT` across the limb at `angle` degrees round from the
-    sun's direction, seen from afar at `phase` degrees (`scattering.iof`): one lobe and Rayleigh's."""
+def haze_of(own_filter, shared):
+    """A filter's haze as the model and the Monte Carlo take it (`multiple.Haze`): one lobe and
+    Rayleigh's."""
     log_extinction, scale, albedo = own_filter
     lobe, share = shared
+    return multiple.Haze(UNIT + REFERENCE, log_extinction, scale, albedo, (lobe, 0.0, share, 0.0), UNIT + TOP, UNIT - FLOOR)
+
+
+def stretch_iof(heights, angle, phase, own_filter, shared, more=None):
+    """The haze's I/F at `heights` km above `UNIT` across the limb at `angle` degrees round from the
+    sun's direction, seen from afar at `phase` degrees (`scattering.iof`), and with `more`, the
+    estimate's numbers, the light scattered more than once."""
+    body = haze_of(own_filter, shared)
     a = np.radians(angle)
     r = UNIT + heights
-    return scattering.iof(r * np.cos(a), r * np.sin(a), phase, UNIT + REFERENCE, log_extinction, scale, albedo,
-                          (lobe, 0.0, share, 0.0), UNIT + TOP, STEPS, SPREAD)
+    return scattering.iof(r * np.cos(a), r * np.sin(a), phase, body.reference, body.log_extinction, body.scale, body.albedo,
+                          body.lobes, body.top, STEPS, SPREAD, multiple=more)
 
 
-def fit(measured):
-    """The shared numbers, each filter's, and each frame's own, fitted to the stretches."""
+def estimate(own_filter, shared, seed):
+    """The estimate's numbers for the light a filter's fitted haze scatters more than once, fitted
+    to a Monte Carlo of it, and how far the Monte Carlo's lines are from them."""
+    return multiple.estimate(haze_of(own_filter, shared), MULTIPLE_HEIGHTS, UNIT, MULTIPLE_PATHS, seed, STEPS, SPREAD)
+
+
+def fit(measured, more):
+    """The shared numbers, each filter's, and each frame's own, fitted to the stretches, with `more`,
+    each filter's numbers for the light scattered more than once, or none."""
     data, weights, rows_of = [], [], []
     for m in measured:
         for s in m['stretches']:
@@ -364,7 +394,7 @@ def fit(measured):
         index = np.nonzero(rows)[0]
         near = slice(max(index[0] - margin, 0), min(index[-1] + margin + 1, len(rows)))
         heights = s['heights'][near]
-        iof = stretch_iof(heights + shift, s['angle'], s['phase'], own_filter, shared)
+        iof = stretch_iof(heights + shift, s['angle'], s['phase'], own_filter, shared, more[m['filter']])
         iof = ndimage.gaussian_filter1d(iof, sigma, mode='nearest')
         sky = offset + tail * np.exp(-np.clip(heights, 0, None) / length)
         return (iof + sky)[rows[near]]
@@ -415,7 +445,17 @@ if __name__ == '__main__':
     with open(os.path.join(os.path.dirname(os.path.abspath(listing)), 'frames.json')) as f:
         texture_phase = np.mean([frame_['phase'] for frame_ in json.load(f)['frames']])
     measured = [measure(data, f) for f in frames]
-    (shared, filters, owns), result = fit(measured)
+    # The first round fits the haze alone; each after it, with the estimate the last round's haze gave.
+    more = {name: None for name in FILTERS}
+    with multiprocessing.Pool(len(FILTERS)) as pool:
+        for fit_round in range(FIT_ROUNDS):
+            (shared, filters, owns), result = fit(measured, more)
+            if fit_round == FIT_ROUNDS - 1:
+                break
+            estimates = pool.starmap(estimate, [(filters[name], shared, seed) for seed, name in enumerate(FILTERS)])
+            more = {name: numbers for name, (numbers, off) in zip(FILTERS, estimates)}
+            for name, (numbers, off) in zip(FILTERS, estimates):
+                print(f"round {fit_round + 1}, {name}: {multiple.describe(numbers, off)}")
     print(f"fit: cost {result.cost:.3g} after {result.nfev} evaluations")
     print('shared: ' + ', '.join(f'{k} {v:.4g}' for k, v in zip(SHARED, shared)))
     for name in FILTERS:
@@ -430,4 +470,4 @@ if __name__ == '__main__':
     print(scattering.constructor(
         'neptuneHaze', UNIT, UNIT + REFERENCE, UNIT + TOP, np.exp(numbers[0]), numbers[1], [0.0] * 3, [UNIT] * 3, [1.0] * 3,
         -np.cos(np.radians(texture_phase)), numbers[2], [lobe] * 3, [0.0] * 3, [share] * 3, [0.0] * 3,
-        [colours[name] for name in colour_filters], BLOOM))
+        [more[name] for name in colour_filters], [colours[name] for name in colour_filters], BLOOM))

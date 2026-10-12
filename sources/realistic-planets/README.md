@@ -26,8 +26,8 @@ Run each script from its own folder, in this order:
 1. `neptune/build.sh` downloads Neptune's Voyager frames for the texture and the haze and
    Karkoschka's spectrum, about 150 MB, into `neptune/data`, makes the texture,
    `realistic_planets_neptune.png`, in the mod's folder, and fits Neptune's haze beyond the disk,
-   printing the numbers for `neptune.glsl`. It takes a few minutes, the haze's fit about 15
-   seconds.
+   printing the numbers for `neptune.glsl`. It takes about a quarter of an hour, most of it the
+   haze's fit, with its Monte Carlo of the light scattered more than once.
 2. `jupiter/build.sh` downloads Cassini's map, Hubble's OPAL maps and Karkoschka's spectrum, about
    93 MB, into `jupiter/data`, and makes `realistic_planets_jupiter.png`. It takes a few seconds.
 3. `uranus/build.sh` downloads Hubble's OPAL maps of Uranus and Karkoschka's spectrum, about 3 MB,
@@ -44,7 +44,8 @@ Run each script from its own folder, in this order:
    surface and Karkoschka's spectrum, about 200 MB, into `titan/data`, makes
    `realistic_planets_titan.png`, prints the limb's exponents for `planets.luau`, and fits Titan's
    haze beyond the disk, printing the numbers for `titan.glsl`. The texture takes about ten
-   seconds, and the haze's fit about ten minutes, its three filters at once.
+   seconds, and the haze's fit about forty minutes, its three filters at once, with its Monte Carlo
+   of the light scattered more than once.
 7. `moons/build.sh` downloads the USGS's maps of Io, Europa, Ganymede, Callisto and Triton and
    Voyager's colour frames of them, about 1.4 GB, into `moons/data`, fits the frames' pointing into
    `moons/fits.json`, makes `realistic_planets_io.png`, `realistic_planets_europa.png`,
@@ -75,7 +76,8 @@ Run each script from its own folder, in this order:
 | `minnaert.py` | Fits Minnaert's law with each band of latitude given its own brightness, for Venus and Titan |
 | `globe.py` | Points from a body's centre toward a latitude and longitude, takes the area-weighted mean over its global map, and fits a circle to its disk's edge in a frame, for the bodies' scripts |
 | `voyager.py` | Reads Voyager's GEOMED frames, works out a body's geometry as a frame sees it, and fits a frame's pointing to the sunlit limb, for Neptune, Jupiter's moons and Triton |
-| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's and Titan's fits |
+| `scattering.py` | Works out the sunlight a body's haze scatters toward the camera, once and, as an estimate, more than once, as the mod's `haze.glsl` does, and writes the haze's numbers as the shader takes them, for Neptune's and Titan's fits |
+| `multiple.py` | A Monte Carlo of all orders of scattering in a body's haze, and the numbers of the estimate of the light scattered more than once fitted to it, for Neptune's and Titan's fits |
 | `neptune/frames.json` | The Voyager frames used for the texture, with their geometry from OPUS and their download links |
 | `neptune/haze.json` | The Voyager frames at high phase, for the haze and its check, with their geometry from OPUS and their download links |
 | `neptune/fetch.py` | Downloads the frames and the spectrum |

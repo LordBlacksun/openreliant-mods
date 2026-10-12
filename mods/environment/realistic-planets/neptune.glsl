@@ -14,20 +14,28 @@ const RealisticPlanetsHaze neptuneHaze = RealisticPlanetsHaze(
     24864.0,
     25064.0,
     // The haze's extinction and scale height.
-    vec3(3.311e-07, 8.212e-08, 9.619e-08),
-    vec3(16.58, 13.07, 13.25),
+    vec3(3.717e-07, 9.532e-08, 1.097e-07),
+    vec3(17.06, 13.4, 13.57),
     // No detached layer.
     vec3(0, 0, 0),
     vec3(24764, 24764, 24764),
     vec3(1, 1, 1),
     // The mean phase angle of the frames the texture comes from, 15 degrees.
     -0.966,
-    // The albedo, and the phase function: one Henyey-Greenstein lobe, without Rayleigh's.
-    vec3(1, 0.989, 0.995),
-    vec3(0.599, 0.599, 0.599),
+    // The albedo, and the phase function: one Henyey-Greenstein lobe, and Rayleigh's with a
+    // thousandth of the light.
+    vec3(1, 0.987, 0.999),
+    vec3(0.591, 0.591, 0.591),
     vec3(0, 0, 0),
-    vec3(1, 1, 1),
+    vec3(0.999, 0.999, 0.999),
     vec3(0, 0, 0),
+    // The light scattered more than once, fitted to a Monte Carlo of this haze: the beam's chance of
+    // each further scattering, and the glow's strength, fall, middle and width.
+    vec3(0.695, 0.538, 0.522),
+    vec3(1.05, 0.516, 0.586),
+    vec3(864.7, 2000, 2000),
+    vec3(0.499, 0.46, 0.463),
+    vec3(0.119, 0.115, 0.116),
     // Voyager's blue, green and orange filters' I/F to the game's colours.
     mat3(-0.20353, 0.25230, 1.42995, -0.05585, 0.68837, -0.06105, 1.13900, 0.09700, -0.04382),
     // A quarter of the haze's light blooms, as for Titan's.

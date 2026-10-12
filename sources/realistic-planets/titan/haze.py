@@ -26,6 +26,10 @@ The model (`scattering.py`), which the shader works out for each pixel in the sa
   layer is optically thin, and is left out of the sunlight's depth.
 - The phase function is the sum of two Henyey-Greenstein lobes, the first taking `share` of the
   light.
+- The light scattered more than once is an estimate (`scattering.multiple_light`): a beam of
+  sunlight scattered forward again on its way to the camera, and a glow of light scattered many
+  times. Its numbers come from a Monte Carlo of all orders of scattering in the fitted haze, whose
+  paths end at Titan's solid surface (`multiple.py`, `estimate`).
 - The camera blurs each frame by a Gaussian of `BLUR` pixels, and its stray light lifts the sky round
   the bright disk and ring: an exponential tail in height, with its own length, and a constant, in
   each frame.
@@ -36,10 +40,12 @@ The fit:
   the stray light (`FITTED`), each bin weighted by `RELATIVE` of its I/F plus `ABSOLUTE`. The haze's
   numbers are shared by all the filter's frames; the stray light, and each high-phase frame's centre,
   within `MOST_SHIFT` km, are each frame's own.
-- It prints each filter's numbers, each frame's own, and the haze for `titan.glsl`
-  (`scattering.constructor`), in the order blue, green, red, with the matrix that turns the three
-  filters' I/F into the texture's linear sRGB (`data/colour.json`) and the cosine of the scattering
-  angle at the mean phase of the texture's frames.
+- The fit runs in `FIT_ROUNDS` rounds. The first fits the haze alone; after each, a Monte Carlo of
+  the fitted haze gives the estimate's numbers, and the next round fits the haze again with them.
+- It prints each round's estimate, each filter's numbers, each frame's own, and the haze for
+  `titan.glsl` (`scattering.constructor`), in the order blue, green, red, with the matrix that turns
+  the three filters' I/F into the texture's linear sRGB (`data/colour.json`) and the cosine of the
+  scattering angle at the mean phase of the texture's frames.
 """
 import json
 import multiprocessing
@@ -53,6 +59,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 import cassini  # noqa: E402
 import globe  # noqa: E402
+import multiple  # noqa: E402
 import scattering  # noqa: E402
 
 # Heights are measured from `BASE` km from Titan's centre, about the haze's edge in red, and the haze
@@ -94,6 +101,14 @@ MOST_EVALUATIONS = 200
 BLOOM = 0.25
 # The steps along a line of sight, closest where it passes nearest Titan.
 STEPS, SPREAD = 96, 3.0
+# The light scattered more than once (`multiple.py`): the rounds of the fit, each after the first
+# fitting the haze with the estimate the last round's haze gave; the Monte Carlo's heights above
+# the game's sphere, km, and its paths for each line; and the radius its paths end at, Titan's
+# solid surface, km.
+FIT_ROUNDS = 3
+MULTIPLE_HEIGHTS = np.array([5.0, 20.0, 40.0, 60.0, 80.0, 100.0, 130.0, 170.0, 220.0, 290.0])
+MULTIPLE_PATHS = 20000
+SURFACE = 2575.0
 # The haze's numbers, their first guesses and bounds: the main haze's extinction 100 km above `BASE`
 # (its logarithm, per km) and scale height (km), the detached layer's peak extinction (its
 # logarithm), height (km above `BASE`) and width (km), the single-scattering albedo, and the phase
@@ -198,20 +213,38 @@ def prepare(data, frames, high):
     return prepared
 
 
-def sky_iof(x, y, phase, haze):
-    """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
-    from afar at `phase` degrees (`scattering.iof`): two lobes and the detached layer."""
+def layer_of(haze):
+    """The detached layer's extinction as a function of the radius."""
+    log_layer, layer_height, layer_width = haze[2:5]
+    return lambda r: np.exp(log_layer - 0.5 * ((r - BASE - layer_height) / layer_width) ** 2)
+
+
+def haze_of(haze):
+    """The haze's numbers as the model and the Monte Carlo take them (`multiple.Haze`): two lobes and
+    the detached layer."""
     log_extinction, scale, log_layer, layer_height, layer_width, albedo, first, second, share = haze
-
-    def layer(r):
-        return np.exp(log_layer - 0.5 * ((r - BASE - layer_height) / layer_width) ** 2)
-
-    return scattering.iof(x, y, phase, BASE + REFERENCE, log_extinction, scale, albedo, (first, second, share, 1 - share),
-                          BASE + TOP, STEPS, SPREAD, layer)
+    return multiple.Haze(BASE + REFERENCE, log_extinction, scale, albedo, (first, second, share, 1 - share), BASE + TOP,
+                         SURFACE, layer_of(haze))
 
 
-def fit_filter(frames):
-    """The haze's numbers fitted to one filter's frames, and each frame's own."""
+def sky_iof(x, y, phase, haze, more=None):
+    """The haze's I/F at sky points (x, y), km from Titan's centre, the sun's direction along x, seen
+    from afar at `phase` degrees (`scattering.iof`), and with `more`, the estimate's numbers, the light
+    scattered more than once."""
+    body = haze_of(haze)
+    return scattering.iof(x, y, phase, body.reference, body.log_extinction, body.scale, body.albedo, body.lobes, body.top,
+                          STEPS, SPREAD, body.layer, more)
+
+
+def estimate(haze, seed):
+    """The estimate's numbers for the light the fitted haze scatters more than once, fitted to a
+    Monte Carlo of it, and how far the Monte Carlo's lines are from them."""
+    return multiple.estimate(haze_of(haze), MULTIPLE_HEIGHTS, UNIT, MULTIPLE_PATHS, seed, STEPS, SPREAD)
+
+
+def fit_filter(frames, more):
+    """The haze's numbers fitted to one filter's frames, with `more`, the estimate's numbers for the
+    light scattered more than once, or none, and each frame's own."""
     heights = (HEIGHT_BINS[:-1] + HEIGHT_BINS[1:]) / 2
     angles = np.radians((ANGLE_BINS[:-1] + ANGLE_BINS[1:]) / 2)
     modelled = (heights > MODELLED[0]) & (heights < MODELLED[1])
@@ -228,7 +261,7 @@ def fit_filter(frames):
 
     def model(f, haze, own):
         dx, dy, tail, length, offset = own
-        m = sky_iof((BASE + hh) * np.cos(aa) - dx, (BASE + hh) * np.sin(aa) - dy, f['phase'], haze)
+        m = sky_iof((BASE + hh) * np.cos(aa) - dx, (BASE + hh) * np.sin(aa) - dy, f['phase'], haze, more)
         m = ndimage.gaussian_filter1d(m, BLUR * f['res'] / (HEIGHT_BINS[1] - HEIGHT_BINS[0]), axis=0, mode='nearest')
         return m + tail * np.exp(-hh / length) + offset
 
@@ -269,8 +302,18 @@ if __name__ == '__main__':
     with open(low_listing) as f:
         texture_phase = np.mean([frame['phase'] for frame in json.load(f)['frames']])
     order = sorted(cassini.FILTERS, key=cassini.FILTERS.get)
+    by_filter = [[f for f in frames if f['filter'] == name] for name in order]
+    # The first round fits the haze alone; each after it, with the estimate the last round's haze gave.
+    more = [None] * len(order)
     with multiprocessing.Pool(len(order)) as pool:
-        fitted = dict(zip(order, pool.map(fit_filter, [[f for f in frames if f['filter'] == name] for name in order])))
+        for fit_round in range(FIT_ROUNDS):
+            fitted = dict(zip(order, pool.starmap(fit_filter, zip(by_filter, more))))
+            if fit_round == FIT_ROUNDS - 1:
+                break
+            estimates = pool.starmap(estimate, [(fitted[name][0], seed) for seed, name in enumerate(order)])
+            more = [numbers for numbers, off in estimates]
+            for name, (numbers, off) in zip(order, estimates):
+                print(f"round {fit_round + 1}, {name}: {multiple.describe(numbers, off)}")
     for name in order:
         haze, owns = fitted[name]
         print(f"{name}: " + ', '.join(f'{k} {v:.4g}' for k, v in zip(NAMES, haze)))
@@ -283,4 +326,4 @@ if __name__ == '__main__':
     print('for titan.glsl:')
     print(scattering.constructor(
         'titanHaze', UNIT, BASE + REFERENCE, BASE + TOP, np.exp(haze[0]), haze[1], np.exp(haze[2]), BASE + haze[3], haze[4],
-        -np.cos(np.radians(texture_phase)), haze[5], haze[6], haze[7], share, 1 - share, [colours[name] for name in order], BLOOM))
+        -np.cos(np.radians(texture_phase)), haze[5], haze[6], haze[7], share, 1 - share, more, [colours[name] for name in order], BLOOM))

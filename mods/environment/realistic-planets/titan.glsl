@@ -12,20 +12,27 @@ const RealisticPlanetsHaze titanHaze = RealisticPlanetsHaze(
     2810.0,
     3410.0,
     // The main haze's extinction and scale height.
-    vec3(0.006077, 0.002138, 0.001237),
-    vec3(24.2, 27.49, 30.09),
+    vec3(0.007408, 0.00252, 0.001516),
+    vec3(24.56, 27.78, 30.63),
     // The detached layer's extinction, radius and width.
-    vec3(2.249e-05, 1.111e-05, 7.7e-06),
-    vec3(3028.6, 3028.8, 3031),
-    vec3(44.9, 52, 55.2),
+    vec3(2.86e-05, 1.371e-05, 9.868e-06),
+    vec3(3029.3, 3027.9, 3030.7),
+    vec3(44.2, 51.7, 54),
     // The mean phase angle of the frames the texture comes from, 35 degrees.
     -0.816,
     // The albedo, and the phase function's two lobes and their shares, without Rayleigh's.
-    vec3(1, 0.854, 0.923),
-    vec3(0.758, 0.682, 0.689),
-    vec3(0.232, 0.594, 0.594),
-    vec3(0.556, 1, 1),
-    vec3(0.444, 0, 0),
+    vec3(0.74, 0.671, 0.687),
+    vec3(0.76, 0.722, 0.729),
+    vec3(0.247, 0.595, 0.598),
+    vec3(0.62, 1, 1),
+    vec3(0.38, 0, 0),
+    // The light scattered more than once, fitted to a Monte Carlo of this haze: the beam's chance of
+    // each further scattering, and the glow's strength, fall, middle and width.
+    vec3(0.347, 0.352, 0.429),
+    vec3(0.0184, 0.0278, 0.0212),
+    vec3(33.24, 60.49, 2000),
+    vec3(-0.241, -0.255, 0.225),
+    vec3(0.01, 0.01, 0.0928),
     // Cassini's blue, green and red filters' I/F to the game's colours.
     mat3(-0.14988, 0.21081, 0.69685, 0.27673, 0.35667, -0.03369, 0.35095, -0.00266, -0.00834),
     // A quarter of the haze's light blooms, as the bloom would spread the bright haze of a backlit

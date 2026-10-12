@@ -16,10 +16,10 @@ shaders.register_surface({
     parameters = { 0.680, 0.712, 0.768, 0.25 },
 })
 
--- Neptune's haze beyond its disk, which neptune.glsl draws where it is given no parameters: single
--- scattering of sunlight in its haze, fitted to Voyager 2's frames at 136 and 152 degrees of phase
--- by the collection's sources/realistic-planets/neptune/haze.py. records.luau gives Neptune the
--- ring it draws on.
+-- Neptune's haze beyond its disk, which neptune.glsl draws where it is given no parameters: the
+-- sunlight its haze scatters, fitted to Voyager 2's frames at 136 and 152 degrees of phase by the
+-- collection's sources/realistic-planets/neptune/haze.py. records.luau gives Neptune the ring it
+-- draws on.
 shaders.register_surface({
     name = "neptune_haze",
     shader = "neptune.glsl",
@@ -86,10 +86,10 @@ shaders.register_surface({
     parameters = { 0.877, 0.892, 0.876, 0.25 },
 })
 
--- Titan's haze beyond its disk, which titan.glsl draws where it is given no parameters: single
--- scattering of sunlight in its main haze and its detached layer, fitted to Cassini's frames from 28
--- to 164 degrees of phase by the collection's sources/realistic-planets/titan/haze.py. records.luau
--- gives Titan the ring it draws on.
+-- Titan's haze beyond its disk, which titan.glsl draws where it is given no parameters: the
+-- sunlight its main haze and its detached layer scatter, fitted to Cassini's frames from 28 to 164
+-- degrees of phase by the collection's sources/realistic-planets/titan/haze.py. records.luau gives
+-- Titan the ring it draws on.
 shaders.register_surface({
     name = "titan_haze",
     shader = "titan.glsl",

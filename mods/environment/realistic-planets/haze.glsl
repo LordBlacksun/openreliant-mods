@@ -1,25 +1,29 @@
-// Realistic Planets (planets.luau): a body's haze, by single scattering of sunlight, which a body's
-// function includes with its own numbers (`RealisticPlanetsHaze`), as neptune.glsl and titan.glsl
-// do. The function draws two things. On the body's texture, where parameters.w is the least cosine
-// of the view for Minnaert's law, it lights the disk by that law (limb.glsl) and adds the haze in
-// front of it. On the ring that OpenReliant draws behind the body for its atmosphere
-// (records.luau), where the parameters are 0, it draws the haze beyond the disk. The texture's
-// points are in its model's units, and the ring's in the body's radii. The mod's sources work the
-// model out in the same way, in sources/realistic-planets/scattering.py, to fit each body's
-// numbers, and the mod's README describes it.
+// Realistic Planets (planets.luau): a body's haze, the sunlight it scatters once and an estimate of
+// what it scatters more than once, which a body's function includes with its own numbers
+// (`RealisticPlanetsHaze`), as neptune.glsl and titan.glsl do. The function draws two things. On
+// the body's texture, where parameters.w is the least cosine of the view for Minnaert's law, it
+// lights the disk by that law (limb.glsl) and adds the haze in front of it. On the ring that
+// OpenReliant draws behind the body for its atmosphere (records.luau), where the parameters are 0,
+// it draws the haze beyond the disk. The texture's points are in its model's units, and the ring's
+// in the body's radii. The mod's sources work the model out in the same way, in
+// sources/realistic-planets/scattering.py, to fit each body's numbers, and the mod's README
+// describes it.
 //
 // Each pixel's line of sight is followed through the haze in steps. Each step scatters the sunlight
 // that reaches it toward the eye, as much as its haze's extinction, single-scattering albedo and
-// phase function say, and the haze between it and the eye dims that light. The sunlight that
-// reaches a step is dimmed by the main haze on its way, Chapman's integral, so the haze on the
-// night side is lit only high up, where the sun still reaches it past the body's edge. Beyond the
-// disk the line is followed through. Over the disk it is followed down to the disk, and only the
-// light the texture doesn't hold already counts: the texture is the body as seen from the front, so
-// over the disk the haze adds what its phase function gives beyond what it gives there, which with
-// the sun behind the body is the crescent its forward scattering lights. Everything is worked out
-// in the three filters of the body's fit, in the order of their wavelengths, and turned into the
-// game's colours at the end, on the same scale as the texture. The haze is added in linear light,
-// lit by the sun as the disk is (`scattered`), so the disk and the ring meet at the edge.
+// phase function say, and the haze between it and the eye dims that light. The light scattered more
+// than once is an estimate: a beam of sunlight scattered forward again on its way to the eye, and a
+// glow of light scattered many times, whose numbers the mod's sources fit to a Monte Carlo of each
+// body's haze (sources/realistic-planets/multiple.py). The sunlight that reaches a step is dimmed
+// by the main haze on its way, Chapman's integral, so the haze on the night side is lit only high
+// up, where the sun still reaches it past the body's edge. Beyond the disk the line is followed
+// through. Over the disk it is followed down to the disk, and only the light the texture doesn't
+// hold already counts: the texture is the body as seen from the front, so over the disk the haze
+// adds what its phase function gives beyond what it gives there, which with the sun behind the body
+// is the crescent its forward scattering lights. Everything is worked out in the three filters of
+// the body's fit, in the order of their wavelengths, and turned into the game's colours at the end,
+// on the same scale as the texture. The haze is added in linear light, lit by the sun as the disk
+// is (`scattered`), so the disk and the ring meet at the edge.
 
 #include "limb.glsl"
 
@@ -47,6 +51,15 @@ struct RealisticPlanetsHaze {
     vec3 secondLobe;
     vec3 firstShare;
     vec3 secondShare;
+    // The light scattered more than once. The beam's chance of each further scattering, for each
+    // optical depth along the light's path from the sun to the eye. The glow's strength, as a share
+    // of the sunlight at `reference`, the height it falls by e over, km, and the sun's cosine where
+    // it is half as it fades through the terminator, and how gradually, in the sun's cosine.
+    vec3 beam;
+    vec3 glow;
+    vec3 glowFall;
+    vec3 glowCentre;
+    vec3 glowWidth;
     // The haze's I/F in the three filters to the game's linear sRGB, as the texture takes the
     // body's brightness in them (columns), its blue divided by the key light's as the texture's is.
     mat3 color;
@@ -58,6 +71,9 @@ struct RealisticPlanetsHaze {
 // it meets the disk.
 const int realisticPlanetsHazeSteps = 32;
 const float realisticPlanetsHazeSpread = 3.0;
+// The most optical depth along the light's path that the light scattered more than once takes, past
+// which e^-t is below 1e-34.
+const float realisticPlanetsHazeMostDepth = 80.0;
 // A pixel that spans more than half the thinnest scale height takes up to this many lines of sight
 // across it, so that the haze doesn't shimmer as the body grows small.
 const int realisticPlanetsHazeMostSamples = 4;
@@ -89,12 +105,23 @@ vec3 realisticPlanetsHazeLobe(vec3 g, float cosTheta) {
     return (1.0 - g * g) / pow(1.0 + g * g - 2.0 * g * cosTheta, vec3(1.5));
 }
 
-// The haze's phase function, its lobes and Rayleigh's together, at the cosine of the scattering
-// angle.
-vec3 realisticPlanetsHazePhase(RealisticPlanetsHaze haze, float cosTheta) {
+// The haze's phase function, its lobes, of asymmetries `first` and `second`, and Rayleigh's
+// together, at the cosine of the scattering angle. Light scattered n times in a row takes the lobes
+// with their asymmetries to the n-th power, as Henyey and Greenstein's lobes convolve.
+vec3 realisticPlanetsHazePhase(RealisticPlanetsHaze haze, float cosTheta, vec3 first, vec3 second) {
     vec3 rayleigh = 1.0 - haze.firstShare - haze.secondShare;
-    return haze.firstShare * realisticPlanetsHazeLobe(haze.firstLobe, cosTheta) + haze.secondShare * realisticPlanetsHazeLobe(haze.secondLobe, cosTheta)
+    return haze.firstShare * realisticPlanetsHazeLobe(first, cosTheta) + haze.secondShare * realisticPlanetsHazeLobe(second, cosTheta)
         + rayleigh * 0.75 * (1.0 + cosTheta * cosTheta);
+}
+
+// The phase functions of light scattered once, twice and three times in a row, at the cosine of the
+// scattering angle, as the columns.
+mat3 realisticPlanetsHazePhases(RealisticPlanetsHaze haze, float cosTheta) {
+    vec3 first = haze.firstLobe;
+    vec3 second = haze.secondLobe;
+    return mat3(realisticPlanetsHazePhase(haze, cosTheta, first, second),
+                realisticPlanetsHazePhase(haze, cosTheta, first * first, second * second),
+                realisticPlanetsHazePhase(haze, cosTheta, first * first * first, second * second * second));
 }
 
 // The haze's I/F in each filter along the line of sight along `ray` that passes `through` km from
@@ -103,15 +130,21 @@ vec3 realisticPlanetsHazePhase(RealisticPlanetsHaze haze, float cosTheta) {
 vec3 realisticPlanetsHazeLine(RealisticPlanetsHaze haze, float through, vec3 outward, vec3 ray, vec3 sun) {
     if (through >= haze.top) return vec3(0.0);
     bool meets = through < haze.unit;
-    vec3 phase = realisticPlanetsHazePhase(haze, dot(sun, ray));
-    if (meets) phase = max(phase - realisticPlanetsHazePhase(haze, haze.textureCosine), vec3(0.0));
-    if (all(lessThanEqual(phase, vec3(0.0)))) return vec3(0.0);
+    mat3 phases = realisticPlanetsHazePhases(haze, dot(sun, ray));
+    if (meets) {
+        mat3 atTexture = realisticPlanetsHazePhases(haze, haze.textureCosine);
+        for (int n = 0; n < 3; n++) phases[n] = max(phases[n] - atTexture[n], vec3(0.0));
+    }
+    if (all(lessThanEqual(phases[0] + phases[1] + phases[2], vec3(0.0)))) return vec3(0.0);
     vec3 middle = outward * through;
     float chord = sqrt(haze.top * haze.top - through * through);
     float hit = meets ? sqrt(haze.unit * haze.unit - through * through) : 0.0;
     float spacing = 1.0 / sinh(realisticPlanetsHazeSpread);
     vec3 depth = vec3(0.0);
     vec3 light = vec3(0.0);
+    vec3 twice = vec3(0.0);
+    vec3 thrice = vec3(0.0);
+    vec3 glow = vec3(0.0);
     for (int i = 0; i < realisticPlanetsHazeSteps; i++) {
         float u = (float(i) + 0.5) / float(realisticPlanetsHazeSteps);
         float along;
@@ -132,10 +165,24 @@ vec3 realisticPlanetsHazeLine(RealisticPlanetsHaze haze, float through, vec3 out
         vec3 fromPeak = (vec3(r) - haze.layerRadius) / haze.layerWidth;
         vec3 extinction = realisticPlanetsHazeMain(haze, r) + haze.layer * exp(-0.5 * fromPeak * fromPeak);
         vec3 piece = extinction * stride;
-        light += piece * exp(-realisticPlanetsHazeTowardSun(haze, r, dot(p, sun) / r) - depth - 0.5 * piece);
+        float cosChi = dot(p, sun) / r;
+        vec3 view = depth + 0.5 * piece;
+        // The optical depth along the light's path, toward the sun and toward the eye, held where
+        // no light gets through, so that its square doesn't overflow.
+        vec3 path = min(realisticPlanetsHazeTowardSun(haze, r, cosChi) + view, vec3(realisticPlanetsHazeMostDepth));
+        vec3 sunlit = piece * exp(-path);
+        light += sunlit;
+        twice += sunlit * path;
+        thrice += sunlit * path * path;
+        glow += piece * exp(-view - (r - haze.reference) / haze.glowFall) / (1.0 + exp(-(cosChi - haze.glowCentre) / haze.glowWidth));
         depth += piece;
     }
-    return haze.albedo * phase * light / 4.0;
+    // Once; then the beam, two and three scatterings in all, each further one at the beam's chance
+    // for each optical depth along the path; and over the sky, the glow, the same in every direction,
+    // which over the disk the texture holds already.
+    vec3 more = haze.albedo * haze.beam * phases[1] * twice + haze.albedo * haze.albedo * haze.beam * haze.beam * 0.5 * phases[2] * thrice;
+    if (!meets) more += haze.glow * glow;
+    return haze.albedo * (phases[0] * light + more) / 4.0;
 }
 
 // The body's function: its disk lit by Minnaert's law with its haze in front, where `parameters`
