@@ -1,8 +1,9 @@
 # Homing Screamers: sources
 
-`homing.luau` is the mod's whole source, so there's nothing to build. Its steering is OpenReliant's
-own missile guidance, `home` and `steer` in `src/engine/game/missiles.zig`, with the same numbers;
-its comments say where each one comes from, and how its Screamers differ from the AI's.
+`homing.luau` is the mod's whole source, so there's nothing to build. It gives each of the
+player's Screamers the player's target and sets its `homes`, so that OpenReliant's own missile
+guidance (`home` in `src/engine/game/missiles.zig`) flies it as it flies the AI's. Its comments say
+which Screamers it leaves alone, and why.
 
 `mod.svg` is the mod's thumbnail, an original drawing of a missile curving onto a target in its
 brackets. `mod.png` is made from it with ImageMagick 7:
