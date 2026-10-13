@@ -1,0 +1,9 @@
+OpenReliant Theme, a mod for OpenReliant
+========================================
+
+The music, New_Pensive.wav, is a proposed theme for the main menu, composed by Zabk for
+OpenReliant, under the Creative Commons Attribution-ShareAlike 4.0 International licence
+(CC BY-SA 4.0): https://creativecommons.org/licenses/by-sa/4.0/
+
+Its thumbnail, mod.png, is the track's own waveform, under the same licence. The manifest is
+under the Mozilla Public License 2.0.
