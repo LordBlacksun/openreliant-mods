@@ -22,6 +22,8 @@ from mods import ROOT, REPOSITORY, Category, Mod, all_categories, git, problems,
 SITE = ROOT / "site"
 # The site's address. mods.json uses absolute links, since the game reads it from anywhere.
 SITE_URL = "https://openreliant.github.io/openreliant-mods/"
+# OpenReliant's icon, which OpenReliant's own site publishes: the pages' favicon.
+ICON_URL = "https://openreliant.github.io/openreliant/icon/"
 # The format number of mods.json. Raise it when a key changes meaning. Adding a key doesn't need
 # it: OpenReliant ignores keys it doesn't know.
 INDEX_FORMAT = 1
@@ -342,6 +344,9 @@ def page(title: str, description: str, current: str, base: str, body: str, scrip
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description)}">
+<link rel="icon" href="{ICON_URL}openreliant-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="{ICON_URL}openreliant.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{ICON_URL}openreliant-256.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
